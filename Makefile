@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 SRCS_DIR = ./srcs
 OBJS_DIR = ./objs
-INC_DIR = ./include
+INC_DIR = ./includes
 SRCS = $(wildcard $(SRCS_DIR)/*.c)
 
 RM = rm -f
