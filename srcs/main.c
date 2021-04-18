@@ -10,19 +10,18 @@ char	*read_line()
 
 void	minishell(char *argv, char **envp)
 {
-	int status;
-	char	*cmd;
+	int 	status;
+	char	*cmdlines;
 
 	status = 1;
 	while (status)
 	{
 		write(1, "> ", 2);
-		cmd = read_line();
-		printf("%s\n", cmd);
+		cmdlines = read_line();
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+int		main(int argc, char **argv, char **envp)
 {
 	minishell(argv[0], envp);
 
