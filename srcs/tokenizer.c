@@ -1,11 +1,13 @@
 #include "minishell.h"
 
-int		check_quote(char *line, int i)
+int		check_quote(char *line, int i, char c)
 {
 	int	s_quote;
 	int	d_quote;
 
 	i++;
+	s_quote = OFF;
+	d_quote = OFF;
 	while (line[i])
 	{
 		if (line[i] == '\'')
@@ -22,23 +24,60 @@ int		check_quote(char *line, int i)
 			else if (d_quote == ON && line[i - 1] != '\\')
 				d_quote = OFF;
 		}
-		if (line[i] == ';' && (d_quote == OFF && s_quote == OFF))
+		if (line[i] == c && (d_quote == OFF && s_quote == OFF))
 			return (i);
+		i++;
 	}
 	return (i);
+}
+
+char	*ft_strcpy_i_to_j(char *line, int i, int j)
+{
+	char	*result;
+	int		k;
+
+	if (!(result = (char *)malloc(sizeof(char) * (j - i + 1))))
+		return (NULL);
+	k = 0;
+	while (i < j)
+		result[k++] = line[i++];
+	result[k] = '\0';
+	return (result);
 }
 
 char	**sep_cmdline(char *line)
 {
 	char	**result;
+	char	*tmp;
 	int		i;
 	int		j;
-	
+	int		cnt;
+	int		k;
+
 	i = 0;
 	j = -1;
+	cnt = 0;
 	while (line[i])
 	{
-		j = check_quote(line, j);
+		j = check_quote(line, j, ';');
 		i = j;
+		cnt++;
 	}
+	if (!(result = (char **)malloc(sizeof(char *) * (cnt + 1))))
+		return (NULL);
+	result[cnt] = NULL;
+	i = 0;
+	j = -1;
+	k = 0;
+	while (result[k])
+	{
+		j = check_quote(line, j, ';');
+		// if (!(tmp = (char *)malloc(sizeof(char) * j)))
+		// 	return (NULL);
+		tmp = ft_strcpy_i_to_j(line, i, j);
+		result[k] = tmp;
+		i = j + 1;
+		k++;
+	}
+	return (result);
 }

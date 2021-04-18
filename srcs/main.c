@@ -12,12 +12,19 @@ void	minishell(char *argv, char **envp)
 {
 	int 	status;
 	char	*cmdlines;
+	char	**cmds;
+
+	int		i;
 
 	status = 1;
 	while (status)
 	{
 		write(1, "> ", 2);
 		cmdlines = read_line();
+		cmds = sep_cmdline(cmdlines);
+		i = 0;
+		while (cmds[i])
+			printf("%s\n", cmds[i++]);
 	}
 }
 
