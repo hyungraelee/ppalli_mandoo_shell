@@ -48,11 +48,10 @@ char	*ft_strcpy_i_to_j(char *line, int i, int j)
 char	**sep_cmdline(char *line)
 {
 	char	**result;
-	char	*tmp;
 	int		i;
 	int		j;
-	int		cnt;
 	int		k;
+	int		cnt;
 
 	i = 0;
 	j = -1;
@@ -72,10 +71,7 @@ char	**sep_cmdline(char *line)
 	while (result[k])
 	{
 		j = check_quote(line, j, ';');
-		// if (!(tmp = (char *)malloc(sizeof(char) * j)))
-		// 	return (NULL);
-		tmp = ft_strcpy_i_to_j(line, i, j);
-		result[k] = tmp;
+		result[k] = ft_strcpy_i_to_j(line, i, j);
 		i = j + 1;
 		k++;
 	}
