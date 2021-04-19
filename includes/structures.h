@@ -5,6 +5,10 @@
 # define TYPE_CMD 1
 # define TYPE_REDIRECT 2
 
+# define RD_IN 0
+# define RD_OUT 1
+# define RD_OUT_APPEND 2
+
 typedef struct	s_token		t_token;
 typedef struct	s_cmdline 	t_cmdline;
 typedef struct	s_pipe		t_pipe;
@@ -32,8 +36,8 @@ struct	s_cmdline
 {
 	char	*cmd;
 	char	*arg;
-	char	*rd_in;
-	char	*rd_out;
+	char	*rd;
+	int		rd_type;
 };
 
 #endif

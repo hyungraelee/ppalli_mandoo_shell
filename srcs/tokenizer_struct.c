@@ -1,5 +1,29 @@
 #include "minishell.h"
 
+int	info_rd(t_cmdline **cmdline, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '<')
+		(*cmdline)->rd_type = RD_IN;
+	else if (str[i] == '>')
+	{
+		(*cmdline)->rd_type = RD_OUT;
+		if (str[i + 1] == '>')
+		{
+			(*cmdline)->rd_type = RD_OUT_APPEND;
+			i++;
+		}
+	}
+	while (str[i] == ' ')
+		i++;
+	while (str[i] != ' ')
+		i++;
+	(*cmdline)->rd = ft_substr(str, 0, i);
+	return (i);
+}
+
 t_cmdline	*info_cmdline(char *str, int idx)
 {
 	int			i;
@@ -9,12 +33,17 @@ t_cmdline	*info_cmdline(char *str, int idx)
 	if (!cmdline)
 		return (NULL);
 	i = 0;
+	if (str[i] == '<' || str[i] == '>')
+		i = info_rd(&cmdline, str);
+	while (str[i] == ' ')
+		i++;
 	while (i < idx)
 	{
 		if (str[i] == ' ')
 		{
 			// redirection check
-			cmdline->cmd = ft_substr(str, 0, i - 1);
+
+			cmdline->cmd = ft_substr(str, 0, i);
 			while (str[i] == ' ')
 				i++;
 			if (str[i] == '-')
@@ -69,6 +98,7 @@ t_token	*make_head(char *str, int type, int idx)
 	{
 		head->by_type = init_pipe();
 		head->l_child = make_cmdline(str, idx);
+		head->l_child->parent = head;
 	}
 	else if (type == TYPE_CMD)
 	{
