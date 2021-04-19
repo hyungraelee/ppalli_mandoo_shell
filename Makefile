@@ -8,6 +8,7 @@ OBJS_DIR = ./objs
 INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
+		./srcs/tokenizer.c	\
 		./srcs/gnl/get_next_line_bonus.c	\
 		./srcs/gnl/get_next_line_utils_bonus.c
 
@@ -27,7 +28,7 @@ $(OBJS_DIR) :
 $(OBJS_DIR)/%.o : %.c | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -o $@ -I$(INC_DIR) -c $^
 
-run: all
+run: re
 	@./$(NAME)
 
 clean :
