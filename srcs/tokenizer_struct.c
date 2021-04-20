@@ -27,23 +27,28 @@ int	info_rd(t_cmdline **cmdline, char *str)
 t_cmdline	*info_cmdline(char *str, int idx)
 {
 	int			i;
+	int			j;
 	t_cmdline	*cmdline;
 
 	cmdline = (t_cmdline *)malloc(sizeof(t_cmdline));
 	if (!cmdline)
 		return (NULL);
 	i = 0;
-	if (str[i] == '<' || str[i] == '>')
-		i = info_rd(&cmdline, str);
 	while (str[i] == ' ')
 		i++;
+	j = i;
 	while (i < idx)
 	{
+		if (str[i] == '<' || str[i] == '>')
+		{
+			i = info_rd(&cmdline, str);
+			j = i;
+		}
 		if (str[i] == ' ')
 		{
-			// redirection check
-
-			cmdline->cmd = ft_substr(str, 0, i);
+			while (str[i] == ' ')
+				i++;
+			cmdline->cmd = ft_substr(str, j, i - j);
 			while (str[i] == ' ')
 				i++;
 			if (str[i] == '-')
