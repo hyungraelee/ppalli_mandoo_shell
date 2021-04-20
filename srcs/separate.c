@@ -53,6 +53,8 @@ char	**sep_cmdline(char *line)
 	int		k;
 	int		cnt;
 
+	if (line == NULL)
+		return (NULL);
 	i = 0;
 	j = -1;
 	cnt = 0;
@@ -68,7 +70,7 @@ char	**sep_cmdline(char *line)
 	i = 0;
 	j = -1;
 	k = 0;
-	while (result[k])
+	while (k < cnt)
 	{
 		j = check_quote(line, j, ';');
 		result[k] = ft_strcpy_i_to_j(line, i, j);

@@ -15,6 +15,7 @@ typedef struct	s_pipe		t_pipe;
 
 struct	s_token
 {
+	int		type;
 	void	*by_type;
 	t_token	*l_child;
 	t_token	*r_child;

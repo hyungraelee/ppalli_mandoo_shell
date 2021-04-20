@@ -2,8 +2,7 @@
 # define READ_CMD_H
 
 # include "minishell.h"
-# include <termios.h>
-# include <unistd.h>
-# include <stdio.h>
+
+int	read_cmd(char **line);
 
 #endif
