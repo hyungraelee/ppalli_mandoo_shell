@@ -13,6 +13,6 @@
 # define OFF 0
 # define ON 1
 
-char	**sep_cmdline(char *line);
+char	**sep_cmdline(char *line, char c);
 
 #endif

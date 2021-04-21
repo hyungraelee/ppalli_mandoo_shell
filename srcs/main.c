@@ -13,7 +13,7 @@ void	minishell(char *argv, char **envp)
 	{
 		write(1, "> ", 2);
 		read_cmd(&cmdlines);
-		cmds = sep_cmdline(cmdlines);
+		cmds = sep_cmdline(cmdlines , ';');
 		free(cmdlines);
 		i = 0;
 		while (cmds && cmds[i])
