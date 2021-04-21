@@ -5,6 +5,7 @@ void	minishell(char *argv, char **envp)
 	int 	status;
 	char	*cmdlines;
 	char	**cmds;
+	t_cmd	*list;
 
 	int		i;
 
@@ -18,8 +19,9 @@ void	minishell(char *argv, char **envp)
 		i = 0;
 		while (cmds && cmds[i])
 		{
-			// write(1, cmds[i], ft_strlen(cmds[i]));
-			printf("%s\n", cmds[i]);
+			// list return
+			list = get_parsed_list(cmds[i]);
+			// run
 			i++;
 		}
 		i = 0;
