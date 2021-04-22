@@ -22,6 +22,7 @@ struct	s_cmd
 	char	*rd_append;
 	t_pipe	*next;
 	t_pipe	*prev;
+	t_cmd	*next_tree;
 };
 
 struct s_pipe
