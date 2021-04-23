@@ -45,7 +45,7 @@ char	*ft_strcpy_i_to_j(char *line, int i, int j)
 	return (result);
 }
 
-char	**sep_cmdline(char *line)
+char	**sep_cmdline(char *line, char c)
 {
 	char	**result;
 	int		i;
@@ -53,12 +53,14 @@ char	**sep_cmdline(char *line)
 	int		k;
 	int		cnt;
 
+	if (line == NULL)
+		return (NULL);
 	i = 0;
 	j = -1;
 	cnt = 0;
 	while (line[i])
 	{
-		j = check_quote(line, j, ';');
+		j = check_quote(line, j, c);
 		i = j;
 		cnt++;
 	}
@@ -68,9 +70,9 @@ char	**sep_cmdline(char *line)
 	i = 0;
 	j = -1;
 	k = 0;
-	while (result[k])
+	while (k < cnt)
 	{
-		j = check_quote(line, j, ';');
+		j = check_quote(line, j, c);
 		result[k] = ft_strcpy_i_to_j(line, i, j);
 		i = j + 1;
 		k++;
