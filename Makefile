@@ -10,6 +10,8 @@ INC_DIR = ./includes
 SRCS =	./srcs/main.c	\
 		./srcs/separate.c	\
 		./srcs/read_cmd.c	\
+		./srcs/parse.c		\
+		./srcs/check_syntax_err.c		\
 		./srcs/utils/ft_str_char_join.c	\
 		./srcs/utils/ft_strlen.c	\
 		./srcs/utils/ft_strchr.c	\

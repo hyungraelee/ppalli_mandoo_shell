@@ -14,6 +14,8 @@ void	minishell(char *argv, char **envp)
 	{
 		write(1, "> ", 2);
 		read_cmd(&cmdlines);
+		if (!check_syntax_err(cmdlines))
+			continue ;
 		cmds = sep_cmdline(cmdlines , ';');
 		free(cmdlines);
 		i = 0;

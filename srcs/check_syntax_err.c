@@ -1,40 +1,18 @@
 #include "minishell.h"
 
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s != c)
-	{
-		if (*s == '\0')
-			return (0);
-		s++;
-	}
-	return ((char *)s);
-}
-
 int	check_syntax_err(char *line)
 {
 	char	sflag;
-	// char	c;
-	// char	*str;
 	int		i;
 
 	sflag = 0;
-	// str = line;
-	int num = 0;
 	i = 0;
-	printf("%s\n", line);
 	while (line[i])
 	{
 		if (ft_strchr(" \t\n", line[i]))
-		{
-printf("space\n");
 			i++;
-
-		}
-		// else if (ft_strchr_to_c("><|;", line[i], &c))
 		else if (line[i] == '\'')
 		{
-printf("\'\n");
 			if (sflag & S_QUOTE)						// if s_quote on
 				sflag ^= S_QUOTE;						// s_quote off
 			else if (!((sflag & D_QUOTE) == D_QUOTE))	// if d_quote off
@@ -43,7 +21,6 @@ printf("\'\n");
 		}												// if d_quote on -> Do not on s_quote
 		else if (line[i] == '\"')
 		{
-printf("\"\n");
 			if (sflag & D_QUOTE)						// if d_quote on
 				sflag ^= D_QUOTE;						// d_quote off
 			else if (!((sflag & S_QUOTE) == S_QUOTE))	// if s_quote off
@@ -52,7 +29,6 @@ printf("\"\n");
 		}												// if s_quote on -> Do not on d_quote
 		else if ((line[i] == '>' || line[i] == '<') && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
 		{	// when outside quote
-printf(">\n");
 			if (sflag & REDIRECT)						// if redirect already on (echo 123 > > file)
 				return (0);								// syntax err
 			sflag |= REDIRECT;							// redirect on
@@ -64,7 +40,6 @@ printf(">\n");
 		}
 		else if (line[i] == '|' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
 		{	// when outside quote
-printf("|\n");
 			if (sflag & REDIRECT)						// if redirect on	(>  | )
 				return (0);								// syntax err
 			if (((sflag & POSSIBLE) == 0) && (sflag & CMD) == 0)	// if impossible and cmd off (    | | )
@@ -75,7 +50,6 @@ printf("|\n");
 		}
 		else if (line[i] == ';' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
 		{	// when outside quote
-printf(";\n");
 			if ((sflag & REDIRECT) || (sflag & PIPE))	// if redirect or pipe on (echo 123 > ;)
 				return (0);								// syntax err
 			if (((sflag & CMD) == 0) && ((sflag & POSSIBLE) == 0))	// if cmd and possible off (  ;) (echo 123;;)
@@ -85,7 +59,6 @@ printf(";\n");
 		}
 		else
 		{
-printf("else\n");
 			if (sflag & REDIRECT)
 				sflag = (sflag ^ REDIRECT) | POSSIBLE;
 			else if (sflag & PIPE)
@@ -103,11 +76,11 @@ printf("else\n");
 	return (1);
 }
 
-int main()
-{
-	// char a = 1;
-	// printf("%d\n", a & 1);
-	if(!check_syntax_err("echo > feasd > fed < ede >> edsd;"))
-		printf("\nsyntax error\n\n");
-	return (0);
-}
+// int main()
+// {
+// 	// char a = 1;
+// 	// printf("%d\n", a & 1);
+// 	if(!check_syntax_err("echo > ; fed < ede >> edsd"))
+// 		printf("\nsyntax error\n\n");
+// 	return (0);
+// }
