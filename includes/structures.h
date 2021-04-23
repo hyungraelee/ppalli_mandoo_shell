@@ -7,37 +7,29 @@
 
 # define RD_IN 0
 # define RD_OUT 1
-# define RD_OUT_APPEND 2
+# define RD_APPEND 2
 
-typedef struct	s_token		t_token;
-typedef struct	s_cmdline 	t_cmdline;
+typedef struct	s_cmd		t_cmd;
 typedef struct	s_pipe		t_pipe;
 
-struct	s_token
+struct	s_cmd
 {
-	void	*by_type;
-	t_token	*l_child;
-	t_token	*r_child;
-	t_token	*parent;
+	char	**line;
+	char	*cmd;
+	char	*arg;
+	char	*rd_in;
+	char	*rd_out;
+	char	*rd_append;
+	t_pipe	*next;
+	t_pipe	*prev;
+	t_cmd	*next_tree;
 };
-
-/*
-** void *by_type -> t_cmdline / t_pipe
-*/
 
 struct s_pipe
 {
 	int		fd[2];
-	char	*in;
-	char	*out;
-};
-
-struct	s_cmdline
-{
-	char	*cmd;
-	char	*arg;
-	char	*rd;
-	int		rd_type;
+	t_cmd	*next;
+	t_cmd	*prev;
 };
 
 #endif
