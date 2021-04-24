@@ -19,7 +19,9 @@ t_cmd	*make_cmd(char *cmdline)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-
+	cmd->token = make_tokenlist(cmdline);
+	cmd->next = NULL;
+	cmd->prev = NULL;
 	return (cmd);
 }
 

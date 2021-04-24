@@ -9,7 +9,7 @@ int	check_syntax_err(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr(" \t\n", line[i]))
+		if (ft_strchr(IFS, line[i]))
 			i++;
 		else if (line[i] == '\'')
 		{
