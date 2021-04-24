@@ -104,7 +104,7 @@ t_token	*token_normal_str(char *cmdline, int *i, int type)
 
 	token = token_init();
 	token->type = STR;
-	if (type != COMMAND)
+	if (type != COMMAND && ft_strchr(IFS, cmdline[*i - 1]))
 		token->arg = ft_strdup(" ");
 	while (!ft_strchr(" \t\n\\`\"$><\'", cmdline[*i]))
 		token->arg = ft_str_char_join(token->arg, cmdline[(*i)++]);
@@ -140,9 +140,6 @@ t_token	*make_tokenlist(char *cmdline)
 	int		i;
 	int		flag;
 
-	// token = (t_token *)malloc(sizeof(t_token));
-	// if (!token)
-	// 	return (NULL);
 	token = NULL;
 	i = 0;
 	flag = 0;
@@ -180,15 +177,12 @@ t_token	*make_tokenlist(char *cmdline)
 			else
 			{	
 				if (!(flag & CMD))	// when cmd flag off
-					tmp = token_command(cmdline, &i);
-				else if (!(flag & D_QUOTE))
 				{
-					tmp = token_normal_str(cmdline, &i, token->type);
-					// if (token->type == COMMAND)		// don't add space
-					// 	tmp = 
-					// else							// add space
-					// 	tmp = 
+					tmp = token_command(cmdline, &i);
+					flag |= CMD;
 				}
+				else if (!(flag & D_QUOTE))
+					tmp = token_normal_str(cmdline, &i, token->type);
 				else if (flag & D_QUOTE)
 					tmp = token_dquote_str(cmdline, &i);
 			}
@@ -200,7 +194,6 @@ t_token	*make_tokenlist(char *cmdline)
 				token->next = tmp;
 				token = token->next;
 			}
-			printf("%s\n", token->arg);
 		}
 	}
 	while (token->prev)
@@ -208,16 +201,18 @@ t_token	*make_tokenlist(char *cmdline)
 	return (token);
 }
 
-int		main(void)
-{
-	t_token	*token;
+// int		main(void)
+// {
+// 	t_token	*token;
 
-	token = make_tokenlist("> file echo -n \"hello while\\\" $HOME \"hihi < file1 >>file2       gogijoa\'joa\\\'  < file3");
-	while (token->next)
-	{
-		printf("type = %d arg = %s\n", token->type, token->arg);
-		token = token->next;
-	}
-	printf("type = %d arg = %s\n", token->type, token->arg);
-	return (0);
-}
+// 	token = make_tokenlist("> file echo -n \"hello while      a\\\" \\$HOME \"hihi < file1 >>file2   $PWD    gogijoa\'joa\\\'  < file3");
+// 	while (token->next)
+// 	{
+// 		printf("type = %d arg = %s\n", token->type, token->arg);
+// 		token = token->next;
+// 	}
+// 	printf("type = %d arg = %s\n", token->type, token->arg);
+// 	return (0);
+// }
+
+// \"hello while\\\" $HOME \"hihi < file1 >>file2       gogijoa\'joa\\\'  < file3
