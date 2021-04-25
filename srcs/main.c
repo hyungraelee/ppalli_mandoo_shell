@@ -52,3 +52,20 @@ int		main(int argc, char **argv, char **envp)
 	init_termios();
 	minishell(argv[0], envp);
 }
+
+			// while (list->next)
+			// {
+			// 	while (list->token->next)
+			// 	{
+			// 		printf("%d : %s\n", list->token->type, list->token->arg);
+			// 		list->token = list->token->next;
+			// 	}
+			// 	printf("%d : %s\n", list->token->type, list->token->arg);
+			// 	list = list->next;
+			// }
+			// while (list->token->next)
+			// {
+			// 	printf("%d : %s\n", list->token->type, list->token->arg);
+			// 	list->token = list->token->next;
+			// }
+			// printf("%d : %s\n", list->token->type, list->token->arg);
