@@ -41,14 +41,14 @@ t_cmd	*make_list(char **cmdlines)
 	return (list);
 }
 
-t_cmd	*get_parsed_list(char *line)
+t_cmd	*get_parsed_list(char *cmd_set)
 {
 	char	**cmdlines;
 
-	if (!line)
+	if (!cmd_set)
 		return (NULL);
-	cmdlines = sep_cmdline(line, '|');
+	cmdlines = separate(cmd_set, '|');
 	if (!cmdlines)
 		return (NULL);
-	return (make_list(cmdlines));
+	return (make_cmd_set(cmdlines));
 }
