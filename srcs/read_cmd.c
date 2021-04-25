@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int	read_cmd(char **line)
+int	read_cmd(char **input_string)
 {
 	int	c;
 
-	*line = NULL;
+	*input_string = NULL;
 	while (read(0, &c, sizeof(c)) > 0)
 	{
-		*line = ft_str_char_join(*line, c);
+		*input_string = ft_str_char_join(*input_string, c);
 		if (c == '\n')
 			break;
 		c = 0;

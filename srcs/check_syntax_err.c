@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-int	check_syntax_err(char *line)
+int	check_syntax_err(char *input_string)
 {
 	char	sflag;
 	int		i;
 
 	sflag = 0;
 	i = 0;
-	while (line[i])
+	while (input_string[i])
 	{
-		if (ft_strchr(" \t\n", line[i]))
+		if (ft_strchr(IFS, input_string[i]))
 			i++;
-		else if (line[i] == '\'')
+		else if (input_string[i] == '\'')
 		{
 			if (sflag & S_QUOTE)						// if s_quote on
 				sflag ^= S_QUOTE;						// s_quote off
@@ -19,7 +19,7 @@ int	check_syntax_err(char *line)
 				sflag |= S_QUOTE;						// s_quote on
 			i++;
 		}												// if d_quote on -> Do not on s_quote
-		else if (line[i] == '\"')
+		else if (input_string[i] == '\"')
 		{
 			if (sflag & D_QUOTE)						// if d_quote on
 				sflag ^= D_QUOTE;						// d_quote off
@@ -27,18 +27,18 @@ int	check_syntax_err(char *line)
 				sflag |= D_QUOTE;						// d_quote on
 			i++;
 		}												// if s_quote on -> Do not on d_quote
-		else if ((line[i] == '>' || line[i] == '<') && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
+		else if ((input_string[i] == '>' || input_string[i] == '<') && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
 		{	// when outside quote
 			if (sflag & REDIRECT)						// if redirect already on (echo 123 > > file)
 				return (0);								// syntax err
 			sflag |= REDIRECT;							// redirect on
 			// sflag ^= POSSIBLE;
-			if (line[i] == '>' && line[i + 1] == '>')	// if append case
+			if (input_string[i] == '>' && input_string[i + 1] == '>')	// if append case
 				i += 2;
 			else										// if not append case
 				i++;
 		}
-		else if (line[i] == '|' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
+		else if (input_string[i] == '|' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
 		{	// when outside quote
 			if (sflag & REDIRECT)						// if redirect on	(>  | )
 				return (0);								// syntax err
@@ -48,7 +48,7 @@ int	check_syntax_err(char *line)
 			sflag ^= CMD + POSSIBLE;					// cmd and possible off
 			i++;
 		}
-		else if (line[i] == ';' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
+		else if (input_string[i] == ';' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
 		{	// when outside quote
 			if ((sflag & REDIRECT) || (sflag & PIPE))	// if redirect or pipe on (echo 123 > ;)
 				return (0);								// syntax err
@@ -71,7 +71,7 @@ int	check_syntax_err(char *line)
 			i++;
 		}
 	}
-	if ((sflag & REDIRECT) || (sflag & PIPE))		// if redirect or pipe on at the end (echo 123 > )
+	if ((sflag & REDIRECT) || (sflag & PIPE) || (sflag & S_QUOTE) || (sflag & D_QUOTE))		// if redirect or pipe on at the end (echo 123 > )
 		return (0);
 	return (1);
 }

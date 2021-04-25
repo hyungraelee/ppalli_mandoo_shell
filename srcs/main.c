@@ -3,8 +3,8 @@
 void	minishell(char *argv, char **envp)
 {
 	int 	status;
-	char	*cmdlines;
-	char	**cmds;
+	char	*input_string;
+	char	**cmd_set;
 	t_cmd	*list;
 
 	int		i;
@@ -13,24 +13,22 @@ void	minishell(char *argv, char **envp)
 	while (status)
 	{
 		write(1, "> ", 2);
-		read_cmd(&cmdlines);
-		if (!check_syntax_err(cmdlines))
+		read_cmd(&input_string);
+		if (!check_syntax_err(input_string))
 			continue ;
-		cmds = sep_cmdline(cmdlines , ';');
-		free(cmdlines);
+		cmd_set = separate(input_string, ';');
 		i = 0;
-		while (cmds && cmds[i])
+		while (cmd_set && cmd_set[i])
 		{
-			// list return
-			list = get_parsed_list(cmds[i]);
-			// run
-			i++;
+			list = get_parsed_list(cmd_set[i++]);
+			// if (!list)
+			run(list);
 		}
 		i = 0;
-		while (cmds && cmds[i])
-			free(cmds[i++]);
-		if (cmds != NULL)
-			free(cmds);
+		while (cmd_set && cmd_set[i])
+			free(cmd_set[i++]);
+		if (cmd_set != NULL)
+			free(cmd_set);
 
 	}
 }
@@ -52,3 +50,20 @@ int		main(int argc, char **argv, char **envp)
 	init_termios();
 	minishell(argv[0], envp);
 }
+
+			// while (list->next)
+			// {
+			// 	while (list->token->next)
+			// 	{
+			// 		printf("%d : %s\n", list->token->type, list->token->arg);
+			// 		list->token = list->token->next;
+			// 	}
+			// 	printf("%d : %s\n", list->token->type, list->token->arg);
+			// 	list = list->next;
+			// }
+			// while (list->token->next)
+			// {
+			// 	printf("%d : %s\n", list->token->type, list->token->arg);
+			// 	list->token = list->token->next;
+			// }
+			// printf("%d : %s\n", list->token->type, list->token->arg);
