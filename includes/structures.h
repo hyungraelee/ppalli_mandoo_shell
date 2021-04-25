@@ -22,7 +22,6 @@
 # define IFS " \t\n"
 
 typedef struct	s_cmd		t_cmd;
-typedef struct	s_pipe		t_pipe;
 typedef struct	s_token		t_token;
 
 struct	s_token
@@ -36,13 +35,6 @@ struct	s_token
 struct	s_cmd
 {
 	t_token	*token;
-	t_pipe	*next;
-	t_pipe	*prev;
-};
-
-struct s_pipe
-{
-	int		fd[2];
 	t_cmd	*next;
 	t_cmd	*prev;
 };

@@ -1,17 +1,5 @@
 #include "minishell.h"
 
-t_pipe	*make_pipe(void)
-{
-	t_pipe	*pipe;
-
-	pipe = (t_pipe *)malloc(sizeof(t_pipe));
-	if (!pipe)
-		return (NULL);
-	pipe->next = NULL;
-	pipe->prev = NULL;
-	return (pipe);
-}
-
 t_cmd	*make_cmd(char *cmdline)
 {
 	t_cmd	*cmd;
@@ -28,34 +16,28 @@ t_cmd	*make_cmd(char *cmdline)
 t_cmd	*make_list(char **cmdlines)
 {
 	t_cmd	*list;
-	t_cmd	*cmd_temp;
-	t_pipe	*pipe_temp;
+	t_cmd	*temp;
 	int		i;
 
 	i = 0;
 	list = NULL;
 	while (cmdlines[i])
 	{
-		cmd_temp = make_cmd(cmdlines[i]);
-		if (!cmd_temp)
+		temp = make_cmd(cmdlines[i]);
+		if (!temp)
 			return (NULL);
-		if (i > 0)
-		{
-			pipe_temp->next = cmd_temp;
-			cmd_temp->prev = pipe_temp;
-		}
 		if (list == NULL)
-			list = cmd_temp;
-		if (cmdlines[i + 1])
+			list = temp;
+		else
 		{
-			pipe_temp = make_pipe();
-			if (!pipe_temp)
-				return (NULL);
-			cmd_temp->next = pipe_temp;
-			pipe_temp->prev = cmd_temp;
+			list->next = temp;
+			temp->prev = list;
+			list = list->next;
 		}
 		i++;
 	}
+	while (list->prev)
+		list = list->prev;
 	return (list);
 }
 
