@@ -57,8 +57,8 @@ t_token	*token_env(char *cmdline, int *i)
 
 	token = token_init();
 	token->type = ENV;
-	while (!ft_strchr(IFS, cmdline[*i]))
-		token->arg = ft_str_char_join(token->arg, cmdline[(*i)++]);
+	while (!ft_strchr(IFS, cmdline[++(*i)]))
+		token->arg = ft_str_char_join(token->arg, cmdline[*i]);
 	return (token);
 }
 
@@ -93,8 +93,8 @@ t_token	*token_option(char *cmdline, int *i)
 
 	token = token_init();
 	token->type = OPTION;
-	while (!ft_strchr(IFS, cmdline[++(*i)]))
-		token->arg = ft_str_char_join(token->arg,cmdline[*i]);
+	while (!ft_strchr(IFS, cmdline[(*i)]))
+		token->arg = ft_str_char_join(token->arg,cmdline[(*i)++]);
 	return (token);
 }
 
@@ -104,7 +104,7 @@ t_token	*token_normal_str(char *cmdline, int *i, int type)
 
 	token = token_init();
 	token->type = STR;
-	if (type != COMMAND && ft_strchr(IFS, cmdline[*i - 1]))
+	if (type != COMMAND && type != OPTION && ft_strchr(IFS, cmdline[*i - 1]))
 		token->arg = ft_strdup(" ");
 	while (!ft_strchr(" \t\n\\`\"$><\'", cmdline[*i]))
 		token->arg = ft_str_char_join(token->arg, cmdline[(*i)++]);
