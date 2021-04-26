@@ -5,8 +5,8 @@
 
 int		read_cmd(char **line);
 int		check_syntax_err(char *line);
-char	**sep_cmdline(char *line, char c);
+char	**separate(char *line, char c);
 t_cmd	*get_parsed_list(char *line);
-t_token	*make_tokenlist(char *cmdline);
+t_token	*make_tokenlist(char *cmdline, char **cmd_name);
 
 #endif

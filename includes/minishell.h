@@ -8,6 +8,7 @@
 # include <signal.h>
 # include "structures.h"
 # include "parser.h"
+# include "run.h"
 # include "utils.h"
 
 # define OFF 0

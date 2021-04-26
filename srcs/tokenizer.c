@@ -133,7 +133,7 @@ t_token	*token_command(char *cmdline, int *i)
 	return (token);
 }
 
-t_token	*make_tokenlist(char *cmdline)
+t_token	*make_tokenlist(char *cmdline, char **cmd_name)
 {
 	t_token	*token;
 	t_token	*tmp;
@@ -173,12 +173,13 @@ t_token	*make_tokenlist(char *cmdline)
 				tmp = token_redirection(cmdline, &i);
 			else if (cmdline[i] == '-' && !(flag & D_QUOTE) &&
 			(token->type == COMMAND || token->type == OPTION))
-				tmp = token_option(cmdline, &i);	
+				tmp = token_option(cmdline, &i);
 			else
-			{	
+			{
 				if (!(flag & CMD))	// when cmd flag off
 				{
 					tmp = token_command(cmdline, &i);
+					*cmd_name = ft_strdup(tmp->arg);
 					flag |= CMD;
 				}
 				else if (!(flag & D_QUOTE))
