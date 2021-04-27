@@ -59,7 +59,10 @@ int	run_process(t_cmd *cmd_list, char **envp)
 		;
 	}
 	else
+	{
 		wait(&status);
+	}
+	return (1);
 }
 
 int	run(t_cmd *cmd_list, char **envp)
