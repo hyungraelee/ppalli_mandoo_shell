@@ -7,13 +7,14 @@ t_cmd	*make_cmd(char *cmdline)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->token = make_tokenlist(cmdline);
+	cmd->cmd_name = NULL;
+	cmd->token = make_tokenlist(cmdline, &(cmd->cmd_name));
 	cmd->next = NULL;
 	cmd->prev = NULL;
 	return (cmd);
 }
 
-t_cmd	*make_list(char **cmdlines)
+t_cmd	*make_cmd_set(char **cmdlines)
 {
 	t_cmd	*list;
 	t_cmd	*temp;

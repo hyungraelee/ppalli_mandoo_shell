@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-void	minishell(char *argv, char **envp)
+void	minishell(char **envp)
 {
 	int 	status;
 	char	*input_string;
 	char	**cmd_set;
-	t_cmd	*list;
-
+	t_cmd	*cmd_list;
+	pid_t	pid;
 	int		i;
 
 	status = 1;
@@ -20,9 +20,9 @@ void	minishell(char *argv, char **envp)
 		i = 0;
 		while (cmd_set && cmd_set[i])
 		{
-			list = get_parsed_list(cmd_set[i++]);
+			cmd_list = get_parsed_list(cmd_set[i++]);
 			// if (!list)
-			run(list);
+			status = run(cmd_list, envp);
 		}
 		i = 0;
 		while (cmd_set && cmd_set[i])
@@ -48,22 +48,24 @@ void	init_termios(void)
 int		main(int argc, char **argv, char **envp)
 {
 	init_termios();
-	minishell(argv[0], envp);
+	minishell(envp);
 }
 
-			// while (list->next)
+			// while (cmd_list->next)
 			// {
-			// 	while (list->token->next)
+			// 	printf("cmd_name = %s\n", cmd_list->cmd_name);
+			// 	while (cmd_list->token->next)
 			// 	{
-			// 		printf("%d : %s\n", list->token->type, list->token->arg);
-			// 		list->token = list->token->next;
+			// 		printf("1 %d : %s\n", cmd_list->token->type, cmd_list->token->arg);
+			// 		cmd_list->token = cmd_list->token->next;
 			// 	}
-			// 	printf("%d : %s\n", list->token->type, list->token->arg);
-			// 	list = list->next;
+			// 	printf("2 %d : %s\n", cmd_list->token->type, cmd_list->token->arg);
+			// 	cmd_list = cmd_list->next;
 			// }
-			// while (list->token->next)
+			// while (cmd_list->token->next)
 			// {
-			// 	printf("%d : %s\n", list->token->type, list->token->arg);
-			// 	list->token = list->token->next;
+			// 	printf("cmd_name = %s\n", cmd_list->cmd_name);
+			// 	printf("3 %d : %s\n", cmd_list->token->type, cmd_list->token->arg);
+			// 	cmd_list->token = cmd_list->token->next;
 			// }
-			// printf("%d : %s\n", list->token->type, list->token->arg);
+			// printf("4 %d : %s\n", cmd_list->token->type, cmd_list->token->arg);

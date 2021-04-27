@@ -1,6 +1,7 @@
 NAME = minishell
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g3 -fsanitize=address
 SRCS_DIR =	./srcs	\
 			./srcs/utils
 
@@ -11,6 +12,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/check_syntax_err.c		\
 		./srcs/parse.c		\
 		./srcs/read_cmd.c	\
+		./srcs/run.c	\
 		./srcs/separate.c	\
 		./srcs/tokenizer.c	\
 		./srcs/utils/ft_str_char_join.c	\

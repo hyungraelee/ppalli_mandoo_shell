@@ -34,6 +34,8 @@ struct	s_token
 
 struct	s_cmd
 {
+	char	*cmd_name;
+	int		fds[2];
 	t_token	*token;
 	t_cmd	*next;
 	t_cmd	*prev;
