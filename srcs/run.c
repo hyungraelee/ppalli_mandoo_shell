@@ -135,13 +135,14 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	if (pid == 0)
 	{
 		pipe_process(cmd_list);
-		redirect_process(cmd_list, &rd_fd);
+		redirect_process(cmd_list, &rd_fd);	// need error handle -> open error
 		execve(cmd_list->cmd_name, args, envp);
 		exit(0);
+		// need error handle -> if execve error return -1
 	}
 	else if (pid < 0)
 	{
-		;
+		; // need error handle -> if fork error pid -1
 	}
 	else
 	{
@@ -172,9 +173,5 @@ int	run(t_cmd *cmd_list, char **envp)
 		else
 			break ;
 	}
-
-
-// 	while (++i < BLTIN_NUM)
-// 		if (!ft_strcmp())
 	return (1);
 }
