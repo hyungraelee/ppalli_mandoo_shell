@@ -8,6 +8,7 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <fcntl.h>
 # include "structures.h"
 # include "parser.h"
 # include "run.h"

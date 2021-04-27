@@ -49,17 +49,62 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	int		status;
 
 	args = make_args(cmd_list);
+	pipe(cmd_list->fds);
 	pid = fork();
 	if (pid == 0)
 	{
-		execve("/bin/ls", args, envp);
+		if (cmd_list->next || cmd_list->prev)
+		{
+			if (cmd_list->next && !cmd_list->prev)
+			{
+				dup2(cmd_list->fds[1], STDOUT_FILENO);
+				// close(cmd_list->fds[1]);
+			}
+			else if (cmd_list->next && cmd_list->prev)
+			{
+				dup2(cmd_list->fds[1], STDOUT_FILENO);
+				dup2(cmd_list->prev->fds[0], STDIN_FILENO);
+				// close(cmd_list->fds[1]);
+				// close(cmd_list->prev->fds[0]);
+			}
+			else if (!cmd_list->next && cmd_list->prev)
+			{
+				dup2(cmd_list->prev->fds[0], STDIN_FILENO);
+				// close(cmd_list->fds[1]);
+				// close(cmd_list->prev->fds[0]);
+				// close(cmd_list->fds[0]);
+			}
+		}
+		execve(cmd_list->cmd_name, args, envp);
+		exit(0);
 	}
 	else if (pid < 0)
 	{
 		;
 	}
 	else
+	{
 		wait(&status);
+		if (cmd_list->next || cmd_list->prev)
+		{
+			if (cmd_list->next && !cmd_list->prev)
+			{
+				close(cmd_list->fds[1]);
+			}
+			else if (cmd_list->next && cmd_list->prev)
+			{
+				close(cmd_list->prev->fds[0]);
+				close(cmd_list->fds[1]);
+			}
+			else if (!cmd_list->next && cmd_list->prev)
+			{
+				close(cmd_list->prev->fds[0]);
+				close(cmd_list->fds[1]);
+				close(cmd_list->fds[0]);
+			}
+		}
+	}
+	return (1);
 }
 
 int	run(t_cmd *cmd_list, char **envp)
@@ -73,11 +118,10 @@ int	run(t_cmd *cmd_list, char **envp)
 		// while (++i < BLTIN_NUM)
 		// 	if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)));
 		// 		(*builtin_func(i))(cmd_list);
-		// if (!stat(cmd_list->cmd_name, &buf)) // 내장함수 이름으로만 실행 가능(현재 디렉토리에 이 함수 있음)
-			// 내장함수 실행
+		if (!stat(cmd_list->cmd_name, &buf))
 			run_process(cmd_list, envp);
-		// else
-			// PATH경로에 있는지 확인하고 실행
+		else
+			find_cmd_path(cmd_list, envp);
 		if (cmd_list->next)
 			cmd_list = cmd_list->next;
 		else
