@@ -43,11 +43,4 @@ struct	s_cmd
 	t_cmd	*prev;
 };
 
-struct s_redirect
-{
-	int	fd_in;
-	int	fd_out;
-};
-
-
 #endif
