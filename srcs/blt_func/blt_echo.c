@@ -33,11 +33,12 @@ void	exec_echo(t_cmd *cmd_list, char **envp)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 }
 
-int	blt_echo(t_cmd	*cmd_list, char **envp)
+int	blt_echo(t_cmd *cmd_list, char **envp)
 {
 	pid_t	pid;
 	int		status;
 	int		rd_fds[2];
+	int		old_fds[2];
 
 	pid = 1;
 	if (cmd_list->prev || cmd_list->next)
@@ -63,6 +64,12 @@ int	blt_echo(t_cmd	*cmd_list, char **envp)
 		}
 	}
 	else
+	{
+		old_fds[0] = dup(STDIN_FILENO);
+		old_fds[1] = dup(STDOUT_FILENO);
+		redirect_process(cmd_list, rd_fds);
 		exec_echo(cmd_list, envp);
+		redirect_restore(cmd_list, rd_fds, old_fds);
+	}
 	return (1);
 }

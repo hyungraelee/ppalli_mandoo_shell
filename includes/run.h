@@ -15,5 +15,7 @@ void	pipe_process(t_cmd *cmd_list);
 void	pipe_close(t_cmd *cmd_list);
 void	redirect_process(t_cmd *cmd_list, int *rd_fds);
 void	redirect_close(t_cmd *cmd_list, int *rd_fds);
+void	redirect_restore(t_cmd *cmd_list, int *rd_fds, int *old_fds);
+int		blt_echo(t_cmd *cmd_list, char **envp);
 
 #endif
