@@ -68,7 +68,7 @@ int		blt_cd(t_cmd *cmd_list, char **envp)
 		if (pid == 0)
 		{
 			pipe_process(cmd_list);
-			redirect_process(cmd_list, rd_fds);
+			redirect_process(cmd_list->token, rd_fds);
 			exec_cd(cmd_list->token, &envp);
 			exit(0);
 		}
@@ -77,7 +77,7 @@ int		blt_cd(t_cmd *cmd_list, char **envp)
 		else
 		{
 			wait(&status);
-			redirect_close(cmd_list, rd_fds);
+			redirect_close(rd_fds);
 			pipe_close(cmd_list);
 		}
 		return (1);

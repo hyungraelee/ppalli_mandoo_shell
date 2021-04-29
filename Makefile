@@ -3,12 +3,14 @@ CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
 CFLAGS = -g3 -fsanitize=address
 SRCS_DIR =	./srcs	\
+			./srcs/blt_func	\
 			./srcs/utils
 
 OBJS_DIR = ./objs
 INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
+		./srcs/builtin.c	\
 		./srcs/check_syntax_err.c		\
 		./srcs/find.c		\
 		./srcs/parse.c		\
@@ -16,6 +18,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/run.c		\
 		./srcs/separate.c	\
 		./srcs/tokenizer.c	\
+		./srcs/blt_func/blt_echo.c	\
 		./srcs/utils/ft_str_char_join.c	\
 		./srcs/utils/ft_isalnum.c	\
 		./srcs/utils/ft_isalpha.c	\
@@ -23,6 +26,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/utils/ft_isprint.c	\
 		./srcs/utils/ft_memcpy.c	\
 		./srcs/utils/ft_memmove.c	\
+		./srcs/utils/ft_putstr_fd.c	\
 		./srcs/utils/ft_split.c	\
 		./srcs/utils/ft_str_char_join.c	\
 		./srcs/utils/ft_strchr.c	\

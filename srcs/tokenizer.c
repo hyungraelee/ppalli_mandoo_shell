@@ -8,6 +8,7 @@ t_token	*token_init(void)
 	if (!token)
 		return (0);
 	token->arg = NULL;
+	token->blank = 0;
 	token->prev = NULL;
 	token->next = NULL;
 	return (token);
@@ -105,7 +106,7 @@ t_token	*token_normal_str(char *cmdline, int *i, int type)
 	token = token_init();
 	token->type = STR;
 	if (type != COMMAND && type != OPTION && ft_strchr(IFS, cmdline[*i - 1]))
-		token->arg = ft_strdup(" ");
+		token->blank = 1;
 	while (!ft_strchr(" \t\n\\`\"$><\'", cmdline[*i]))
 		token->arg = ft_str_char_join(token->arg, cmdline[(*i)++]);
 	return (token);

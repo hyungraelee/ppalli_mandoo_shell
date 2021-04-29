@@ -30,6 +30,7 @@ struct	s_token
 {
 	int		type;
 	char	*arg;
+	int		blank;
 	t_token	*next;
 	t_token	*prev;
 };
