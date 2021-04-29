@@ -45,7 +45,7 @@ char	*ft_strcpy_i_to_j(char *line, int i, int j)
 	return (result);
 }
 
-char	**sep_cmdline(char *line, char c)
+char	**separate(char *line, char c)
 {
 	char	**result;
 	int		i;
