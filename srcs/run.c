@@ -42,32 +42,32 @@ char	**make_args(t_cmd *cmd_list)
 	return (result);
 }
 
-void	redirect_process(t_cmd *cmd_list, t_redirect *rd_fd)
+void	redirect_process(t_cmd *cmd_list, int *rd_fds)
 {
-	rd_fd->fd_in = 0;
-	rd_fd->fd_out = 0;
+	rd_fds[0] = 0;
+	rd_fds[1] = 0;
 	while (cmd_list->token)
 	{
 		if (cmd_list->token->type == RD_IN)
 		{
-			if (rd_fd->fd_in > 0)
-				close (rd_fd->fd_in);
-			rd_fd->fd_in = open(cmd_list->token->arg, O_RDONLY);
-			dup2(rd_fd->fd_in, STDIN_FILENO);
+			if (rd_fds[0] > 0)
+				close (rd_fds[0]);
+			rd_fds[0] = open(cmd_list->token->arg, O_RDONLY);
+			dup2(rd_fds[0], STDIN_FILENO);
 		}
 		else if (cmd_list->token->type == RD_OUT)
 		{
-			if (rd_fd->fd_out > 0)
-				close (rd_fd->fd_out);
-			rd_fd->fd_out = open(cmd_list->token->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(rd_fd->fd_out, STDOUT_FILENO);
+			if (rd_fds[1] > 0)
+				close (rd_fds[1]);
+			rd_fds[1] = open(cmd_list->token->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			dup2(rd_fds[1], STDOUT_FILENO);
 		}
 		else if (cmd_list->token->type == RD_APPEND)
 		{
-			if (rd_fd->fd_out > 0)
-				close (rd_fd->fd_out);
-			rd_fd->fd_out = open(cmd_list->token->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(rd_fd->fd_out, STDOUT_FILENO);
+			if (rd_fds[1] > 0)
+				close (rd_fds[1]);
+			rd_fds[1] = open(cmd_list->token->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			dup2(rd_fds[1], STDOUT_FILENO);
 		}
 		if (cmd_list->token->next)
 			cmd_list->token = cmd_list->token->next;
@@ -76,12 +76,12 @@ void	redirect_process(t_cmd *cmd_list, t_redirect *rd_fd)
 	}
 }
 
-void	redirect_close(t_cmd *cmd_list, t_redirect *rd_fd)
+void	redirect_close(t_cmd *cmd_list, int *rd_fds)
 {
-	if (rd_fd->fd_in > 0)
-		close(rd_fd->fd_in);
-	if (rd_fd->fd_out > 0)
-		close(rd_fd->fd_out);
+	if (rd_fds[0] > 0)
+		close(rd_fds[0]);
+	if (rd_fds[1] > 0)
+		close(rd_fds[1]);
 }
 
 void	pipe_process(t_cmd *cmd_list)
@@ -124,10 +124,10 @@ void	pipe_close(t_cmd *cmd_list)
 
 int	run_process(t_cmd *cmd_list, char **envp)
 {
-	char		**args;
-	pid_t		pid;
-	int			status;
-	t_redirect	rd_fd;
+	char	**args;
+	pid_t	pid;
+	int		status;
+	int		rd_fds[2];
 
 	args = make_args(cmd_list);
 	pipe(cmd_list->fds);
@@ -135,7 +135,7 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	if (pid == 0)
 	{
 		pipe_process(cmd_list);
-		redirect_process(cmd_list, &rd_fd);	// need error handle -> open error
+		redirect_process(cmd_list, rd_fds);	// need error handle -> open error
 		execve(cmd_list->cmd_name, args, envp);
 		exit(0);
 		// need error handle -> if execve error return -1
@@ -147,7 +147,7 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	else
 	{
 		wait(&status);
-		redirect_close(cmd_list, &rd_fd);
+		redirect_close(cmd_list, rd_fds);
 		pipe_close(cmd_list);
 	}
 	return (1);
