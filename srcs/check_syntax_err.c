@@ -15,19 +15,22 @@ int	check_syntax_err(char *input_string)
 		{
 			if (sflag & S_QUOTE)						// if s_quote on
 				sflag ^= S_QUOTE;						// s_quote off
-			else if (!((sflag & D_QUOTE) == D_QUOTE))	// if d_quote off
+			else if (!(sflag & D_QUOTE))				// if d_quote off
 				sflag |= S_QUOTE;						// s_quote on
 			i++;
 		}												// if d_quote on -> Do not on s_quote
 		else if (input_string[i] == '\"')
 		{
 			if (sflag & D_QUOTE)						// if d_quote on
-				sflag ^= D_QUOTE;						// d_quote off
-			else if (!((sflag & S_QUOTE) == S_QUOTE))	// if s_quote off
+			{
+				if (input_string[i - 1] != '\\')
+					sflag ^= D_QUOTE;					// d_quote off
+			}
+			else if (!(sflag & S_QUOTE))				// if s_quote off
 				sflag |= D_QUOTE;						// d_quote on
 			i++;
 		}												// if s_quote on -> Do not on d_quote
-		else if ((input_string[i] == '>' || input_string[i] == '<') && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
+		else if ((input_string[i] == '>' || input_string[i] == '<') && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
 		{	// when outside quote
 			if (sflag & REDIRECT)						// if redirect already on (echo 123 > > file)
 				return (0);								// syntax err
@@ -38,21 +41,21 @@ int	check_syntax_err(char *input_string)
 			else										// if not append case
 				i++;
 		}
-		else if (input_string[i] == '|' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
+		else if (input_string[i] == '|' && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
 		{	// when outside quote
 			if (sflag & REDIRECT)						// if redirect on	(>  | )
 				return (0);								// syntax err
-			if (((sflag & POSSIBLE) == 0) && (sflag & CMD) == 0)	// if impossible and cmd off (    | | )
+			if (!(sflag & POSSIBLE) && !(sflag & CMD))	// if impossible and cmd off (    | | )
 				return (0);								// syntax err
 			sflag |= PIPE;								// pipe on
 			sflag ^= CMD + POSSIBLE;					// cmd and possible off
 			i++;
 		}
-		else if (input_string[i] == ';' && (sflag & S_QUOTE) == 0 && (sflag & D_QUOTE) == 0)
+		else if (input_string[i] == ';' && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
 		{	// when outside quote
 			if ((sflag & REDIRECT) || (sflag & PIPE))	// if redirect or pipe on (echo 123 > ;)
 				return (0);								// syntax err
-			if (((sflag & CMD) == 0) && ((sflag & POSSIBLE) == 0))	// if cmd and possible off (  ;) (echo 123;;)
+			if (!(sflag & CMD) && !(sflag & POSSIBLE))	// if cmd and possible off (  ;) (echo 123;;)
 				return (0);								// syntax err
 			sflag = 0;									// flag zero set
 			i++;
@@ -66,7 +69,7 @@ int	check_syntax_err(char *input_string)
 				sflag ^= PIPE;
 				sflag |= CMD + POSSIBLE;
 			}
-			else if (((sflag & REDIRECT) == 0) && ((sflag & PIPE) == 0))
+			else if (!(sflag & REDIRECT) && !(sflag & PIPE))
 				sflag |= CMD;
 			i++;
 		}
