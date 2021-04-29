@@ -74,6 +74,8 @@ void	redirect_process(t_cmd *cmd_list, int *rd_fds)
 		else
 			break ;
 	}
+	while (cmd_list->token->prev)
+		cmd_list->token = cmd_list->token->prev;
 }
 
 void	redirect_close(t_cmd *cmd_list, int *rd_fds)
@@ -82,6 +84,22 @@ void	redirect_close(t_cmd *cmd_list, int *rd_fds)
 		close(rd_fds[0]);
 	if (rd_fds[1] > 0)
 		close(rd_fds[1]);
+}
+
+void	redirect_restore(t_cmd *cmd_list, int *rd_fds, int *old_fds)
+{
+	if (rd_fds[0] > 0)
+	{
+		dup2(old_fds[0], STDIN_FILENO);
+		close(rd_fds[0]);
+		close(old_fds[0]);
+	}
+	if (rd_fds[1] > 0)
+	{
+		dup2(old_fds[1], STDOUT_FILENO);
+		close(rd_fds[1]);
+		close(old_fds[1]);
+	}
 }
 
 void	pipe_process(t_cmd *cmd_list)
@@ -140,7 +158,7 @@ int	run_process(t_cmd *cmd_list, char **envp)
 		exit(0);
 		// need error handle -> if execve error return -1
 	}
-	else if (pid < 0)
+	else if (pid == -1)
 	{
 		; // need error handle -> if fork error pid -1
 	}
