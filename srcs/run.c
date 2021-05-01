@@ -179,13 +179,13 @@ int	run(t_cmd *cmd_list, char **envp)
 	i = -1;
 	while (cmd_list)
 	{
-		// while (++i < BLTIN_NUM)
-		// 	if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)));
-		// 		(*builtin_func(i))(cmd_list);
-		if (!stat(cmd_list->cmd_name, &buf))
-			run_process(cmd_list, envp);
-		else
-			find_cmd_path(cmd_list, envp);
+		while (++i < BLTIN_NUM)
+			if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
+				(*builtin_func(i))(cmd_list, envp);
+		// if (!stat(cmd_list->cmd_name, &buf))
+		// 	run_process(cmd_list, envp);
+		// else
+		// 	find_cmd_path(cmd_list, envp);
 		if (cmd_list->next)
 			cmd_list = cmd_list->next;
 		else

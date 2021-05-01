@@ -19,7 +19,7 @@ int		(*builtin_func(int i))(t_cmd *cmd_list, char **envp)
 {
 	int		(*blt_func[BLTIN_NUM])(t_cmd *cmd_list, char **envp);
 
-	// blt_func[0] = &blt_echo;
+	blt_func[0] = &blt_echo;
 	// blt_func[1] = &blt_cd;
 	// blt_func[2] = &blt_pwd;
 	// blt_func[3] = &blt_export;

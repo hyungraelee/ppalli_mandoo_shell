@@ -6,7 +6,7 @@
 # define BLTIN_NUM 7
 
 char	*builtin_str(int i);
-int		(*builtin_func(int i))(t_cmd *cmd_list);
+int		(*builtin_func(int i))(t_cmd *cmd_list, char **envp);
 int		run(t_cmd *cmd_list, char **envp);
 int		run_process(t_cmd *cmd_list, char **envp);
 int		find_cmd_path(t_cmd *cmd_list, char **envp);

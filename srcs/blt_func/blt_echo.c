@@ -16,7 +16,11 @@ void	exec_echo(t_token *token, char **envp)
 				;
 		}
 		else if (token->type == STR)
+		{
+			if (token->blank == 1)
+				ft_putstr_fd(" ", STDOUT_FILENO);
 			ft_putstr_fd(token->arg, STDOUT_FILENO);
+		}
 		else if (token->type == ENV)
 		{
 			env = find_env_value(token->arg, envp);
