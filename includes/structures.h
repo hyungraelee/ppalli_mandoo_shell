@@ -11,13 +11,11 @@
 # define S_QUOTE 32
 # define D_QUOTE 64
 
-# define RD_IN 0
-# define RD_OUT 1
-# define RD_APPEND 2
-# define COMMAND 3
-# define OPTION 4
-# define STR 5
-# define ENV 6
+# define RD_IN 1
+# define RD_OUT 2
+# define RD_APPEND 4
+# define COMMAND 8
+# define ARGUMENT 16
 
 # define IFS " \t\n"
 
@@ -30,7 +28,6 @@ struct	s_token
 {
 	int		type;
 	char	*arg;
-	int		blank;
 	t_token	*next;
 	t_token	*prev;
 };
