@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int to_free)
 {
 	size_t	s1_len;
 	size_t	s2_len;
@@ -12,7 +12,15 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (0);
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len);
-	free(s1);
 	str[s1_len + s2_len] = '\0';
+	if (to_free == 1)
+		free(s1);
+	if (to_free == 2)
+		free(s2);
+	if (to_free == 3)
+	{
+		free(s1);
+		free(s2);
+	}
 	return (str);
 }
