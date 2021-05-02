@@ -46,7 +46,7 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	return (run_process(cmd_list, envp));
 }
 
-char	*get_env_value(char *arg, char **env)
+char	*get_env_value(char *arg, char **envp)
 {
 	char	*env_name;
 	char	*result;
@@ -56,24 +56,20 @@ char	*get_env_value(char *arg, char **env)
 	flag = 0;
 	i = 0;
 	result = NULL;
+	env_name = NULL;
 	while (arg[i])
 	{
 		if (arg[i] == '\'')
 		{
-			if (flag & S_QUOTE)						// if s_quote on
-				flag ^= S_QUOTE;						// s_quote off
-			else if (!(flag & D_QUOTE))				// if d_quote off
-				flag |= S_QUOTE;						// s_quote on
+			if (!(flag & D_QUOTE))				// if d_quote off
+				flag |= S_QUOTE;				// s_quote on
+			i++;
 		}
 		else if (arg[i] == '\"')
 		{
-			if (flag & D_QUOTE)						// if d_quote on
-			{
-				if (arg[i - 1] != '\\')
-					flag ^= D_QUOTE;					// d_quote off
-			}
-			else if (!(flag & S_QUOTE))				// if s_quote off
-				flag |= D_QUOTE;						// d_quote on
+			if (!(flag & S_QUOTE))				// if s_quote off
+				flag |= D_QUOTE;				// d_quote on
+			i++;
 		}
 		else
 		{
@@ -85,6 +81,7 @@ char	*get_env_value(char *arg, char **env)
 					if (arg[i] == '\'')
 						flag |= S_QUOTE;
 				}
+				i++;
 			}
 			else if (flag & D_QUOTE)
 			{
@@ -92,29 +89,52 @@ char	*get_env_value(char *arg, char **env)
 				{
 					if (arg[i] == '\\')
 					{
-						if (arg[i + 1] == '\'' || arg[i + 1] == '\"' || arg[i + 1] == '\\' || arg[i + 1] == '`')
-						{
+						if (arg[i + 1] == '\"' || arg[i + 1] == '\\' || arg[i + 1] == '`' || arg[i + 1] == '$')
 							result = ft_str_char_join(result, arg[++i]);
-							i++;
-						}
 						else
-							result = ft_str_char_join(result, arg[i++]);
+							result = ft_str_char_join(result, arg[i]);
+						i++;
 					}
 					else if (arg[i] == '$')
 					{
-						if (arg[i - 1] == '\\')
-							result = ft_str_char_join(result, arg[i++]);
-						else
-						{
-							while (!ft_strchr(" \t\n\"\'\\", arg[i]))
-							{
-								// $HOME -> /Users/jkeum
-							}
-						}
+						// if (arg[i - 1] == '\\')
+						// 	result = ft_str_char_join(result, arg[i++]);
+						// else
+						// {
+						while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))		// $HOME -> /Users/jkeum
+							env_name = ft_str_char_join(env_name, arg[i]);
+						result = ft_strjoin(result, find_env_value(env_name, envp));
+						free(env_name);
+						// }
+					}
+					else if (arg[i] == '\"')
+					{
+						flag ^= D_QUOTE;
+						i++;
 					}
 				}
 			}
+			else
+			{
+				if (arg[i] == '$')
+				{
+					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))		// $HOME -> /Users/jkeum
+						env_name = ft_str_char_join(env_name, arg[i]);
+					result = ft_strjoin(result, find_env_value(env_name, envp));
+					free(env_name);
+				}
+				else
+					result = ft_str_char_join(result, arg[i++]);
+			}
 		}
-		i++;
 	}
+	return (result);
 }
+
+// int		main(int argc, char *argv[], char **envp)
+// {
+// 	char	arg[] = "hello\"  hi   $HOME\\$HOME\"world$PWD\\$HOME";
+
+// 	printf("%s\n", get_env_value(arg, envp));
+// 	return (0);
+// }
