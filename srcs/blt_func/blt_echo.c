@@ -2,39 +2,39 @@
 
 void	exec_echo(t_token *token, char **envp)
 {
-	int		end_line;
-	char	*env;
+	char	*result;
+	int		new_line;
 
-	end_line = 0;
+	result = NULL;
+	new_line = 1;
+	while (token->type != ARGUMENT)
+	{
+		token->arg = get_env_value(token->arg, envp);
+		token = token->next;
+	}
+	if (!ft_strcmp(token->arg, "-n"))
+	{
+		new_line = 0;
+		token = token->next;
+	}
 	while (token)
 	{
-		if (token->type == OPTION)
+		if (token->type == ARGUMENT)
 		{
-			if (!ft_strcmp(token->arg, "-n"))
-				end_line = 1;
-			else
-				;
+			token->arg = get_env_value(token->arg, envp);
+			result = ft_strjoin(result, token->arg, 1);
 		}
-		else if (token->type == STR)
+		if (token->next && token->next->type == ARGUMENT)
 		{
-			if (token->blank == 1)
-				ft_putstr_fd(" ", STDOUT_FILENO);
-			ft_putstr_fd(token->arg, STDOUT_FILENO);
-		}
-		else if (token->type == ENV)
-		{
-			env = find_env_value(token->arg, envp);
-			if (!env)
-				;
-			ft_putstr_fd(env, STDOUT_FILENO);
-		}
-		if (token->next)
+			result = ft_strjoin(result, " ", 1);
 			token = token->next;
+		}
 		else
 			break ;
 	}
-	if (end_line == 0)
-		ft_putstr_fd("\n", STDOUT_FILENO);
+	if (new_line)
+		result = ft_strjoin(result, "\n", 1);
+	ft_putstr_fd(result, STDOUT_FILENO);
 }
 
 int	blt_echo(t_cmd *cmd_list, char **envp)
