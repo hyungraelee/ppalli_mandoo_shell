@@ -17,8 +17,8 @@ SRCS =	./srcs/main.c	\
 		./srcs/read_cmd.c	\
 		./srcs/run.c		\
 		./srcs/separate.c	\
-		./srcs/tokenizer.c	\
-		./srcs/blt_func/blt_echo.c	\
+		./srcs/token.c	\
+		./srcs/blt_func/blt_cd.c	\
 		./srcs/utils/ft_str_char_join.c	\
 		./srcs/utils/ft_isalnum.c	\
 		./srcs/utils/ft_isalpha.c	\

@@ -225,14 +225,13 @@ int	run(t_cmd *cmd_list, char **envp)
 	int	i;
 	struct stat	buf;
 
-	i = -1;
 	while (cmd_list)
 	{
 		if (cmd_list->cmd_name == NULL)
 			handle_no_cmd(cmd_list, envp);
 		else
 		{
-
+			i = -1;
 			while (++i < BLTIN_NUM)
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
 					(*builtin_func(i))(cmd_list, envp);
