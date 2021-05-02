@@ -9,13 +9,8 @@ char	**make_args(t_token *token)
 	cnt = 0;
 	while (token)
 	{
-		if (token->type == COMMAND || token->type == OPTION || token->type == STR)
+		if (token->type == COMMAND || token->type == ARGUMENT)
 			cnt++;
-		else if (token->type == ENV)
-		{
-			cnt++;
-			token->arg = getenv(token->arg);
-		}
 		if (token->next)
 			token = token->next;
 		else
@@ -29,7 +24,7 @@ char	**make_args(t_token *token)
 	i = 0;
 	while (token)
 	{
-		if (token->type == COMMAND || token->type == OPTION || token->type == STR || token->type == ENV)
+		if (token->type == COMMAND || token->type == ARGUMENT)
 			result[i++] = ft_strdup(token->arg);
 		if (token->next)
 			token = token->next;
@@ -140,6 +135,50 @@ void	pipe_close(t_cmd *cmd_list)
 	}
 }
 
+int	handle_no_cmd(t_cmd *cmd_list, char **envp)
+{
+	pid_t	pid;
+	int		rd_fds[2];
+	int		status;
+
+	while (cmd_list->token)
+	{
+		cmd_list->token->arg = get_env_value(cmd_list->token->arg, envp);
+		if (cmd_list->token->next)
+			cmd_list->token = cmd_list->token->next;
+		else
+			break ;
+	}
+	while (cmd_list->token->prev)
+		cmd_list->token = cmd_list->token->prev;
+	if (cmd_list->prev || cmd_list->next)
+	{
+		pipe(cmd_list->fds);
+		pid = fork();
+		if (pid == 0)
+		{
+			pipe_process(cmd_list);
+			redirect_process(cmd_list->token, rd_fds);
+			exit(0);
+		}
+		else if (pid == -1)
+			; // error
+		else
+		{
+			wait(&status);
+			redirect_close(rd_fds);
+			pipe_close(cmd_list);
+		}
+		return (1);
+	}
+	else
+	{
+		redirect_process(cmd_list->token, rd_fds);
+		redirect_close(rd_fds);
+	}
+	return (1);
+}
+
 int	run_process(t_cmd *cmd_list, char **envp)
 {
 	char	**args;
@@ -147,6 +186,16 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	int		status;
 	int		rd_fds[2];
 
+	while (cmd_list->token)
+	{
+		cmd_list->token->arg = get_env_value(cmd_list->token->arg, envp);
+		if (cmd_list->token->next)
+			cmd_list->token = cmd_list->token->next;
+		else
+			break ;
+	}
+	while (cmd_list->token->prev)
+		cmd_list->token = cmd_list->token->prev;
 	args = make_args(cmd_list->token);
 	pipe(cmd_list->fds);
 	pid = fork();
@@ -179,13 +228,20 @@ int	run(t_cmd *cmd_list, char **envp)
 	i = -1;
 	while (cmd_list)
 	{
-		while (++i < BLTIN_NUM)
-			if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
-				(*builtin_func(i))(cmd_list, envp);
-		// if (!stat(cmd_list->cmd_name, &buf))
-		// 	run_process(cmd_list, envp);
-		// else
-		// 	find_cmd_path(cmd_list, envp);
+		if (cmd_list->cmd_name == NULL)
+			handle_no_cmd(cmd_list, envp);
+		else
+		{
+
+			while (++i < BLTIN_NUM)
+				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
+					(*builtin_func(i))(cmd_list, envp);
+			// if (!stat(cmd_list->cmd_name, &buf))
+			// 	run_process(cmd_list, envp);
+			// else
+			// 	find_cmd_path(cmd_list, envp);
+			// error : command not found
+		}
 		if (cmd_list->next)
 			cmd_list = cmd_list->next;
 		else
