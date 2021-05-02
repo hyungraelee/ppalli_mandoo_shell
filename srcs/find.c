@@ -50,91 +50,57 @@ char	*get_env_value(char *arg, char **envp)
 {
 	char	*env_name;
 	char	*result;
-	int		flag;
 	int		i;
 
-	flag = 0;
 	i = 0;
 	result = NULL;
-	env_name = NULL;
 	while (arg[i])
 	{
+		env_name = NULL;
 		if (arg[i] == '\'')
 		{
-			if (!(flag & D_QUOTE))				// if d_quote off
-				flag |= S_QUOTE;				// s_quote on
+			i++;
+			while (arg[i] != '\'')
+				result = ft_str_char_join(result, arg[i++]);
 			i++;
 		}
 		else if (arg[i] == '\"')
 		{
-			if (!(flag & S_QUOTE))				// if s_quote off
-				flag |= D_QUOTE;				// d_quote on
 			i++;
-		}
-		else
-		{
-			if (flag & S_QUOTE)
+			while (arg[i] != '\"')
 			{
-				while (flag & S_QUOTE)
+				if (arg[i] == '\\')
 				{
-					result = ft_str_char_join(result, arg[i++]);
-					if (arg[i] == '\'')
-						flag |= S_QUOTE;
+					if (arg[i + 1] == '\"' || arg[i + 1] == '\\' || arg[i + 1] == '`' || arg[i + 1] == '$')
+						result = ft_str_char_join(result, arg[++i]);
+					else
+						result = ft_str_char_join(result, arg[i]);
+					i++;
 				}
-				i++;
-			}
-			else if (flag & D_QUOTE)
-			{
-				while (flag & D_QUOTE)
+				else if (arg[i] == '$')
 				{
-					if (arg[i] == '\\')
-					{
-						if (arg[i + 1] == '\"' || arg[i + 1] == '\\' || arg[i + 1] == '`' || arg[i + 1] == '$')
-							result = ft_str_char_join(result, arg[++i]);
-						else
-							result = ft_str_char_join(result, arg[i]);
-						i++;
-					}
-					else if (arg[i] == '$')
-					{
-						// if (arg[i - 1] == '\\')
-						// 	result = ft_str_char_join(result, arg[i++]);
-						// else
-						// {
-						while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))		// $HOME -> /Users/jkeum
-							env_name = ft_str_char_join(env_name, arg[i]);
-						result = ft_strjoin(result, find_env_value(env_name, envp));
-						free(env_name);
-						// }
-					}
-					else if (arg[i] == '\"')
-					{
-						flag ^= D_QUOTE;
-						i++;
-					}
-				}
-			}
-			else
-			{
-				if (arg[i] == '$')
-				{
-					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))		// $HOME -> /Users/jkeum
+					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
 						env_name = ft_str_char_join(env_name, arg[i]);
-					result = ft_strjoin(result, find_env_value(env_name, envp));
-					free(env_name);
+					result = ft_strjoin(result, find_env_value(env_name, envp), 1);
 				}
 				else
 					result = ft_str_char_join(result, arg[i++]);
 			}
+			i++;
 		}
+		else
+		{
+			if (arg[i] == '$')
+			{
+				while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
+					env_name = ft_str_char_join(env_name, arg[i]);
+				result = ft_strjoin(result, find_env_value(env_name, envp), 1);
+			}
+			else
+				result = ft_str_char_join(result, arg[i++]);
+		}
+		if (env_name)
+			free(env_name);
 	}
 	return (result);
 }
-
-// int		main(int argc, char *argv[], char **envp)
-// {
-// 	char	arg[] = "hello\"  hi   $HOME\\$HOME\"world$PWD\\$HOME";
-
-// 	printf("%s\n", get_env_value(arg, envp));
-// 	return (0);
-// }
