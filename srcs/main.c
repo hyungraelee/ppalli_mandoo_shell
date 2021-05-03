@@ -33,6 +33,29 @@ void	minishell(char **envp)
 	}
 }
 
+char	**init_envp(char **env)
+{
+	int		i;
+	int		j;
+	char	**envp;
+
+	i = -1;
+	while (env[++i])
+		;
+	envp = (char **)ft_calloc(i + 1, sizeof(char *));
+	i = -1;
+	while (env[++i])
+	{
+		envp[i] = (char *)ft_calloc(PATH_MAX + 1, sizeof(char));
+		j = -1;
+		while (env[i][++j])
+			envp[i][j] = env[i][j];
+		envp[i][j] = 0;
+	}
+	envp[i] = NULL;
+	return (envp);
+}
+
 void	init_termios(void)
 {
 	struct termios	term;
@@ -45,9 +68,12 @@ void	init_termios(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-int		main(int argc, char **argv, char **envp)
+int		main(int argc, char **argv, char **env)
 {
+	char	**envp;
+
 	init_termios();
+	envp = init_envp(env);
 	minishell(envp);
 }
 
