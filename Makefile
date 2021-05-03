@@ -18,14 +18,16 @@ SRCS =	./srcs/main.c	\
 		./srcs/run.c		\
 		./srcs/separate.c	\
 		./srcs/token.c	\
+		./srcs/blt_func/blt_echo.c	\
 		./srcs/blt_func/blt_cd.c	\
-		./srcs/utils/ft_str_char_join.c	\
+		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\
 		./srcs/utils/ft_isalpha.c	\
 		./srcs/utils/ft_isdigit.c	\
 		./srcs/utils/ft_isprint.c	\
 		./srcs/utils/ft_memcpy.c	\
 		./srcs/utils/ft_memmove.c	\
+		./srcs/utils/ft_memset.c	\
 		./srcs/utils/ft_putstr_fd.c	\
 		./srcs/utils/ft_split.c	\
 		./srcs/utils/ft_str_char_join.c	\

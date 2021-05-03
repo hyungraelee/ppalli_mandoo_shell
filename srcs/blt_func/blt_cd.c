@@ -14,7 +14,8 @@ char	**add_env(char **envp, char *str)
 	i = -1;
 	while (envp[++i])
 		result[i] = envp[i];
-	result[i] = str;
+	result[i] = (char *)ft_calloc((PATH_MAX + 1) * sizeof(char));
+	ft_strlcpy(result[i], str, ft_strlen(str));
 	result[++i] = NULL;
 	free(envp);
 	return (result);
@@ -23,47 +24,23 @@ char	**add_env(char **envp, char *str)
 void	change_dir(char *dest, char ***envp)
 {
 	int		rt;
-	char	**env_tmp;
-	char	*temp;
+	char	*sys_env;
+	char	*inner_env;
 
 	rt = chdir(dest);
+	sys_env = NULL;
+	inner_env = NULL;
 	// if (rt == -1)
 		// strerror error & exit
 	// else
-	temp = NULL;
-	env_tmp = *envp;
-	while (*env_tmp)
-	{
-		if (!ft_strncmp(*env_tmp, "OLDPWD", 6) && *env_tmp[6] == '=')
-		{
-			free(*env_tmp);
-			*env_tmp = NULL;
-			temp = *env_tmp;
-			break ;
-		}
-		(*env_tmp)++;
-	}
-	env_tmp = *envp;
-	while (*env_tmp)
-	{
-		if (!temp)
-			add_env(*envp, ft_strjoin("OLDPWD=", ft_strdup(find_env_value("PWD", *envp)), 2)); // if not oldpwd exist
-		else
-			temp = ft_strjoin("OLDPWD=", ft_strdup(find_env_value("PWD", *envp)), 2);
-	}
-	env_tmp = *envp;
-	while (*env_tmp)
-	{
-		if (!ft_strncmp(*env_tmp, "PWD", 3) && *env_tmp[3] == '=')
-		{
-			free(*env_tmp);
-			*env_tmp = ft_strjoin("PWD=", dest, 0);
-			break ;
-		}
-		(*env_tmp)++;
-	}
-
-
+	sys_env = getenv("OLDPWD");
+	inner_env = find_env_value("OLDPWD", *envp);
+	if (!inner_env)
+		*envp = add_env(*envp, ft_strjoin("OLDPWD=", sys_env, 0));
+	else
+		ft_strlcpy(find_env_value("OLDPWD", *envp), sys_env, ft_strlen(sys_env));
+	sys_env = getenv("PWD");
+	ft_strlcpy(find_env_value("PWD", *envp), sys_env, ft_strlen(sys_env));
 }
 
 int		exec_cd(t_token *token, char ***envp)
