@@ -12,8 +12,8 @@ char	*find_env_value(char *env_name, char **envp)
 		if (!ft_strncmp(env_name, envp[i], env_len))
 		{
 			if (envp[i][env_len] == '=')
-				return (ft_strdup(envp[i] + env_len + 1));
-				// return (ft_strchr(envp[i], '=') + 1);
+				// return (ft_strdup(envp[i] + env_len + 1));
+				return (ft_strchr(envp[i], '=') + 1);
 		}
 	}
 	return (NULL);
@@ -82,7 +82,7 @@ char	*get_env_value(char *arg, char **envp)
 				{
 					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
 						env_name = ft_str_char_join(env_name, arg[i]);
-					result = ft_strjoin(result, find_env_value(env_name, envp), 3);
+					result = ft_strjoin(result, find_env_value(env_name, envp), 1);
 				}
 				else
 					result = ft_str_char_join(result, arg[i++]);
@@ -95,7 +95,7 @@ char	*get_env_value(char *arg, char **envp)
 			{
 				while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
 					env_name = ft_str_char_join(env_name, arg[i]);
-				result = ft_strjoin(result, find_env_value(env_name, envp), 3);
+				result = ft_strjoin(result, find_env_value(env_name, envp), 1);
 			}
 			else
 				result = ft_str_char_join(result, arg[i++]);
