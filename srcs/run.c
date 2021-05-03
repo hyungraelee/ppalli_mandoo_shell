@@ -202,6 +202,45 @@ int	handle_no_cmd(t_cmd *cmd_list, char **envp)
 	return (1);
 }
 
+void	blt_run(int i, t_cmd *cmd_list, char **envp)
+{
+	pid_t	pid;
+	int		status;
+	int		rd_fds[2];
+	int		old_fds[2];
+
+	old_fds[0] = dup(STDIN_FILENO);
+	old_fds[1] = dup(STDOUT_FILENO);
+	if (cmd_list->prev || cmd_list->next)
+	{
+		pipe(cmd_list->fds);
+		pid = fork();
+		if (pid == 0)
+		{
+			pipe_process(cmd_list);
+			redirect_process(cmd_list->token, rd_fds);
+			(*builtin_func(i))(cmd_list->token, envp);
+			exit(0);
+		}
+		else if (pid == -1)
+		{
+			;
+		}
+		else
+		{
+			wait(&status);
+			redirect_close(rd_fds);
+			pipe_restore(cmd_list, old_fds);
+		}
+	}
+	else
+	{
+		redirect_process(cmd_list->token, rd_fds);
+		(*builtin_func(i))(cmd_list->token, envp);
+		redirect_restore(rd_fds, old_fds);
+	}
+}
+
 int	run_process(t_cmd *cmd_list, char **envp)
 {
 	char	**args;
@@ -255,15 +294,15 @@ int	run(t_cmd *cmd_list, char **envp)
 		else
 		{
 			i = -1;
-			while (++i < 2)
+			while (++i < 3)
 			{
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
 				{
-					(*builtin_func(i))(cmd_list, envp);
+					blt_run(i, cmd_list, envp);
 					break ;
 				}
 			}
-			if (i >= 2)
+			if (i >= 3)
 			{
 				if (!stat(cmd_list->cmd_name, &buf))
 					run_process(cmd_list, envp);
