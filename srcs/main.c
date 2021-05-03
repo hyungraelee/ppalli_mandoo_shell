@@ -73,7 +73,7 @@ int		main(int argc, char **argv, char **env)
 	char	**envp;
 
 	init_termios();
-	envp = init_envp(&env);
+	envp = init_envp(env);
 	minishell(envp);
 }
 
