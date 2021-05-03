@@ -14,6 +14,7 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp);
 char	*find_env_value(char *env_name, char **envp);
 void	pipe_process(t_cmd *cmd_list);
 void	pipe_close(t_cmd *cmd_list);
+void	pipe_restore(t_cmd *cmd_list, int *old_fds);
 void	redirect_process(t_token *token, int *rd_fds);
 void	redirect_close(int *rd_fds);
 void	redirect_restore(int *rd_fds, int *old_fds);

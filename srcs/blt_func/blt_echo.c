@@ -44,7 +44,8 @@ int	blt_echo(t_cmd *cmd_list, char **envp)
 	int		rd_fds[2];
 	int		old_fds[2];
 
-	pid = 1;
+	old_fds[0] = dup(STDIN_FILENO);
+	old_fds[1] = dup(STDOUT_FILENO);
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
@@ -64,13 +65,11 @@ int	blt_echo(t_cmd *cmd_list, char **envp)
 		{
 			wait(&status);
 			redirect_close(rd_fds);
-			pipe_close(cmd_list);
+			pipe_restore(cmd_list, old_fds);
 		}
 	}
 	else
 	{
-		old_fds[0] = dup(STDIN_FILENO);
-		old_fds[1] = dup(STDOUT_FILENO);
 		redirect_process(cmd_list->token, rd_fds);
 		exec_echo(cmd_list->token, envp);
 		redirect_restore(rd_fds, old_fds);
