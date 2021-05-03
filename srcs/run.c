@@ -255,13 +255,21 @@ int	run(t_cmd *cmd_list, char **envp)
 		else
 		{
 			i = -1;
-			while (++i < BLTIN_NUM)
+			while (++i < 2)
+			{
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
+				{
 					(*builtin_func(i))(cmd_list, envp);
-			// if (!stat(cmd_list->cmd_name, &buf))
-			// 	run_process(cmd_list, envp);
-			// else
-			// 	find_cmd_path(cmd_list, envp);
+					break ;
+				}
+			}
+			if (i >= 2)
+			{
+				if (!stat(cmd_list->cmd_name, &buf))
+					run_process(cmd_list, envp);
+				else
+					find_cmd_path(cmd_list, envp);
+			}
 			// error : command not found
 		}
 		if (cmd_list->next)

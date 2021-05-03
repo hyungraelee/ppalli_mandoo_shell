@@ -6,12 +6,13 @@ char	*builtin_str(int i)
 
 	blt_str[0] = "echo";
 	blt_str[1] = "cd";
-	blt_str[2] = "pwd";
-	blt_str[3] = "export";
-	blt_str[4] = "unset";
-	blt_str[5] = "env";
-	blt_str[6] = "exit";
-	blt_str[7] = NULL;
+	blt_str[2] = NULL;
+	// blt_str[2] = "pwd";
+	// blt_str[3] = "export";
+	// blt_str[4] = "unset";
+	// blt_str[5] = "env";
+	// blt_str[6] = "exit";
+	// blt_str[7] = NULL;
 	return (blt_str[i]);
 }
 

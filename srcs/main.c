@@ -24,6 +24,7 @@ void	minishell(char **envp)
 			// if (!list)
 			status = run(cmd_list, envp);
 		}
+		free(input_string);
 		i = 0;
 		while (cmd_set && cmd_set[i])
 			free(cmd_set[i++]);
