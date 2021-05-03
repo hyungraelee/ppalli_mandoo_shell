@@ -15,6 +15,7 @@ char	*ft_strjoin(char *s1, char *s2, int to_free);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, size_t n);
+void	*ft_calloc(size_t count, size_t size);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
