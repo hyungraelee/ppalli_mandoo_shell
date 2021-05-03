@@ -15,7 +15,7 @@ char	**add_env(char **envp, char *str)
 	while (envp[++i])
 		result[i] = envp[i];
 	result[i] = (char *)ft_calloc((PATH_MAX + 1), sizeof(char));
-	ft_strlcpy(result[i], str, ft_strlen(str));
+	ft_strlcpy(result[i], str, ft_strlen(str) + 1);
 	result[++i] = NULL;
 	free(envp);
 	return (result);
@@ -26,21 +26,28 @@ void	change_dir(char *dest, char ***envp)
 	int		rt;
 	char	*sys_env;
 	char	*inner_env;
+	char	*temp;
+	char	buf[1024];
+	char	*pwd;
 
 	rt = chdir(dest);
+	char	cwd[1024];
+	printf("%s\n", getcwd(cwd, 100));
 	sys_env = NULL;
 	inner_env = NULL;
 	// if (rt == -1)
 		// strerror error & exit
 	// else
-	sys_env = getenv("OLDPWD");
+	temp = find_env_value("PWD", *envp);
+	pwd = getcwd(buf, 1024);
+
 	inner_env = find_env_value("OLDPWD", *envp);
 	if (!inner_env)
-		*envp = add_env(*envp, ft_strjoin("OLDPWD=", sys_env, 0));
+		*envp = add_env(*envp, ft_strjoin("OLDPWD=", temp, 0));
 	else
-		ft_strlcpy(find_env_value("OLDPWD", *envp), sys_env, ft_strlen(sys_env) + 1);
-	sys_env = getenv("PWD");
-	ft_strlcpy(find_env_value("PWD", *envp), sys_env, ft_strlen(sys_env) + 1);
+		ft_strlcpy(find_env_value("OLDPWD", *envp), temp, ft_strlen(temp) + 1);
+	temp = find_env_value("PWD", *envp);
+	ft_strlcpy(find_env_value("PWD", *envp), pwd, ft_strlen(pwd) + 1);
 }
 
 int		exec_cd(t_token *token, char ***envp)
@@ -79,15 +86,14 @@ int		exec_cd(t_token *token, char ***envp)
 		}
 		else
 		{
-			while (*env_value)
-				path[++i] = (*env_value)++;
+			ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
 		}
 	}
 	else if (arg[0] == '~' && arg[1] == '/' && ft_strlen(arg) > 2)
 	{
 		env_value = find_env_value("HOME", *envp);
-		while (*env_value)
-			path[++i] = (*env_value)++;
+		while (env_value[++i])
+			path[i] = env_value[i];
 		j = 2;
 		while (arg[j])
 			path[i++] = arg[j++];
@@ -103,8 +109,7 @@ int		exec_cd(t_token *token, char ***envp)
 		else
 		{
 			ft_putstr_fd(env_value, STDOUT_FILENO);
-			while (*env_value)
-				path[++i] = (*env_value)++;
+			ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
 		}
 	}
 	else
