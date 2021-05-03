@@ -51,9 +51,9 @@ int		exec_cd(t_token *token, char ***envp)
 	char	*arg;
 	char	*env_value;
 
-	i = 0;
-	while (i < PATH_MAX + 1)
-		path[i++] = 0;
+	i = -1;
+	while (++i < PATH_MAX + 1)
+		path[i] = 0;
 	while (token->type != ARGUMENT)
 	{
 		if (token->next)
