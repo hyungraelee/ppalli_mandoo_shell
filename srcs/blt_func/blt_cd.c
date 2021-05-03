@@ -14,7 +14,7 @@ char	**add_env(char **envp, char *str)
 	i = -1;
 	while (envp[++i])
 		result[i] = envp[i];
-	result[i] = (char *)ft_calloc((PATH_MAX + 1) * sizeof(char));
+	result[i] = (char *)ft_calloc((PATH_MAX + 1), sizeof(char));
 	ft_strlcpy(result[i], str, ft_strlen(str));
 	result[++i] = NULL;
 	free(envp);
@@ -38,9 +38,9 @@ void	change_dir(char *dest, char ***envp)
 	if (!inner_env)
 		*envp = add_env(*envp, ft_strjoin("OLDPWD=", sys_env, 0));
 	else
-		ft_strlcpy(find_env_value("OLDPWD", *envp), sys_env, ft_strlen(sys_env));
+		ft_strlcpy(find_env_value("OLDPWD", *envp), sys_env, ft_strlen(sys_env) + 1);
 	sys_env = getenv("PWD");
-	ft_strlcpy(find_env_value("PWD", *envp), sys_env, ft_strlen(sys_env));
+	ft_strlcpy(find_env_value("PWD", *envp), sys_env, ft_strlen(sys_env) + 1);
 }
 
 int		exec_cd(t_token *token, char ***envp)
@@ -51,9 +51,9 @@ int		exec_cd(t_token *token, char ***envp)
 	char	*arg;
 	char	*env_value;
 
-	i = 0;
-	while (i < PATH_MAX + 1)
-		path[i++] = 0;
+	i = -1;
+	while (++i < PATH_MAX + 1)
+		path[i] = 0;
 	while (token->type != ARGUMENT)
 	{
 		if (token->next)
