@@ -42,7 +42,7 @@ char	**init_envp(char **env)
 	i = -1;
 	while (env[++i])
 		;
-	envp = (char **)ft_calloc(i, sizeof(char *));
+	envp = (char **)ft_calloc(i + 1, sizeof(char *));
 	i = -1;
 	while (env[++i])
 	{
