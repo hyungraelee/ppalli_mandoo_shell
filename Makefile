@@ -18,8 +18,9 @@ SRCS =	./srcs/main.c	\
 		./srcs/run.c		\
 		./srcs/separate.c	\
 		./srcs/token.c	\
-		./srcs/blt_func/blt_echo.c	\
 		./srcs/blt_func/blt_cd.c	\
+		./srcs/blt_func/blt_echo.c	\
+		./srcs/blt_func/blt_export.c	\
 		./srcs/blt_func/blt_pwd.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\

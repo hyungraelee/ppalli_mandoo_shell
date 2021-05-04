@@ -13,7 +13,7 @@ void	print_export(char **envp)
 	export = (char **)malloc((i + 1) * sizeof(char *));
 	i = -1;
 	while (envp[++i])
-		export[i] = envp[i];
+		export[i] = ft_strdup(envp[i]);
 	export[i] = NULL;
 	i--;
 	while (i > 0)
@@ -42,13 +42,13 @@ void	print_export(char **envp)
 	free(export);
 }
 
-int		blt_export(t_token *token, char **envp)
+int		blt_export(t_token *token, char ***envp)
 {
 	int		i;
 	char	*export_name;
 
 	if (!token->next)
-		print_export(envp);
+		print_export(*envp);
 	else
 	{
 		while (token)
@@ -59,10 +59,10 @@ int		blt_export(t_token *token, char **envp)
 					; // error;
 				else
 				{
-					i = 0;
-					while (token->arg[i] == '=' && token->arg[i])
+					// i = 0;
+					// while (token->arg[i] == '=' && token->arg[i])
 					// if (!find_env_value())
-					envp = add_env(envp, token->arg);
+					*envp = add_env(*envp, token->arg);
 				}
 			}
 			if (token->next)

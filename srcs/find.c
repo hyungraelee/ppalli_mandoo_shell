@@ -44,7 +44,7 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	while (path[++i])
 		free(path[i]);
 	free(path);
-	return (run_process(cmd_list, envp));
+	return (run_process(cmd_list, &envp));
 }
 
 char	*get_env_value(char *arg, char **envp)
@@ -108,7 +108,6 @@ char	*get_env_value(char *arg, char **envp)
 					else
 						result = ft_str_char_join(result, (*env_temp)++);
 				}
-				result = ft_strjoin(result, find_env_value(env_name, envp), 1);
 			}
 			else
 				result = ft_str_char_join(result, arg[i++]);
