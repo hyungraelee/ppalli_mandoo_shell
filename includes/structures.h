@@ -23,7 +23,6 @@ typedef struct	s_cmd		t_cmd;
 typedef struct	s_token		t_token;
 typedef struct	s_redirect	t_redirect;
 
-
 struct	s_token
 {
 	int		type;

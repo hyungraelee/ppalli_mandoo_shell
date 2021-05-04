@@ -309,7 +309,6 @@ int	run(t_cmd *cmd_list, char **envp)
 				else
 					find_cmd_path(cmd_list, envp);
 			}
-			// error : command not found
 		}
 		if (cmd_list->next)
 			cmd_list = cmd_list->next;
