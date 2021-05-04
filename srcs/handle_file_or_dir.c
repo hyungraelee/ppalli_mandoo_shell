@@ -1,18 +1,23 @@
 #include "minishell.h"
 
-int	handle_file_or_dir(char	*cmd_name, char ***envp)
+int	check_stat(char	*cmd_name, char ***envp)
 {
 	struct stat	buf;
 
 	cmd_name = get_env_value(cmd_name, *envp);
 	if (stat(cmd_name, &buf) == -1)
 	{
-		printf("minishell: %s: %s\n", cmd_name, strerror(errno));
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd_name, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+		// printf("minishell: %s: %s\n", cmd_name, strerror(errno));
 		g_exit = 127;
 	}
 	if (S_ISDIR(buf.st_mode))
 	{
-		printf("minishell: %s: %s\n", cmd_name, "is a directory");
+		// printf("minishell: %s: %s\n", cmd_name, "is a directory");
 		g_exit = 126;
 	}
 	else if (S_ISREG(buf.st_mode))
@@ -21,9 +26,49 @@ int	handle_file_or_dir(char	*cmd_name, char ***envp)
 			g_exit = 0;
 		else
 		{
-			printf("minishell: %s: %s\n", cmd_name, "Permission denied");
+			// printf("minishell: %s: %s\n", cmd_name, "Permission denied");
 			g_exit = 126;
 		}
+	}
+	return (1);
+}
+
+int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
+{
+	pid_t	pid;
+	int		status;
+	int		rd_fds[2];
+	int		old_fds[2];
+
+	old_fds[0] = dup(STDIN_FILENO);
+	old_fds[1] = dup(STDOUT_FILENO);
+	if (cmd_list->prev || cmd_list->next)
+	{
+		pipe(cmd_list->fds);
+		pid = fork();
+		if (pid == 0)
+		{
+			pipe_process(cmd_list);
+			redirect_process(cmd_list->token, rd_fds);
+			check_stat(cmd_list->cmd_name, envp);
+			exit(0);
+		}
+		else if (pid == -1)
+		{
+			;
+		}
+		else
+		{
+			wait(&status);
+			redirect_close(rd_fds);
+			pipe_restore(cmd_list, old_fds);
+		}
+	}
+	else
+	{
+		redirect_process(cmd_list->token, rd_fds);
+		check_stat(cmd_list->cmd_name, envp);
+		redirect_restore(rd_fds, old_fds);
 	}
 	return (1);
 }
