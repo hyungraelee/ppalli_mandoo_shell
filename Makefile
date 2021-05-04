@@ -13,6 +13,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/builtin.c	\
 		./srcs/check_syntax_err.c		\
 		./srcs/find.c		\
+		./srcs/handle_file_or_dir.c		\
 		./srcs/parse.c		\
 		./srcs/read_cmd.c	\
 		./srcs/run.c		\

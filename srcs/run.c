@@ -291,6 +291,8 @@ int	run(t_cmd *cmd_list, char ***envp)
 	{
 		if (cmd_list->cmd_name == NULL)
 			handle_no_cmd(cmd_list, envp);
+		else if (cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/')
+			handle_file_or_dir(cmd_list->cmd_name, envp);
 		else
 		{
 			i = -1;

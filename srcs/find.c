@@ -115,5 +115,6 @@ char	*get_env_value(char *arg, char **envp)
 		if (env_name)
 			free(env_name);
 	}
+	free(arg);
 	return (result);
 }
