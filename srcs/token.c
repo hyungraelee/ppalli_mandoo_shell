@@ -64,7 +64,7 @@ char	**token_array(char **args, char *cmdline)
 					while (flag & D_QUOTE)
 					{
 						j++;
-						if (cmdline[j] == '\"' && cmdline[i - 1] != '\\')
+						if (cmdline[j] == '\"' && cmdline[j - 1] != '\\')
 							flag ^= D_QUOTE;
 					}
 				}
