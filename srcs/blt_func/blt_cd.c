@@ -18,11 +18,11 @@ char	**add_env(char **envp, char *str)
 	ft_strlcpy(result[i], str, ft_strlen(str) + 1);
 	result[++i] = NULL;
 	free(str);
-	free(envp);
+	// free(envp);
 	return (result);
 }
 
-void	change_dir(char *dest, char **envp)
+void	change_dir(char *dest, char ***envp)
 {
 	int		rt;
 	char	*inner_env;
@@ -35,19 +35,19 @@ void	change_dir(char *dest, char **envp)
 	// if (rt == -1)
 		// strerror error & exit
 	// else
-	temp = find_env_value("PWD", envp);
+	temp = find_env_value("PWD", *envp);
 	pwd = getcwd(buf, PATH_MAX);
 
-	inner_env = find_env_value("OLDPWD", envp);
+	inner_env = find_env_value("OLDPWD", *envp);
 	if (!inner_env)
-		envp = add_env(envp, ft_strjoin("OLDPWD=", temp, 0));
+		*envp = add_env(*envp, ft_strjoin("OLDPWD=", temp, 0));
 	else
-		ft_strlcpy(find_env_value("OLDPWD", envp), temp, ft_strlen(temp) + 1);
-	temp = find_env_value("PWD", envp);
-	ft_strlcpy(find_env_value("PWD", envp), pwd, ft_strlen(pwd) + 1);
+		ft_strlcpy(find_env_value("OLDPWD", *envp), temp, ft_strlen(temp) + 1);
+	temp = find_env_value("PWD", *envp);
+	ft_strlcpy(find_env_value("PWD", *envp), pwd, ft_strlen(pwd) + 1);
 }
 
-int		blt_cd(t_token *token, char **envp)
+int		blt_cd(t_token *token, char ***envp)
 {
 	char	path[PATH_MAX + 1];
 	int		i;
@@ -66,13 +66,13 @@ int		blt_cd(t_token *token, char **envp)
 			break ;
 	}
 	if (token->type == ARGUMENT)
-		arg = get_env_value(token->arg, envp);
+		arg = get_env_value(token->arg, *envp);
 	else
 		arg = NULL;
 	i = -1;
 	if (!arg || !ft_strcmp("~", arg) || !ft_strcmp("~/", arg))
 	{
-		env_value = find_env_value("HOME", envp);
+		env_value = find_env_value("HOME", *envp);
 		if (!env_value)
 		{
 			;
@@ -88,7 +88,7 @@ int		blt_cd(t_token *token, char **envp)
 	}
 	else if (arg[0] == '~' && arg[1] == '/' && ft_strlen(arg) > 2)
 	{
-		env_value = find_env_value("HOME", envp);
+		env_value = find_env_value("HOME", *envp);
 		while (env_value[++i])
 			path[i] = env_value[i];
 		j = 2;
@@ -97,7 +97,7 @@ int		blt_cd(t_token *token, char **envp)
 	}
 	else if (!ft_strcmp("-", arg))
 	{
-		env_value = find_env_value("OLDPWD", envp);
+		env_value = find_env_value("OLDPWD", *envp);
 		if (!env_value)
 		{
 			;

@@ -158,7 +158,7 @@ void	pipe_restore(t_cmd *cmd_list, int *old_fds)
 	}
 }
 
-int	handle_no_cmd(t_cmd *cmd_list, char **envp)
+int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 {
 	pid_t	pid;
 	int		rd_fds[2];
@@ -166,7 +166,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char **envp)
 
 	while (cmd_list->token)
 	{
-		cmd_list->token->arg = get_env_value(cmd_list->token->arg, envp);
+		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
 		if (cmd_list->token->next)
 			cmd_list->token = cmd_list->token->next;
 		else
@@ -202,7 +202,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char **envp)
 	return (1);
 }
 
-void	blt_run(int i, t_cmd *cmd_list, char **envp)
+void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 {
 	pid_t	pid;
 	int		status;
@@ -241,7 +241,7 @@ void	blt_run(int i, t_cmd *cmd_list, char **envp)
 	}
 }
 
-int	run_process(t_cmd *cmd_list, char **envp)
+int	run_process(t_cmd *cmd_list, char ***envp)
 {
 	char	**args;
 	pid_t	pid;
@@ -250,7 +250,7 @@ int	run_process(t_cmd *cmd_list, char **envp)
 
 	while (cmd_list->token)
 	{
-		cmd_list->token->arg = get_env_value(cmd_list->token->arg, envp);
+		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
 		if (cmd_list->token->next)
 			cmd_list->token = cmd_list->token->next;
 		else
@@ -265,7 +265,7 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	{
 		pipe_process(cmd_list);
 		redirect_process(cmd_list->token, rd_fds);	// need error handle -> open error
-		execve(cmd_list->cmd_name, args, envp);
+		execve(cmd_list->cmd_name, args, *envp);
 		exit(0);
 		// need error handle -> if execve error return -1
 	}
@@ -282,7 +282,7 @@ int	run_process(t_cmd *cmd_list, char **envp)
 	return (1);
 }
 
-int	run(t_cmd *cmd_list, char **envp)
+int	run(t_cmd *cmd_list, char ***envp)
 {
 	int			i;
 	struct stat	buf;
@@ -294,7 +294,7 @@ int	run(t_cmd *cmd_list, char **envp)
 		else
 		{
 			i = -1;
-			while (++i < 3)
+			while (++i < 4)
 			{
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
 				{
@@ -302,12 +302,12 @@ int	run(t_cmd *cmd_list, char **envp)
 					break ;
 				}
 			}
-			if (i >= 3)
+			if (i >= 4)
 			{
 				if (!stat(cmd_list->cmd_name, &buf))
 					run_process(cmd_list, envp);
 				else
-					find_cmd_path(cmd_list, envp);
+					find_cmd_path(cmd_list, *envp);
 			}
 		}
 		if (cmd_list->next)

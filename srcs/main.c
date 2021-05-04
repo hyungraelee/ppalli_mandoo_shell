@@ -22,7 +22,7 @@ void	minishell(char **envp)
 		{
 			cmd_list = get_parsed_list(cmd_set[i++]);
 			// if (!list)
-			status = run(cmd_list, envp);
+			status = run(cmd_list, &envp);
 		}
 		free(input_string);
 		i = 0;
