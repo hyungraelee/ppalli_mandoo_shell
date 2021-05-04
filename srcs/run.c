@@ -163,7 +163,10 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 	pid_t	pid;
 	int		rd_fds[2];
 	int		status;
+	int		old_fds[2];
 
+	old_fds[0] = dup(STDIN_FILENO);
+	old_fds[1] = dup(STDOUT_FILENO);
 	while (cmd_list->token)
 	{
 		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
@@ -190,14 +193,14 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 		{
 			wait(&status);
 			redirect_close(rd_fds);
-			pipe_close(cmd_list);
+			pipe_restore(cmd_list, old_fds);
 		}
 		return (1);
 	}
 	else
 	{
 		redirect_process(cmd_list->token, rd_fds);
-		redirect_close(rd_fds);
+		redirect_restore(rd_fds, old_fds);
 	}
 	return (1);
 }
@@ -247,7 +250,10 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	pid_t	pid;
 	int		status;
 	int		rd_fds[2];
+	int		old_fds[2];
 
+	old_fds[0] = dup(STDIN_FILENO);
+	old_fds[1] = dup(STDOUT_FILENO);
 	while (cmd_list->token)
 	{
 		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
@@ -277,7 +283,7 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	{
 		wait(&status);
 		redirect_close(rd_fds);
-		pipe_close(cmd_list);
+		pipe_restore(cmd_list, old_fds);
 	}
 	return (1);
 }
@@ -292,7 +298,7 @@ int	run(t_cmd *cmd_list, char ***envp)
 		if (cmd_list->cmd_name == NULL)
 			handle_no_cmd(cmd_list, envp);
 		else if (cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/')
-			handle_file_or_dir(cmd_list->cmd_name, envp);
+			handle_file_or_dir(cmd_list, envp);
 		else
 		{
 			i = -1;
