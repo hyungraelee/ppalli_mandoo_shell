@@ -27,7 +27,7 @@ void	change_dir(char *dest, char **envp)
 	int		rt;
 	char	*inner_env;
 	char	*temp;
-	char	buf[1024];
+	char	buf[PATH_MAX];
 	char	*pwd;
 
 	rt = chdir(dest);
@@ -36,7 +36,7 @@ void	change_dir(char *dest, char **envp)
 		// strerror error & exit
 	// else
 	temp = find_env_value("PWD", envp);
-	pwd = getcwd(buf, 1024);
+	pwd = getcwd(buf, PATH_MAX);
 
 	inner_env = find_env_value("OLDPWD", envp);
 	if (!inner_env)

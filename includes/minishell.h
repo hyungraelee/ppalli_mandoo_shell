@@ -14,6 +14,10 @@
 # include "run.h"
 # include "utils.h"
 
+
+typedef int	t_exit_code;
+t_exit_code	g_exit;
+
 # define PATH_MAX 1024
 # define OFF 0
 # define ON 1
