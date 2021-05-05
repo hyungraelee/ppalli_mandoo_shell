@@ -61,7 +61,7 @@ void	print_export(char **envp)
 	i--;
 	while (i > 0)
 	{
-		j = 1;
+		j = 0;
 		while (j < i)
 		{
 			if (ft_strcmp(export[j], export[j + 1]) > 0)
@@ -79,7 +79,7 @@ void	print_export(char **envp)
 	{
 		j = 0;
 		export_name = NULL;
-		while (export[i][j] || export[i][j] != '=')
+		while (export[i][j] && export[i][j] != '=')
 			export_name = ft_str_char_join(export_name, export[i][j++]);
 		tmp = set_export_value(export[i], j);
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
@@ -88,9 +88,9 @@ void	print_export(char **envp)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		free(export_name);
 		free(tmp);
-		free(export[i]);
+		// free(export[i]);
 	}
-	free(export);
+	// free(export);
 }
 
 int		blt_export(t_token *token, char ***envp)
@@ -108,23 +108,23 @@ int		blt_export(t_token *token, char ***envp)
 		{
 			if (token->type == ARGUMENT)
 			{
-				if (token->arg[0] == '=')
-					; // error;
-				else
-				{
-					i = 0;
-					while (token->arg[i] || token->arg[i] != '=')
-						export_name = ft_str_char_join(export_name, token->arg[i++]);
-					if (!set_env_name(&export_name))
-						; // error
-					idx = find_env_name(export_name, envp);
+				// if (token->arg[0] == '=')
+				// 	; // error;
+				// else
+				// {
+				// 	i = 0;
+				// 	while (token->arg[i] || token->arg[i] != '=')
+				// 		export_name = ft_str_char_join(export_name, token->arg[i++]);
+				// 	if (!set_env_name(&export_name))
+				// 		; // error
+					idx = find_env_name(export_name, *envp);
 					if (idx > 0)
-						;// duplicate envp[idx]
-						// ft_strlcpy(envp[idx], token->arg, ft_strlen(token->arg) + 1);
+						// ;// duplicate envp[idx]
+						ft_strlcpy(*envp[idx], token->arg, ft_strlen(token->arg) + 1);
 					else
-						;// *envp
-						// *envp = add_env(*envp, token->arg);
-				}
+						// ;// *envp
+						*envp = add_env(*envp, token->arg);
+				// }
 			}
 			if (token->next)
 				token = token->next;

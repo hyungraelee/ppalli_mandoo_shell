@@ -12,6 +12,7 @@ int		run_process(t_cmd *cmd_list, char ***envp);
 char	*get_env_value(char *arg, char **envp);
 int		find_cmd_path(t_cmd *cmd_list, char **envp);
 char	*find_env_value(char *env_name, char **envp);
+int		find_env_name(char *env_name, char **envp);
 void	pipe_process(t_cmd *cmd_list);
 void	pipe_close(t_cmd *cmd_list);
 void	pipe_restore(t_cmd *cmd_list, int *old_fds);
