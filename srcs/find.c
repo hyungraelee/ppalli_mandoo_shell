@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+int		find_env_name(char *env_name, char **envp)
+{
+	int	i;
+	int	env_len;
+
+	i = -1;
+	env_len = ft_strlen(env_name);
+	while (envp[++i])
+	{
+		if (!ft_strncmp(env_name, envp[i], env_len))
+		{
+			if (!envp[i][env_len] || envp[i][env_len] == '=')
+				return (i);
+		}
+	}
+	return (-1);
+}
+
 char	*find_env_value(char *env_name, char **envp)
 {
 	int	i;
