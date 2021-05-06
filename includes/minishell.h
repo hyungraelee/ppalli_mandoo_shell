@@ -20,6 +20,10 @@
 typedef int	t_exit_code;
 t_exit_code	g_exit;
 
+# define B_RED "\033[1;5;31m"
+# define B_GREEN "\033[1;5;92m"
+# define C_RESET "\e[0m"
+
 # define PATH_MAX 1024
 # define OFF 0
 # define ON 1

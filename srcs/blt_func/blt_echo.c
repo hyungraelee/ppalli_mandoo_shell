@@ -29,6 +29,8 @@ int		blt_echo(t_token *token, char ***envp)
 			result = ft_strjoin(result, " ", 1);
 			token = token->next;
 		}
+		else if (token->next)
+			token = token->next;
 		else
 			break ;
 	}
