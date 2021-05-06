@@ -11,9 +11,13 @@ char	*print_export_value(char *envp, int idx)
 	is_squote = 0;
 	if (!envp[idx])
 		result = ft_strdup("");
-	else if (envp[idx++] == '=')
+	else if (envp[idx] == '=')
 	{
-		
+		result = ft_str_char_join(result, envp[idx++]);
+		while (envp[idx])
+		{
+
+		}
 	}
 	return (result);
 }
