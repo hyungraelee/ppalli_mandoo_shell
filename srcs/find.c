@@ -107,9 +107,17 @@ char	*get_env_value(char *arg, char **envp)
 				}
 				else if (arg[i] == '$')
 				{
-					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
-						env_name = ft_str_char_join(env_name, arg[i]);
-					result = ft_strjoin(result, find_env_value(env_name, envp), 1);
+					if (arg[i + 1] == '?')
+					{
+						result = ft_strjoin(result, ft_itoa(g_exit), 3);
+						i += 2;
+					}
+					else
+					{
+						while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
+							env_name = ft_str_char_join(env_name, arg[i]);
+						result = ft_strjoin(result, find_env_value(env_name, envp), 1);
+					}
 				}
 				else
 					result = ft_str_char_join(result, arg[i++]);
@@ -120,19 +128,27 @@ char	*get_env_value(char *arg, char **envp)
 		{
 			if (arg[i] == '$')
 			{
-				while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
-					env_name = ft_str_char_join(env_name, arg[i]);
-				env_temp = find_env_value(env_name, envp);
-				while (env_temp && *env_temp)
+				if (arg[i + 1] == '?')
 				{
-					if (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
+					result = ft_strjoin(result, ft_itoa(g_exit), 3);
+					i += 2;
+				}
+				else
+				{
+					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
+						env_name = ft_str_char_join(env_name, arg[i]);
+					env_temp = find_env_value(env_name, envp);
+					while (env_temp && *env_temp)
 					{
-						result = ft_str_char_join(result, ' ');
-						while (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
-							(*env_temp)++;
+						if (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
+						{
+							result = ft_str_char_join(result, ' ');
+							while (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
+								(*env_temp)++;
+						}
+						else
+							result = ft_str_char_join(result, (*env_temp)++);
 					}
-					else
-						result = ft_str_char_join(result, (*env_temp)++);
 				}
 			}
 			else
