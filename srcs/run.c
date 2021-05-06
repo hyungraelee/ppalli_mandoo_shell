@@ -188,7 +188,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 			exit(0);
 		}
 		else if (pid == -1)
-			; // error
+			ft_print_err("fork", strerror(errno), 1);
 		else
 		{
 			wait(&status);
@@ -226,9 +226,7 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 			exit(0);
 		}
 		else if (pid == -1)
-		{
-			;
-		}
+			ft_print_err("fork", strerror(errno), 1);
 		else
 		{
 			wait(&status);
@@ -251,6 +249,7 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	int		status;
 	int		rd_fds[2];
 	int		old_fds[2];
+	int		rt;
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
@@ -267,21 +266,26 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	args = make_args(cmd_list->token);
 	pipe(cmd_list->fds);
 	pid = fork();
+	rt = 0;
 	if (pid == 0)
 	{
 		pipe_process(cmd_list);
 		redirect_process(cmd_list->token, rd_fds);	// need error handle -> open error
-		execve(cmd_list->cmd_name, args, *envp);
-		exit(0);
-		// need error handle -> if execve error return -1
+		rt = execve(cmd_list->cmd_name, args, *envp);
+		if (rt == -1)
+		{
+			ft_print_err(cmd_list->cmd_name, strerror(errno), 1);
+			exit(EXIT_FAILURE);
+		}
+		exit(EXIT_SUCCESS);
 	}
 	else if (pid == -1)
-	{
-		; // need error handle -> if fork error pid -1
-	}
+		ft_print_err("fork", strerror(errno), 1);
 	else
 	{
 		wait(&status);
+		if (status >> 8 != 0)
+			g_exit = 1;
 		redirect_close(rd_fds);
 		pipe_restore(cmd_list, old_fds);
 	}

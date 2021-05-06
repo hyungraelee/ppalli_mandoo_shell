@@ -56,8 +56,11 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 			break ;
 		}
 	}
-	// if (!path[i])
-		// command not found
+	if (!path[i])
+	{
+		ft_print_err(cmd_list->cmd_name, "command not found", 127);
+		return (0);
+	}
 	i = -1;
 	while (path[++i])
 		free(path[i]);
