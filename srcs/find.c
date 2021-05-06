@@ -144,10 +144,13 @@ char	*get_env_value(char *arg, char **envp)
 						{
 							result = ft_str_char_join(result, ' ');
 							while (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
-								(*env_temp)++;
+								env_temp++;
 						}
 						else
-							result = ft_str_char_join(result, (*env_temp)++);
+						{
+							result = ft_str_char_join(result, *env_temp);
+							env_temp++;
+						}
 					}
 				}
 			}

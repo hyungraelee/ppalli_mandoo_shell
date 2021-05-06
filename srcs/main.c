@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	prompt(void)
+{
+	if (g_exit == 0)
+		write(1, B_GREEN, ft_strlen(B_GREEN));
+	else
+		write(1, B_RED, ft_strlen(B_RED));
+	write(1, "> ", 2);
+	write(1, C_RESET, ft_strlen(C_RESET));
+}
+
 void	minishell(char **envp)
 {
 	int 	status;
@@ -12,7 +22,7 @@ void	minishell(char **envp)
 	status = 1;
 	while (status)
 	{
-		write(1, "> ", 2);
+		prompt();
 		read_cmd(&input_string);
 		if (!check_syntax_err(input_string))
 			continue ;
