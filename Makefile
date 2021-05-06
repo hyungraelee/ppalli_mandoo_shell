@@ -21,8 +21,11 @@ SRCS =	./srcs/main.c	\
 		./srcs/token.c	\
 		./srcs/blt_func/blt_cd.c	\
 		./srcs/blt_func/blt_echo.c	\
+		./srcs/blt_func/blt_env.c	\
+		./srcs/blt_func/blt_exit.c	\
 		./srcs/blt_func/blt_export.c	\
 		./srcs/blt_func/blt_pwd.c	\
+		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\
 		./srcs/utils/ft_isalpha.c	\

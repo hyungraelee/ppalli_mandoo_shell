@@ -58,7 +58,12 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	}
 	if (!path[i])
 	{
-		ft_print_err(cmd_list->cmd_name, "command not found", 127);
+		ft_print_err(cmd_list->cmd_name, "command not found", NULL, 127);
+		return (0);
+	}
+	if (!(buf.st_mode & S_IXUSR))
+	{
+		ft_print_err(cmd_list->cmd_name, "Permission denied", NULL, 126);
 		return (0);
 	}
 	i = -1;

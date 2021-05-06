@@ -188,7 +188,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 			exit(0);
 		}
 		else if (pid == -1)
-			ft_print_err("fork", strerror(errno), 1);
+			ft_print_err("fork", strerror(errno), NULL, 1);
 		else
 		{
 			wait(&status);
@@ -226,10 +226,12 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 			exit(0);
 		}
 		else if (pid == -1)
-			ft_print_err("fork", strerror(errno), 1);
+			ft_print_err("fork", strerror(errno), NULL, 1);
 		else
 		{
 			wait(&status);
+			if (status >> 8 != 0)
+				g_exit = status >> 8;
 			redirect_close(rd_fds);
 			pipe_restore(cmd_list, old_fds);
 		}
@@ -274,13 +276,13 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 		rt = execve(cmd_list->cmd_name, args, *envp);
 		if (rt == -1)
 		{
-			ft_print_err(cmd_list->cmd_name, strerror(errno), 1);
+			ft_print_err(cmd_list->cmd_name, strerror(errno), NULL, 1);
 			exit(EXIT_FAILURE);
 		}
 		exit(EXIT_SUCCESS);
 	}
 	else if (pid == -1)
-		ft_print_err("fork", strerror(errno), 1);
+		ft_print_err("fork", strerror(errno), NULL, 1);
 	else
 	{
 		wait(&status);
@@ -306,7 +308,7 @@ int	run(t_cmd *cmd_list, char ***envp)
 		else
 		{
 			i = -1;
-			while (++i < 4)
+			while (++i < 6)
 			{
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
 				{
@@ -314,7 +316,7 @@ int	run(t_cmd *cmd_list, char ***envp)
 					break ;
 				}
 			}
-			if (i >= 4)
+			if (i >= 6)
 			{
 				if (!stat(cmd_list->cmd_name, &buf))
 					run_process(cmd_list, envp);

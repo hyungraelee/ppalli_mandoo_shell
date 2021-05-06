@@ -7,17 +7,17 @@ int	check_stat(char	*cmd_name, char ***envp)
 	cmd_name = get_env_value(cmd_name, *envp);
 	if (stat(cmd_name, &buf) == -1)
 	{
-		ft_print_err(cmd_name, strerror(errno), 127);
+		ft_print_err(cmd_name, strerror(errno), NULL, 127);
 		return (1);
 	}
 	if (S_ISDIR(buf.st_mode))
-		ft_print_err(cmd_name, "is a directory", 126);
+		ft_print_err(cmd_name, "is a directory", NULL, 126);
 	else if (S_ISREG(buf.st_mode))
 	{
 		if (buf.st_mode & S_IXUSR)
 			g_exit = 0;
 		else
-			ft_print_err(cmd_name, "Permission denied", 126);
+			ft_print_err(cmd_name, "Permission denied", NULL, 126);
 	}
 	return (1);
 }
@@ -43,7 +43,7 @@ int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
 			exit(0);
 		}
 		else if (pid == -1)
-			ft_print_err("fork", strerror(errno), 1);
+			ft_print_err("fork", strerror(errno), NULL, 1);
 		else
 		{
 			wait(&status);
