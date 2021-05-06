@@ -1,9 +1,10 @@
 #include "minishell.h"
 
-void	ft_print_err(char	*s1, char *s2)
+void	ft_print_err(char *s1, char *s2, int code)
 {
 	char	*print;
 
+	g_exit = code;
 	print = ft_strdup("minishell: ");
 	print = ft_strjoin(print, s1, 1);
 	print = ft_strjoin(print, ": ", 1);
