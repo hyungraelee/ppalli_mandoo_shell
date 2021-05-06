@@ -216,7 +216,7 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
-	g_exit = 0;
+	// g_exit = 0;
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
@@ -258,7 +258,7 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
-	g_exit = 0;
+	// g_exit = 0;
 	while (cmd_list->token)
 	{
 		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
@@ -292,6 +292,8 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 		wait(&status);
 		if (status >> 8 != 0)
 			g_exit = 1;
+		else
+			g_exit = 0;
 		redirect_close(rd_fds);
 		pipe_restore(cmd_list, old_fds);
 	}
@@ -305,9 +307,10 @@ int	run(t_cmd *cmd_list, char ***envp)
 
 	while (cmd_list)
 	{
+		cmd_list->cmd_name = get_env_value(cmd_list->cmd_name, *envp);
 		if (cmd_list->cmd_name == NULL)
 			handle_no_cmd(cmd_list, envp);
-		else if (cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/')
+		else if ((cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/') || cmd_list->cmd_name[0] == '/')
 			handle_file_or_dir(cmd_list, envp);
 		else
 		{
