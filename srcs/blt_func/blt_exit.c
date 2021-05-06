@@ -6,7 +6,7 @@ int		blt_exit(t_token *token, char ***envp)
 	int	i;
 	int	exit_code;
 
-	write(2, "exit\n", 5);
+	write(STDERR_FILENO, "exit\n", 5);
 	cnt = 0;
 	exit_code = 0;
 	while (token)

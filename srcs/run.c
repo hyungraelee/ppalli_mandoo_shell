@@ -192,6 +192,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 		else
 		{
 			wait(&status);
+			g_exit = status >> 8;
 			redirect_close(rd_fds);
 			pipe_restore(cmd_list, old_fds);
 		}
@@ -199,6 +200,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 	}
 	else
 	{
+		g_exit = 0;
 		redirect_process(cmd_list->token, rd_fds);
 		redirect_restore(rd_fds, old_fds);
 	}
@@ -214,6 +216,7 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
+	g_exit = 0;
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
@@ -255,6 +258,7 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
+	g_exit = 0;
 	while (cmd_list->token)
 	{
 		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
