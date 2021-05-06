@@ -31,6 +31,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/utils/ft_isalpha.c	\
 		./srcs/utils/ft_isdigit.c	\
 		./srcs/utils/ft_isprint.c	\
+		./srcs/utils/ft_itoa.c	\
 		./srcs/utils/ft_memcpy.c	\
 		./srcs/utils/ft_memmove.c	\
 		./srcs/utils/ft_memset.c	\
