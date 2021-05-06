@@ -8,11 +8,11 @@ char	*builtin_str(int i)
 	blt_str[1] = "cd";
 	blt_str[2] = "pwd";
 	blt_str[3] = "export";
-	blt_str[4] = NULL;
+	// blt_str[4] = NULL;
 	// blt_str[4] = "unset";
-	// blt_str[5] = "env";
-	// blt_str[6] = "exit";
-	// blt_str[7] = NULL;
+	blt_str[4] = "env";
+	blt_str[5] = "exit";
+	blt_str[6] = NULL;
 	return (blt_str[i]);
 }
 
@@ -25,7 +25,7 @@ int		(*builtin_func(int i))(t_token *token, char ***envp)
 	blt_func[2] = &blt_pwd;
 	blt_func[3] = &blt_export;
 	// blt_func[4] = &blt_unset;
-	// blt_func[5] = &blt_env;
-	// blt_func[6] = &blt_exit;
+	blt_func[4] = &blt_env;
+	blt_func[5] = &blt_exit;
 	return (blt_func[i]);
 }

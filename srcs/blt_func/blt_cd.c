@@ -34,7 +34,7 @@ void	change_dir(char *dest, char ***envp)
 	inner_env = NULL;
 	if (rt == -1)
 	{
-		ft_print_err("cd", strerror(errno), 1);
+		ft_print_err("cd", strerror(errno), NULL, 1);
 		return ;
 	}
 	temp = find_env_value("PWD", *envp);
@@ -77,7 +77,7 @@ int		blt_cd(t_token *token, char ***envp)
 		if (!env_value)
 		{
 			if (!arg)
-				ft_print_err("cd", "HOME not set", 1);
+				ft_print_err("cd", "HOME not set", NULL, 1);
 			// else if (!ft_strcmp("~", arg) || !ft_strcmp("~/", arg))
 				// change dir to home
 			return (0);
@@ -99,7 +99,7 @@ int		blt_cd(t_token *token, char ***envp)
 		env_value = find_env_value("OLDPWD", *envp);
 		if (!env_value)
 		{
-			ft_print_err("cd", "OLDPWD not set", 1);
+			ft_print_err("cd", "OLDPWD not set", NULL, 1);
 			return (0);
 		}
 		else
