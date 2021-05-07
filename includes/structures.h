@@ -21,7 +21,7 @@
 
 typedef struct	s_cmd		t_cmd;
 typedef struct	s_token		t_token;
-typedef struct	s_redirect	t_redirect;
+typedef struct	s_history	t_history;
 
 struct	s_token
 {
@@ -39,5 +39,14 @@ struct	s_cmd
 	t_cmd	*next;
 	t_cmd	*prev;
 };
+
+struct s_history
+{
+	char		*record;
+	char		*edit_record;
+	t_history	*next;
+	t_history	*prev;
+};
+
 
 #endif

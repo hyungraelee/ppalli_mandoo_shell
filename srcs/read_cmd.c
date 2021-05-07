@@ -1,87 +1,119 @@
 #include "minishell.h"
 
-int		nbr_length(int n)
+t_history	*history_init(void)
 {
-	int	i = 0;
+	t_history	*result;
 
-	if (n <= 0)
-		i++;
-	while (n != 0)
-	{
-		n /= 10;
-		i++;
-	}
-	return (i);
+	result = (t_history *)malloc(sizeof(t_history));
+				if (!result)
+					return (NULL);
+	result->record = NULL;
+	result->edit_record = NULL;
+	result->next = NULL;
+	result->prev = NULL;
+	return (result);
 }
 
-void	get_current_cursor(int *row, int *col)
+char	*read_cmd(t_history **last)
 {
-	char	buf[255];
-	int		ret;
-	int		i;
-	int		check_row;
-	int		num_len;
+	char		*result;
+	char		**current;
+	int			c;
+	int			col;
+	char		*new;
+	t_history	*temp;
+	t_history	*now;
 
-	write(1, QUERY_CURSOR_POSITION, 4);
-	ret = read(0, buf, 254);			// 왜 254만큼 읽는지, 무슨일 발생하는지 확인.
-	buf[ret] = '\0';
-	i = 0;
-	check_row = 0;
-	while (buf[i])
-	{
-		if (ft_isdigit(buf[i]))
-		{
-			if (!check_row)
-			{
-				*row = ft_atoi(&buf[i]) - 1;
-				num_len = nbr_length(*row + 1);
-			}
-			else
-			{
-				*col = ft_atoi(&buf[i]) - 1;
-				break ;
-			}
-			check_row++;
-			i += num_len;
-		}
-		i++;
-	}
-	// printf("%d %d", *row, *col);
-}
-
-int	read_cmd(char **input_string)
-{
-	int	c;
-	int	col;
-
-	*input_string = NULL;
+	result = NULL;
+	new = ft_strdup("");
+	current = &new;
 	col = 0;
+	now = *last;
 	while (read(0, &c, sizeof(c)) > 0)
 	{
-		// get_current_cursor(&row, &col);
-		if (c == BACKSPACE)
+		if (c == KEY_BACKSPACE)
 		{
 			if (col-- > 0)
+			{
 				delete_letter();
+				*current = ft_str_char_del(*current);
+			}
 			if (col < 0)
 				col = 0;
 		}
-		// else if (c == LEFT_ARROW)
-		// else if (c == RIGHT_ARROW)
-		// else if (c == UP_ARROW)
-		// else if (c == DOWN_ARROW)
-		else if (c == ENTER)
+		else if (c == UP_ARROW)
+		{
+			if (*current == new)
+			{
+				if (*last)
+				{
+					now = *last;
+					current = &now->edit_record;
+				}
+			}
+			else
+			{
+				if (now->prev)
+					now = now->prev;
+				current = &now->edit_record;
+			}
+			col = ft_strlen(*current);
+			delete_current_line();
+			prompt();
+			ft_putstr_fd(*current, 1);
+		}
+		else if (c == DOWN_ARROW)
+		{
+			if (*current != new)
+			{
+				if (now->next)
+				{
+					now = now->next;
+					current = &now->edit_record;
+				}
+				else
+					current = &new;
+			}
+			col = ft_strlen(*current);
+			delete_current_line();
+			prompt();
+			ft_putstr_fd(*current, 1);
+		}
+		else if (c == KEY_ENTER)
 		{
 			write(1, &c, 1);
+			temp = history_init();
+			temp->record = ft_strdup(*current);
+			temp->edit_record = ft_strdup(temp->record);
+			if (!(*last))
+			{
+				*last = temp;
+				now = (*last);
+			}
+			else
+			{
+				(*last)->next = temp;
+				temp->prev = (*last);
+				(*last) = (*last)->next;
+			}
+			if (*current != new)
+			{
+				free(now->edit_record);
+				now->edit_record = ft_strdup(now->record);
+			}
 			break;
 		}
 		else
 		{
 			write(1, &c, 1);
 			col++;
-			*input_string = ft_str_char_join(*input_string, c);
+			*current = ft_str_char_join(*current, c);
 		}
 		c = 0;
 	}
-	return (1);
+	result = ft_strdup(*current);
+	if (new)
+		free(new);
+	new = NULL;
+	return (result);
 }

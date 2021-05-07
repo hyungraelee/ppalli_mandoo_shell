@@ -11,3 +11,8 @@ void	delete_letter(void)
 	tputs(tgetstr("le", NULL), 1, putchar_tc);
 	tputs(tgetstr("dc", NULL), 1, putchar_tc);
 }
+
+void	delete_current_line(void)
+{
+	tputs(tgetstr("dl", NULL), 1, putchar_tc);
+}
