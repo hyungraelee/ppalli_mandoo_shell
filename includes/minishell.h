@@ -11,6 +11,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
+# include <termcap.h>
 # include "structures.h"
 # include "parser.h"
 # include "run.h"
