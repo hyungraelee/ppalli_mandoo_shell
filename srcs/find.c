@@ -79,12 +79,14 @@ char	*get_env_value(char *arg, char **envp)
 	char	*env_temp;
 	char	*result;
 	int		i;
+	int		j;
 
 	i = 0;
 	result = NULL;
 	while (arg[i])
 	{
 		env_name = NULL;
+		env_temp = NULL;
 		if (arg[i] == '\'')
 		{
 			i++;
@@ -116,7 +118,8 @@ char	*get_env_value(char *arg, char **envp)
 					{
 						while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
 							env_name = ft_str_char_join(env_name, arg[i]);
-						result = ft_strjoin(result, find_env_value(env_name, envp), 1);
+						env_temp = find_env_value(env_name, envp);
+						result = ft_strjoin(result, set_env_value(env_temp, 0), 1);
 					}
 				}
 				else
@@ -137,21 +140,24 @@ char	*get_env_value(char *arg, char **envp)
 				{
 					while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
 						env_name = ft_str_char_join(env_name, arg[i]);
-					env_temp = find_env_value(env_name, envp);
-					while (env_temp && *env_temp)
+					env_temp = set_env_value(find_env_value(env_name, envp), 0);
+					j = 0;
+					while (env_temp && env_temp[j])
 					{
-						if (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
+						if (env_temp[j] == ' ' || env_temp[j] == '\t' || env_temp[j] == '\n')
 						{
 							result = ft_str_char_join(result, ' ');
-							while (*env_temp == ' ' || *env_temp == '\t' || *env_temp == '\n')
-								env_temp++;
+							while (env_temp[j] == ' ' || env_temp[j] == '\t' || env_temp[j] == '\n')
+								j++;
 						}
 						else
 						{
-							result = ft_str_char_join(result, *env_temp);
-							env_temp++;
+							result = ft_str_char_join(result, env_temp[j]);
+							j++;
 						}
 					}
+					if (env_temp)
+						free(env_temp);
 				}
 			}
 			else
