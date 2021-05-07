@@ -84,6 +84,8 @@ char	*set_export_value(char *arg, int idx, char **envp)
 	char	*result;
 	char	*env_name;
 
+	if (!arg)
+		return (NULL);
 	i = 0;
 	flag = 0;
 	result = NULL;
@@ -145,7 +147,7 @@ int		set_env_name(char **export_name, char **envp)
 	i = 0;
 	result = NULL;
 	if ((*export_name)[0] != '$' && (*export_name)[0] != '_' && ft_isalpha((*export_name)[0]) == 0)
-		;	//error (not a valid identifier)
+		return (0);	//error (not a valid identifier)
 	while ((*export_name)[i])
 	{
 		if ((*export_name)[i] == '$')
@@ -153,19 +155,25 @@ int		set_env_name(char **export_name, char **envp)
 			key = NULL;
 			while (!ft_strchr(" \t\n$\"\'\\=", (*export_name)[++i]))
 				key = ft_str_char_join(key, (*export_name)[i]);
-			if (!key)
-				return (0);	// error (not a valid identifier)
-			if (find_env_name(key, envp) > 0)
+			if (find_env_name(key, envp) >= 0)
 				result = ft_strjoin(result, set_export_value(find_env_value(key, envp), 0, envp), 1);
+			// else
+			// 	result = ft_strjoin(result, "", 1);
 			if (key)
 				free(key);
 		}
 		else
 			result = ft_str_char_join(result, (*export_name)[i++]);
 	}
-	if (!result)
-		;	//error (not a valid identifier)
 	*export_name = result;
+	if (!result || ft_isdigit(result[0]))
+		return (0);	//error (not a valid identifier)
+	i = -1;
+	while (result[++i])
+	{
+		if (result[i] != '_' && ft_isalpha(result[i]) == 0)
+			return (0);	//error (not a valid identifier)
+	}
 	return (1);
 }
 
@@ -220,6 +228,7 @@ int		blt_export(t_token *token, char ***envp)
 {
 	int		i;
 	int		idx;
+	int		is_err;
 	char	*export_name;
 	char	*export_value;
 	char	*new_var;
@@ -237,18 +246,27 @@ int		blt_export(t_token *token, char ***envp)
 				else
 				{
 					i = 0;
+					is_err = 0;
 					export_name = NULL;
 					while (token->arg[i] && token->arg[i] != '=')
 						export_name = ft_str_char_join(export_name, token->arg[i++]);
-					if (!set_env_name(&export_name, *envp))	// if a" "=abc -> 0		or		a=abc -> 1
-						; // error (not a valid identifier)
-					export_value = set_export_value(token->arg, i, *envp);
-					new_var = ft_strjoin(export_name, export_value, 0);
-					idx = find_env_name(export_name, *envp);	// check if envp-key already exists
-					if (idx > 0)
-						ft_strlcpy((*envp)[idx], new_var, ft_strlen(new_var) + 1);
+					is_err = set_env_name(&export_name, *envp);	// if a" "=abc -> 0		or		a=abc -> 1
+					if (is_err == 0)
+					{
+						export_value = set_env_value(set_export_value(token->arg, i, *envp), 0);
+						new_var = ft_strjoin(export_name, export_value, 0);
+						// printf("%s\n", new_var);	//error (not a valid identifier)
+					}
 					else
-						*envp = add_env(*envp, new_var);
+					{
+						export_value = set_export_value(token->arg, i, *envp);
+						new_var = ft_strjoin(export_name, export_value, 0);
+						idx = find_env_name(export_name, *envp);	// check if envp-key already exists
+						if (idx >= 0)
+							ft_strlcpy((*envp)[idx], new_var, ft_strlen(new_var) + 1);
+						else
+							*envp = add_env(*envp, new_var);
+					}
 					if (export_name)
 						free(export_name);
 					if (export_value)
