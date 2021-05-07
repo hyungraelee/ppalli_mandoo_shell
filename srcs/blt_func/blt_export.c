@@ -1,25 +1,80 @@
 #include "minishell.h"
 
-char	*print_export_value(char *envp, int idx)
+void	print_export_value(char *envp, int idx, int fd)
 {
-	int		is_dquote;
-	int		is_squote;
+	int		flag;
 	char	*result;
 
+	flag = 0;
 	result = NULL;
-	is_dquote = 0;
-	is_squote = 0;
 	if (!envp[idx])
 		result = ft_strdup("");
 	else if (envp[idx] == '=')
 	{
 		result = ft_str_char_join(result, envp[idx++]);
+		result = ft_str_char_join(result, '\"');
 		while (envp[idx])
 		{
-
+			if (envp[idx] == '\"' && !(flag & S_QUOTE))
+			{
+				if (flag & D_QUOTE)
+					flag ^= D_QUOTE;
+				else
+					flag |= D_QUOTE;
+				idx++;
+			}
+			else if (envp[idx] == '\'' && !(flag & D_QUOTE))
+			{
+				if (flag & S_QUOTE)
+					flag ^= S_QUOTE;
+				else
+					flag |= S_QUOTE;
+				idx++;
+			}
+			else if (envp[idx] == '\\')
+			{
+				if (flag == 0)
+				{
+					idx++;
+					if (envp[idx] == '\"' || envp[idx] == '\\' || envp[idx] == '`' || envp[idx] == '$')
+					{
+						result = ft_str_char_join(result, '\\');
+						result = ft_str_char_join(result, envp[idx++]);
+					}
+					else
+						result = ft_str_char_join(result, envp[idx++]);
+				}
+				else if (flag & D_QUOTE)
+				{
+					result = ft_str_char_join(result, envp[idx++]);
+					if (envp[idx] == '\"' || envp[idx] == '\\' || envp[idx] == '`' || envp[idx] == '$')
+						result = ft_str_char_join(result, envp[idx++]);
+					else
+					{
+						result = ft_str_char_join(result, '\\');
+						result = ft_str_char_join(result, envp[idx++]);
+					}
+				}
+				else if (flag & S_QUOTE)
+				{
+					result = ft_str_char_join(result, '\\');
+					result = ft_str_char_join(result, envp[idx++]);
+				}
+			}
+			else
+			{
+				if (flag & S_QUOTE)
+				{
+					if (envp[idx] == '\"' || envp[idx] == '`' || envp[idx] == '$')
+						result = ft_str_char_join(result, '\\');
+				}
+				result = ft_str_char_join(result, envp[idx++]);
+			}
 		}
+		result = ft_str_char_join(result, '\"');
 	}
-	return (result);
+	ft_putstr_fd(result, fd);
+	free(result);
 }
 
 char	*set_export_value(char *arg, int idx, char **envp)
@@ -127,7 +182,6 @@ void	print_export(char **envp)
 	int		j;
 	char	**export;
 	char	*export_name;
-	char	*export_value;
 	char	*tmp;
 
 	i = 0;
@@ -161,13 +215,11 @@ void	print_export(char **envp)
 		export_name = NULL;
 		while (export[i][j] && export[i][j] != '=')
 			export_name = ft_str_char_join(export_name, export[i][j++]);
-		export_value = print_export_value(export[i], j);		// ="abc"
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		ft_putstr_fd(export_name, STDOUT_FILENO);
-		ft_putstr_fd(export_value, STDOUT_FILENO);
+		print_export_value(export[i], j, STDOUT_FILENO);		// ="abc"
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		free(export_name);
-		free(export_value);
 	}
 }
 
