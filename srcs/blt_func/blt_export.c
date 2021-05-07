@@ -144,34 +144,27 @@ int		set_env_name(char **export_name, char **envp)
 
 	i = 0;
 	result = NULL;
-	if ((*export_name)[0] == '$')
+	if ((*export_name)[0] != '$' && (*export_name)[0] != '_' && ft_isalpha((*export_name)[0]) == 0)
+		;	//error (not a valid identifier)
+	while ((*export_name)[i])
 	{
-		i++;
-		key = NULL;
-		while ((*export_name)[i] && (*export_name)[i] != '=')
-			key = ft_str_char_join(key, (*export_name)[i++]);
-		if (!key)
-			return (0);	// error (not a valid identifier)
-		if (find_env_name(key, envp))
-			result = find_env_value(key, envp);
-		else
+		if ((*export_name)[i] == '$')
 		{
-			free(key);
-			return (0);	// error (not a valid identifier)
+			key = NULL;
+			while (!ft_strchr(" \t\n$\"\'\\=", (*export_name)[++i]))
+				key = ft_str_char_join(key, (*export_name)[i]);
+			if (!key)
+				return (0);	// error (not a valid identifier)
+			if (find_env_name(key, envp) > 0)
+				result = ft_strjoin(result, set_export_value(find_env_value(key, envp), 0, envp), 1);
+			if (key)
+				free(key);
 		}
-		if (key)
-			free(key);
-	}
-	else
-	{
-		if ((*export_name)[0] != '_' && ft_isalpha((*export_name)[0]) == 0)
-			return (0);	// error (not a valid identifier)
 		else
-		{
-			while ((*export_name)[i] && (*export_name)[i] != '=')
-				result = ft_str_char_join(result, (*export_name)[i++]);
-		}
+			result = ft_str_char_join(result, (*export_name)[i++]);
 	}
+	if (!result)
+		;	//error (not a valid identifier)
 	*export_name = result;
 	return (1);
 }
@@ -240,10 +233,9 @@ int		blt_export(t_token *token, char ***envp)
 			if (token->type == ARGUMENT)
 			{
 				if (token->arg[0] == '=')
-					; // error;
+					; // error (not a valid identifier)
 				else
 				{
-					// make token->arg pretty	ex) a"=b"cd -> a=bcd (remove quote whcih wrapping '=')
 					i = 0;
 					export_name = NULL;
 					while (token->arg[i] && token->arg[i] != '=')
