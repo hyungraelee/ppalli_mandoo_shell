@@ -164,7 +164,7 @@ int		set_env_name(char **export_name, char **envp)
 	}
 	else
 	{
-		if (ft_isalpha((*export_name)[0]) == 0)
+		if ((*export_name)[0] != '_' && ft_isalpha((*export_name)[0]) == 0)
 			return (0);	// error (not a valid identifier)
 		else
 		{
