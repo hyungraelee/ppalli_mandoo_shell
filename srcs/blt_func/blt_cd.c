@@ -28,7 +28,7 @@ void	change_dir(char *dest, char ***envp)
 	char	*inner_env;
 	char	*temp;
 	char	buf[PATH_MAX];
-	char	*pwd;
+	// char	*pwd;
 
 	rt = chdir(dest);
 	inner_env = NULL;
@@ -38,14 +38,13 @@ void	change_dir(char *dest, char ***envp)
 		return ;
 	}
 	temp = find_env_value("PWD", *envp);
-	pwd = getcwd(buf, PATH_MAX);
+	getcwd(buf, PATH_MAX);
 	inner_env = find_env_value("OLDPWD", *envp);
 	if (!inner_env)
 		*envp = add_env(*envp, ft_strjoin("OLDPWD=", temp, 0));
 	else
 		ft_strlcpy(find_env_value("OLDPWD", *envp), temp, ft_strlen(temp) + 1);
-	temp = find_env_value("PWD", *envp);
-	ft_strlcpy(find_env_value("PWD", *envp), pwd, ft_strlen(pwd) + 1);
+	ft_strlcpy(temp, buf, ft_strlen(buf) + 1);
 	g_exit = 0;
 }
 
