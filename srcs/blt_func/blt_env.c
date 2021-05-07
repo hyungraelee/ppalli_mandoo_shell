@@ -6,6 +6,8 @@ char	*set_env_value(char *arg, int idx)
 	int		flag;
 	char	*result;
 
+	if (!arg)
+		return (NULL);
 	i = 0;
 	flag = 0;
 	result = NULL;
