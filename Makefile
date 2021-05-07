@@ -4,6 +4,7 @@ CC = gcc
 CFLAGS = -g3 -fsanitize=address
 SRCS_DIR =	./srcs	\
 			./srcs/blt_func	\
+			./srcs/cursor	\
 			./srcs/utils
 
 OBJS_DIR = ./objs
@@ -25,6 +26,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/blt_func/blt_exit.c	\
 		./srcs/blt_func/blt_export.c	\
 		./srcs/blt_func/blt_pwd.c	\
+		./srcs/cursor/cursor.c	\
 		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\
@@ -57,13 +59,13 @@ RM = rm -f
 all: $(NAME)
 
 $(NAME) : $(OBJS)
-	@$(CC) $(CFLAGS) -o $@ $^
+	@$(CC) -lncurses $(CFLAGS) -o $@ $^
 
 $(OBJS_DIR) :
 	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o : %.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -o $@ -I$(INC_DIR) -c $^
+	@$(CC) -lncurses $(CFLAGS) -o $@ -I$(INC_DIR) -c $^
 
 run: re
 	@./$(NAME)
