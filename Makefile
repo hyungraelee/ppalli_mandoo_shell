@@ -1,7 +1,12 @@
 NAME = minishell
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g3 -fsanitize=address
+# CFLAGS = -g3 -fsanitize=address
+
+ifeq ($(DEBUG),true)
+	CFLAGS += -g
+endif
+
 SRCS_DIR =	./srcs	\
 			./srcs/blt_func	\
 			./srcs/cursor	\
@@ -40,6 +45,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/utils/ft_print_err.c	\
 		./srcs/utils/ft_putstr_fd.c	\
 		./srcs/utils/ft_split.c	\
+		./srcs/utils/ft_str_char_del.c	\
 		./srcs/utils/ft_str_char_join.c	\
 		./srcs/utils/ft_strchr.c	\
 		./srcs/utils/ft_strcmp.c	\
@@ -59,13 +65,13 @@ RM = rm -f
 all: $(NAME)
 
 $(NAME) : $(OBJS)
-	@$(CC) -lncurses $(CFLAGS) -o $@ $^
+	@$(CC) $(CFLAGS) -lncurses -o $@ $^
 
 $(OBJS_DIR) :
 	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o : %.c | $(OBJS_DIR)
-	@$(CC) -lncurses $(CFLAGS) -o $@ -I$(INC_DIR) -c $^
+	@$(CC) $(CFLAGS) -o $@ -I$(INC_DIR) -c $^
 
 run: re
 	@./$(NAME)
