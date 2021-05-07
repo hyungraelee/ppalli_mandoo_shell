@@ -24,7 +24,7 @@ void	minishell(char **envp)
 	{
 		prompt();
 		read_cmd(&input_string);
-		if (!check_syntax_err(input_string))
+		if (!input_string || !check_syntax_err(input_string))
 			continue ;
 		cmd_set = separate(input_string, ';');
 		i = 0;
