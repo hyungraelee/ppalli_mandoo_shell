@@ -21,6 +21,7 @@ void	redirect_close(int *rd_fds);
 void	redirect_restore(int *rd_fds, int *old_fds);
 int		blt_echo(t_token *token, char ***envp);
 int		blt_env(t_token *token, char ***envp);
+char	*set_env_value(char *arg, int idx);
 int		blt_exit(t_token *token, char ***envp);
 int		blt_cd(t_token *token, char ***envp);
 char	**add_env(char **envp, char *str);

@@ -43,16 +43,7 @@ char	*set_env_value(char *arg, int idx)
 			i++;
 		}
 		else
-		{
-			if (arg[idx + i] == ' ' || arg[idx + i] == '\t' || arg[idx + i] == '\n')
-			{
-				result = ft_str_char_join(result, ' ');
-				while (arg[idx + i] == ' ' || arg[idx + i] == '\t' || arg[idx + i] == '\n')
-					i++;
-			}
-			else
-				result = ft_str_char_join(result, arg[idx + i++]);
-		}
+			result = ft_str_char_join(result, arg[idx + i++]);
 	}
 	return (result);
 }
