@@ -123,14 +123,14 @@ char	*set_export_value(char *arg, int idx, char **envp)
 				i++;
 				if (flag == 0 || flag & D_QUOTE)
 				{
-					if (arg[idx + i] == '\"')
-						result = ft_str_char_join(result, arg[idx + i++]);
-					else if (arg[idx + i] == '$')
+					if (arg[idx + i] == '\"' || arg[idx + i] == '$' || arg[idx + i] == '`' || arg[idx + i] == '\\')
 						result = ft_str_char_join(result, arg[idx + i++]);
 				}
 			}
 		}
 		else if ((flag & S_QUOTE) && arg[idx + i] == '\"')
+			result = ft_str_char_join(result, arg[idx + i++]);
+		else if ((flag & D_QUOTE) && arg[idx + i] == '\'')
 			result = ft_str_char_join(result, arg[idx + i++]);
 		else if (!(flag & S_QUOTE) && arg[idx + i] == '$')
 		{
@@ -263,13 +263,10 @@ int		blt_export(t_token *token, char ***envp)
 					{
 						export_value = set_env_value(set_export_value(token->arg, i, *envp), 0);
 						new_var = ft_strjoin(export_name, export_value, 0);
-						// ft_putstr_fd(new_var, STDOUT_FILENO);	//error (not a valid identifier)
 					}
 					else
 					{
 						export_value = set_export_value(token->arg, i, *envp);
-						// if (!ft_strcmp(export_value, ""))
-						// 	ft_putstr_fd("nothing", STDOUT_FILENO);
 						new_var = ft_strjoin(export_name, export_value, 0);
 						idx = find_env_name(export_name, *envp);	// check if envp-key already exists
 						if (idx >= 0)
