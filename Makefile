@@ -43,6 +43,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/utils/ft_memmove.c	\
 		./srcs/utils/ft_memset.c	\
 		./srcs/utils/ft_print_err.c	\
+		./srcs/utils/ft_print_synerr.c	\
 		./srcs/utils/ft_putstr_fd.c	\
 		./srcs/utils/ft_split.c	\
 		./srcs/utils/ft_str_char_del.c	\

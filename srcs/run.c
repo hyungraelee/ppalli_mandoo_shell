@@ -321,7 +321,7 @@ int	run(t_cmd *cmd_list, char ***envp)
 	while (cmd_list)
 	{
 		cmd_list->cmd_name = get_env_value(cmd_list->cmd_name, *envp);
-		if (cmd_list->cmd_name == NULL)
+		if (!cmd_list->cmd_name)
 			handle_no_cmd(cmd_list, envp);
 		else if ((cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/') || cmd_list->cmd_name[0] == '/')
 			handle_file_or_dir(cmd_list, envp);

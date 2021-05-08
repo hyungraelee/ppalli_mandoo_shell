@@ -21,6 +21,8 @@ int		blt_exit(t_token *token, char ***envp)
 				return (0);
 			}
 			i = 0;
+			if (token->arg[i] == '-')
+				i++;
 			while (token->arg[i])
 			{
 				if (!ft_isdigit(token->arg[i++]))

@@ -180,7 +180,7 @@ t_token	*make_tokenlist(char *cmdline, char **cmd_name)
 		temp = make_token(args[i], command);
 		if (temp->type == COMMAND)
 		{
-			*cmd_name = ft_strdup(temp->arg);
+			*cmd_name = ft_strjoin(*cmd_name, temp->arg, 1);
 			command = 1;
 		}
 		if (!token)
