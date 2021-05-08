@@ -7,7 +7,7 @@ t_cmd	*make_cmd(char *cmdline)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->cmd_name = NULL;
+	cmd->cmd_name = ft_strdup("");
 	cmd->token = make_tokenlist(cmdline, &(cmd->cmd_name));
 	cmd->next = NULL;
 	cmd->prev = NULL;
