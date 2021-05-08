@@ -9,8 +9,10 @@ int		blt_echo(t_token *token, char ***envp)
 	new_line = 1;
 	while (token->type != ARGUMENT)
 	{
-		token->arg = get_env_value(token->arg, *envp);
-		token = token->next;
+		if (token->next)
+			token = token->next;
+		else
+			break ;
 	}
 	if (!ft_strcmp(token->arg, "-n"))
 	{
@@ -20,10 +22,7 @@ int		blt_echo(t_token *token, char ***envp)
 	while (token)
 	{
 		if (token->type == ARGUMENT)
-		{
-			token->arg = get_env_value(token->arg, *envp);
 			result = ft_strjoin(result, token->arg, 1);
-		}
 		if (token->next && token->next->type == ARGUMENT)
 		{
 			result = ft_strjoin(result, " ", 1);

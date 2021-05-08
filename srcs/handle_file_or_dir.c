@@ -31,6 +31,16 @@ int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
+	while (cmd_list->token)
+	{
+		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
+		if (cmd_list->token->next)
+			cmd_list->token = cmd_list->token->next;
+		else
+			break ;
+	}
+	while (cmd_list->token->prev)
+		cmd_list->token = cmd_list->token->prev;
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
