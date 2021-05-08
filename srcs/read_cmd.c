@@ -104,6 +104,8 @@ char	*read_cmd(t_history **last)
 			}
 			break;
 		}
+		else if (c == KEY_TAB)
+			;
 		else
 		{
 			write(1, &c, 1);
