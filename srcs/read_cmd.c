@@ -96,6 +96,7 @@ char	*read_cmd(t_history **last)
 				temp->prev = (*last);
 				(*last) = (*last)->next;
 			}
+			result = ft_strdup(*current);
 			if (*current != new)
 			{
 				free(now->edit_record);
@@ -111,7 +112,6 @@ char	*read_cmd(t_history **last)
 		}
 		c = 0;
 	}
-	result = ft_strdup(*current);
 	if (new)
 		free(new);
 	new = NULL;
