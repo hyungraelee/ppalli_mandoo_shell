@@ -5,8 +5,8 @@ t_history	*history_init(void)
 	t_history	*result;
 
 	result = (t_history *)malloc(sizeof(t_history));
-				if (!result)
-					return (NULL);
+	if (!result)
+		return (NULL);
 	result->record = NULL;
 	result->edit_record = NULL;
 	result->next = NULL;

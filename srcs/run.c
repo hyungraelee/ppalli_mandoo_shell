@@ -303,7 +303,9 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	else
 	{
 		wait(&status);
-		if (status >> 8 != 0)
+		if (status >> 8 == 255)
+			g_exit = 255;
+		else if (status >> 8 != 0)
 			g_exit = 1;
 		else
 			g_exit = 0;
