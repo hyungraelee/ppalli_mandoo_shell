@@ -19,6 +19,8 @@ char	*ft_strcpy_i_to_j(char *line, int i, int j);
 t_cmd	*get_parsed_list(char *line);
 t_token	*make_tokenlist(char *cmdline, char **cmd_name);
 void	delete_letter(void);
+void	move_cursor_left(void);
+void	move_cursor_right(void);
 void	delete_current_line(void);
 void	prompt(void);
 

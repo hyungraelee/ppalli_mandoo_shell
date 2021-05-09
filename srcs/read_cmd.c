@@ -33,13 +33,12 @@ char	*read_cmd(t_history **last)
 	{
 		if (c == KEY_BACKSPACE)
 		{
-			if (col-- > 0)
+			if (col > 0)
 			{
 				delete_letter();
-				*current = ft_str_char_del(*current);
+				*current = ft_str_char_del(*current, col - 1);
+				col--;
 			}
-			if (col < 0)
-				col = 0;
 		}
 		else if (c == UP_ARROW)
 		{
@@ -79,6 +78,22 @@ char	*read_cmd(t_history **last)
 			prompt();
 			ft_putstr_fd(*current, 1);
 		}
+		else if (c == LEFT_ARROW)
+		{
+			if (col > 0)
+			{
+				move_cursor_left();
+				col--;
+			}
+		}
+		else if (c == RIGHT_ARROW)
+		{
+			if (col < ft_strlen(*current))
+			{
+				move_cursor_right();
+				col++;
+			}
+		}
 		else if (c == KEY_ENTER)
 		{
 			write(1, &c, 1);
@@ -109,8 +124,11 @@ char	*read_cmd(t_history **last)
 		else
 		{
 			write(1, &c, 1);
+			*current = ft_str_char_embed(*current, c, col);
+			// delete_current_line();
+			// prompt();
+			// ft_putstr_fd(*current, 1);
 			col++;
-			*current = ft_str_char_join(*current, c);
 		}
 		c = 0;
 	}

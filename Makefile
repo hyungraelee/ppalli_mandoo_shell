@@ -47,6 +47,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/utils/ft_putstr_fd.c	\
 		./srcs/utils/ft_split.c	\
 		./srcs/utils/ft_str_char_del.c	\
+		./srcs/utils/ft_str_char_embed.c	\
 		./srcs/utils/ft_str_char_join.c	\
 		./srcs/utils/ft_strchr.c	\
 		./srcs/utils/ft_strcmp.c	\
