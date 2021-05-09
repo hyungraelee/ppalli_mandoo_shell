@@ -125,10 +125,13 @@ char	*read_cmd(t_history **last)
 		{
 			write(1, &c, 1);
 			*current = ft_str_char_embed(*current, c, col);
-			// delete_current_line();
-			// prompt();
-			// ft_putstr_fd(*current, 1);
+			delete_current_line();
+			prompt();
+			ft_putstr_fd(*current, 1);
+			c = ft_strlen(*current);
 			col++;
+			while (c-- > col)
+				move_cursor_left();
 		}
 		c = 0;
 	}
