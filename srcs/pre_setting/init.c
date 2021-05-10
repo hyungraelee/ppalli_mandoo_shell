@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	**init_envp(char **env)
+static char	**init_envp(char **env)
 {
 	int		i;
 	int		j;
@@ -23,7 +23,7 @@ char	**init_envp(char **env)
 	return (envp);
 }
 
-void	init_termios(void)
+static void	init_termios(void)
 {
 	struct termios	term;
 
@@ -35,25 +35,39 @@ void	init_termios(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void	init_termcap(void)
+static void	init_termcap(void)
 {
-	char	*termtype = getenv("TERM");
+	char	*termtype;
 	int		success;
 
+	termtype = getenv("TERM");
 	if (termtype == 0)
 	{
-		ft_putstr_fd("minishell: Specify a terminal type with `setenv TERM <yourtype>'.", STDERR_FILENO);
+		ft_putstr_fd("minishell: Specify a terminal \
+type with `setenv TERM <yourtype>'.", STDERR_FILENO);
 		exit(1);
 	}
 	success = tgetent(NULL, "xterm");
 	if (success < 0)
 	{
-		ft_putstr_fd("minishell: Could not access the termcap data base.", STDERR_FILENO);
+		ft_putstr_fd("minishell: Could not access the \
+termcap data base.", STDERR_FILENO);
 		exit(1);
 	}
 	if (success == 0)
 	{
-		ft_putstr_fd(ft_strjoin(ft_strjoin("minishell: Terminal type `", termtype, 2), "\' is not defined.", 1), STDERR_FILENO);
+		ft_putstr_fd(ft_strjoin(ft_strjoin("minishell: \
+Terminal type `", termtype, 2), "\' is not defined.", 1), STDERR_FILENO);
 		exit(1);
 	}
+}
+
+char		**init(char **env)
+{
+	char	**envp;
+
+	init_termios();
+	init_termcap();
+	envp = init_envp(env);
+	return (envp);
 }

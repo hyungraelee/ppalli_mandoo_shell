@@ -19,7 +19,7 @@ char	*read_cmd(t_history **last)
 	char		*result;
 	char		**current;
 	int			c;
-	int			col;
+	int			cursor;
 	char		*new;
 	t_history	*temp;
 	t_history	*now;
@@ -27,17 +27,17 @@ char	*read_cmd(t_history **last)
 	result = NULL;
 	new = ft_strdup("");
 	current = &new;
-	col = 0;
+	cursor = 0;
 	now = *last;
 	while (read(0, &c, sizeof(c)) > 0)
 	{
 		if (c == KEY_BACKSPACE)
 		{
-			if (col > 0)
+			if (cursor > 0)
 			{
 				delete_letter();
-				*current = ft_str_char_del(*current, col - 1);
-				col--;
+				*current = ft_str_char_del(*current, cursor - 1);
+				cursor--;
 			}
 		}
 		else if (c == UP_ARROW)
@@ -56,7 +56,7 @@ char	*read_cmd(t_history **last)
 					now = now->prev;
 				current = &now->edit_record;
 			}
-			col = ft_strlen(*current);
+			cursor = ft_strlen(*current);
 			delete_current_line();
 			prompt();
 			ft_putstr_fd(*current, 1);
@@ -73,41 +73,41 @@ char	*read_cmd(t_history **last)
 				else
 					current = &new;
 			}
-			col = ft_strlen(*current);
+			cursor = ft_strlen(*current);
 			delete_current_line();
 			prompt();
 			ft_putstr_fd(*current, 1);
 		}
 		else if (c == LEFT_ARROW)
 		{
-			if (col > 0)
+			if (cursor > 0)
 			{
 				move_cursor_left();
-				col--;
+				cursor--;
 			}
 		}
 		else if (c == RIGHT_ARROW)
 		{
-			if (col < ft_strlen(*current))
+			if (cursor < ft_strlen(*current))
 			{
 				move_cursor_right();
-				col++;
+				cursor++;
 			}
 		}
 		else if (c == KEY_HOME)
 		{
-			while (col > 0)
+			while (cursor > 0)
 			{
 				move_cursor_left();
-				col--;
+				cursor--;
 			}
 		}
 		else if (c == KEY_END)
 		{
-			while (col < ft_strlen(*current))
+			while (cursor < ft_strlen(*current))
 			{
 				move_cursor_right();
-				col++;
+				cursor++;
 			}
 		}
 		else if (c == KEY_ENTER)
@@ -143,13 +143,13 @@ char	*read_cmd(t_history **last)
 		else
 		{
 			write(1, &c, 1);
-			*current = ft_str_char_embed(*current, c, col);
+			*current = ft_str_char_embed(*current, c, cursor);
 			delete_current_line();
 			prompt();
 			ft_putstr_fd(*current, 1);
 			c = ft_strlen(*current);
-			col++;
-			while (c-- > col)
+			cursor++;
+			while (c-- > cursor)
 				move_cursor_left();
 		}
 		c = 0;

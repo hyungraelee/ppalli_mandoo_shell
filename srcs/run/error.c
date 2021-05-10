@@ -22,7 +22,8 @@ int	ft_print_err(char *s1, char *s2, char *s3, int code)
 
 int	ft_print_synerr(char c, int rd)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
+	ft_putstr_fd("minishell: syntax \
+error near unexpected token `", STDERR_FILENO);
 	write(STDERR_FILENO, &c, 1);
 	if (rd == 3)
 		write(STDERR_FILENO, &c, 1);
