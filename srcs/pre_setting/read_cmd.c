@@ -29,6 +29,7 @@ char	*read_cmd(t_history **last)
 	current = &new;
 	cursor = 0;
 	now = *last;
+	c = 0;
 	while (read(0, &c, sizeof(c)) > 0)
 	{
 		if (c == KEY_BACKSPACE)
@@ -108,6 +109,15 @@ char	*read_cmd(t_history **last)
 			{
 				move_cursor_right();
 				cursor++;
+			}
+		}
+		else if (c == KEY_CTRL_D)
+		{
+			if (!ft_strcmp(*current, ""))
+			{
+				// history free
+				ft_putstr_fd("exit\n", STDOUT_FILENO);
+				exit (0);
 			}
 		}
 		else if (c == KEY_ENTER)

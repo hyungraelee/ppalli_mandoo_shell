@@ -1,6 +1,57 @@
 #include "minishell.h"
 
-int	check_syntax_err(char *input_string)
+int		redirect_flag_onoff(char *input_string, int *i, char *sflag, int *rd)
+{
+	if (*sflag & REDIRECT)	// if redirect already on (echo 123 > > file)
+	{
+		if (*input_string == '>' && *(input_string + 1) == '>')
+			return (ft_print_synerr(*input_string, 3));
+		else 								// syntax err
+			return (ft_print_synerr(*input_string, 0));
+	}
+	*sflag |= REDIRECT;							// redirect on
+	if (*input_string == '>' && *(input_string + 1) == '>')	// if append case
+	{
+		(*i) += 2;
+		*rd = 3;
+	}
+	else if (*input_string == '>' && *(input_string + 1) != '>')		// if not append case
+	{
+		(*i)++;
+		*rd = 2;
+	}
+	else
+	{
+		(*i)++;
+		*rd = 1;
+	}
+	return (1);
+}
+
+void	quote_flag_onoff(char *input_string, int *i, char *sflag)
+{
+	if (*input_string == '\'')
+	{
+		if (*sflag & S_QUOTE)						// if s_quote on
+			*sflag ^= S_QUOTE;						// s_quote off
+		else if (!(*sflag & D_QUOTE))				// if d_quote off
+			*sflag |= S_QUOTE;						// s_quote on
+		(*i)++;
+	}												// if d_quote on -> Do not on s_quote
+	else if (*input_string == '\"')
+	{
+		if (*sflag & D_QUOTE)						// if d_quote on
+		{
+			if (*(input_string - 1) != '\\')
+				*sflag ^= D_QUOTE;					// d_quote off
+		}
+		else if (!(*sflag & S_QUOTE))				// if s_quote off
+			*sflag |= D_QUOTE;						// d_quote on
+		(*i)++;
+	}
+}
+
+int		check_syntax_err(char *input_string)
 {
 	char	sflag;
 	int		i;
@@ -12,51 +63,13 @@ int	check_syntax_err(char *input_string)
 	{
 		if (ft_strchr(IFS, input_string[i]))
 			i++;
-		else if (input_string[i] == '\'')
-		{
-			if (sflag & S_QUOTE)						// if s_quote on
-				sflag ^= S_QUOTE;						// s_quote off
-			else if (!(sflag & D_QUOTE))				// if d_quote off
-				sflag |= S_QUOTE;						// s_quote on
-			i++;
-		}												// if d_quote on -> Do not on s_quote
-		else if (input_string[i] == '\"')
-		{
-			if (sflag & D_QUOTE)						// if d_quote on
-			{
-				if (input_string[i - 1] != '\\')
-					sflag ^= D_QUOTE;					// d_quote off
-			}
-			else if (!(sflag & S_QUOTE))				// if s_quote off
-				sflag |= D_QUOTE;						// d_quote on
-			i++;
-		}												// if s_quote on -> Do not on d_quote
+		else if (input_string[i] == '\'' || input_string[i] == '\"')
+			quote_flag_onoff(&(input_string[i]), &i, &sflag);
 		else if ((input_string[i] == '>' || input_string[i] == '<') && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
 		{	// when outside quote
-			if (sflag & REDIRECT)	// if redirect already on (echo 123 > > file)
-			{
-				if (input_string[i] == '>' && input_string[i + 1] == '>')
-					return (ft_print_synerr(input_string[i], 3));
-				else 								// syntax err
-					return (ft_print_synerr(input_string[i], 0));
-			}
-			sflag |= REDIRECT;							// redirect on
-			// sflag ^= POSSIBLE;
-			if (input_string[i] == '>' && input_string[i + 1] == '>')	// if append case
-			{
-				i += 2;
-				rd = 3;
-			}
-			else if (input_string[i] == '>' && input_string[i + 1] != '>')		// if not append case
-			{
-				i++;
-				rd = 2;
-			}
-			else
-			{
-				i++;
-				rd = 1;
-			}
+			if (!redirect_flag_onoff(&(input_string[i]), &i, &sflag, &rd))
+			// if (rd == 0)
+				return (0);
 		}
 		else if (input_string[i] == '|' && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
 		{	// when outside quote

@@ -12,6 +12,7 @@
 # define KEY_TAB 9
 # define KEY_HOME 4741915
 # define KEY_END 4610843
+# define KEY_CTRL_D 4
 # define QUERY_CURSOR_POSITION "\033[6n"
 
 char	*read_cmd(t_history **last);
