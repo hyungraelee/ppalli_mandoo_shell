@@ -5,7 +5,8 @@
 
 int		ft_atoi(const char *nptr);
 int		ft_strlen(const char *s);
-char	*ft_str_char_del(char *before);
+char	*ft_str_char_del(char *before, int index);
+char	*ft_str_char_embed(char *before, char c, int index);
 char	*ft_str_char_join(char *before, char c);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

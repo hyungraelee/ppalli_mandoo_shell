@@ -12,6 +12,16 @@ void	delete_letter(void)
 	tputs(tgetstr("dc", NULL), 1, putchar_tc);
 }
 
+void	move_cursor_left(void)
+{
+	tputs(tgetstr("le", NULL), 1, putchar_tc);
+}
+
+void	move_cursor_right(void)
+{
+	tputs(tgetstr("nd", NULL), 1, putchar_tc);
+}
+
 void	delete_current_line(void)
 {
 	tputs(tgetstr("dl", NULL), 1, putchar_tc);
