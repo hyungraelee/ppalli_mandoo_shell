@@ -4,7 +4,7 @@ int	ft_print_err(char *s1, char *s2, char *s3, int code)
 {
 	char	*print;
 
-	g_exit = code;
+	g_global.exit = code;
 	print = ft_strdup("minishell: ");
 	print = ft_strjoin(print, s1, 1);
 	print = ft_strjoin(print, ": ", 1);
@@ -27,6 +27,6 @@ int	ft_print_synerr(char c, int rd)
 	if (rd == 3)
 		write(STDERR_FILENO, &c, 1);
 	ft_putstr_fd("\'\n", STDERR_FILENO);
-	g_exit = 258;
+	g_global.exit = 258;
 	return (0);
 }

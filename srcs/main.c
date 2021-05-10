@@ -5,7 +5,7 @@ void	prompt(void)
 	char	buf[PATH_MAX];
 
 	getcwd(buf, PATH_MAX);
-	if (g_exit == 0)
+	if (g_global.exit == 0)
 		write(1, B_GREEN, ft_strlen(B_GREEN));
 	else
 		write(1, B_RED, ft_strlen(B_RED));

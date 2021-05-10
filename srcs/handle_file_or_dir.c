@@ -15,11 +15,11 @@ int	check_stat(char	*cmd_name, char ***envp)
 	else if (S_ISREG(buf.st_mode))
 	{
 		if (buf.st_mode & S_IXUSR)
-			g_exit = 0;
+			g_global.exit = 0;
 		else
 			ft_print_err(cmd_name, "Permission denied", NULL, 126);
 	}
-	return (g_exit);
+	return (g_global.exit);
 }
 
 int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
@@ -51,14 +51,14 @@ int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
 			if(!redirect_process(cmd_list->token, rd_fds))
 				exit(1);
 			check_stat(cmd_list->cmd_name, envp);
-			exit(g_exit);
+			exit(g_global.exit);
 		}
 		else if (pid == -1)
 			ft_print_err("fork", strerror(errno), NULL, 1);
 		else
 		{
 			wait(&status);
-			g_exit = status >> 8;
+			g_global.exit = status >> 8;
 			redirect_close(rd_fds);
 			pipe_restore(cmd_list, old_fds);
 		}

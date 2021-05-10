@@ -18,6 +18,6 @@ int	blt_pwd(t_token *token, char ***envp)
 		getcwd(buf, PATH_MAX);
 		ft_putstr_fd(buf, STDOUT_FILENO);
 	}
-	g_exit = 0;
+	g_global.exit = 0;
 	return (1);
 }

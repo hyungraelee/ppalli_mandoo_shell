@@ -61,6 +61,6 @@ int		blt_unset(t_token *token, char ***envp)
 		else
 			break ;
 	}
-	g_exit = 0;
+	g_global.exit = 0;
 	return (1);
 }

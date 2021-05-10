@@ -111,7 +111,7 @@ char	*get_env_value(char *arg, char **envp)
 				{
 					if (arg[i + 1] == '?')
 					{
-						result = ft_strjoin(result, ft_itoa(g_exit), 3);
+						result = ft_strjoin(result, ft_itoa(g_global.exit), 3);
 						i += 2;
 					}
 					else
@@ -133,7 +133,7 @@ char	*get_env_value(char *arg, char **envp)
 			{
 				if (arg[i + 1] == '?')
 				{
-					result = ft_strjoin(result, ft_itoa(g_exit), 3);
+					result = ft_strjoin(result, ft_itoa(g_global.exit), 3);
 					i += 2;
 				}
 				else

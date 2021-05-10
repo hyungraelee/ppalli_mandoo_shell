@@ -17,7 +17,7 @@ int		blt_exit(t_token *token, char ***envp)
 			if (cnt == 2)
 			{
 				ft_print_err("exit", "too many arguments", NULL, 1);
-				g_exit = 1;
+				g_global.exit = 1;
 				return (0);
 			}
 			i = 0;
@@ -28,7 +28,7 @@ int		blt_exit(t_token *token, char ***envp)
 				if (!ft_isdigit(token->arg[i++]))
 				{
 					ft_print_err("exit", token->arg, "numeric argument required", 255);
-					g_exit = 255;
+					g_global.exit = 255;
 					exit(255);
 				}
 			}
@@ -39,6 +39,6 @@ int		blt_exit(t_token *token, char ***envp)
 		else
 			break ;
 	}
-	g_exit = exit_code;
+	g_global.exit = exit_code;
 	exit(exit_code);
 }
