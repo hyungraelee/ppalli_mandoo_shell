@@ -16,7 +16,10 @@
 # define QUERY_CURSOR_POSITION "\033[6n"
 
 char	*read_cmd(t_history **last);
+
 int		check_syntax_err(char *line);
+int		handle_special_letter(char *input_string, int *i, char *sflag, int *rd);
+
 char	**separate(char *line, char c);
 char	*ft_strcpy_i_to_j(char *line, int i, int j);
 t_cmd	*get_parsed_list(char *line);
