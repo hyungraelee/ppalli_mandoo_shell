@@ -28,8 +28,6 @@ int		blt_unset(t_token *token, char ***envp)
 	int		idx;
 	int		is_err;
 	char	*env_name;
-	char	*env_value;
-	char	*new_var;
 
 	while (token)
 	{
@@ -41,34 +39,28 @@ int		blt_unset(t_token *token, char ***envp)
 			{
 				env_name = ft_str_char_join(env_name, token->arg[i]);
 				if (token->arg[i] == '=')
-				{
-					env_value = set_env_value(set_export_value(token->arg, i, *envp), 0);
-					new_var = ft_strjoin(env_name, env_value, 0);
-					//print	//error (not a valid identifier)
-					return (0);
-				}
+					return (ft_print_err("unset", "not a valid identifier", NULL, 1));
 			}
 			if (!token->arg[i])
 			{
 				is_err = set_env_name(&env_name, *envp);
 				if (is_err == 0)
-				{
-					;	//error (not a valid identifier)
-				}
+					return (ft_print_err("unset", "not a valid identifier", NULL, 1));
 				else
 				{
 					idx = find_env_name(env_name, *envp);
 					if (idx >= 0)
-					{
 						*envp = delete_env(*envp, env_name, idx);
-					}
 				}
 			}
+			if (env_name)
+				free(env_name);
 		}
 		if (token->next)
 			token = token->next;
 		else
 			break ;
 	}
+	g_exit = 0;
 	return (1);
 }

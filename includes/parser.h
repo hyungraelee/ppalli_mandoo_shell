@@ -10,6 +10,8 @@
 # define DOWN_ARROW 4348699
 # define KEY_ENTER 10
 # define KEY_TAB 9
+# define KEY_HOME 4741915
+# define KEY_END 4610843
 # define QUERY_CURSOR_POSITION "\033[6n"
 
 char	*read_cmd(t_history **last);

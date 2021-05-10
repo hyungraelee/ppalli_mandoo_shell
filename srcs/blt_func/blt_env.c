@@ -83,5 +83,6 @@ int	blt_env(t_token *token, char ***envp)
 			free(env_value);
 		}
 	}
+	g_exit = 0;
 	return (1);
 }

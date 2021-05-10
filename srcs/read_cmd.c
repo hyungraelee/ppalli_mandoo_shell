@@ -94,22 +94,41 @@ char	*read_cmd(t_history **last)
 				col++;
 			}
 		}
+		else if (c == KEY_HOME)
+		{
+			while (col > 0)
+			{
+				move_cursor_left();
+				col--;
+			}
+		}
+		else if (c == KEY_END)
+		{
+			while (col < ft_strlen(*current))
+			{
+				move_cursor_right();
+				col++;
+			}
+		}
 		else if (c == KEY_ENTER)
 		{
 			write(1, &c, 1);
-			temp = history_init();
-			temp->record = ft_strdup(*current);
-			temp->edit_record = ft_strdup(temp->record);
-			if (!(*last))
+			if (ft_strcmp(*current, ""))
 			{
-				*last = temp;
-				now = (*last);
-			}
-			else
-			{
-				(*last)->next = temp;
-				temp->prev = (*last);
-				(*last) = (*last)->next;
+				temp = history_init();
+				temp->record = ft_strdup(*current);
+				temp->edit_record = ft_strdup(temp->record);
+				if (!(*last))
+				{
+					*last = temp;
+					now = (*last);
+				}
+				else
+				{
+					(*last)->next = temp;
+					temp->prev = (*last);
+					(*last) = (*last)->next;
+				}
 			}
 			result = ft_strdup(*current);
 			if (*current != new)
