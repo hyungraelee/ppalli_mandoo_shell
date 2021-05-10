@@ -45,7 +45,7 @@ void	change_dir(char *dest, char ***envp)
 	else
 		ft_strlcpy(find_env_value("OLDPWD", *envp), temp, ft_strlen(temp) + 1);
 	ft_strlcpy(temp, buf, ft_strlen(buf) + 1);
-	g_exit = 0;
+	g_global.exit = 0;
 }
 
 int		blt_cd(t_token *token, char ***envp)

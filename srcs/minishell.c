@@ -6,7 +6,6 @@ void	minishell(char **envp)
 	char		*input_string;
 	char		**cmd_set;
 	t_cmd		*cmd_list;
-	pid_t		pid;
 	int			i;
 	t_history	*last;
 

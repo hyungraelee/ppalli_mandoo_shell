@@ -283,6 +283,6 @@ int		blt_export(t_token *token, char ***envp)
 				break ;
 		}
 	}
-	g_exit = 0;
+	g_global.exit = 0;
 	return (1);
 }

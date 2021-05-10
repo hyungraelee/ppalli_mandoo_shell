@@ -16,7 +16,7 @@ OBJS_DIR = ./objs
 INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
-SRCS =	./srcs/minishell.c	\
+		./srcs/minishell.c	\
 		./srcs/builtin.c	\
 		./srcs/check_syntax_err.c		\
 		./srcs/error.c		\

@@ -163,7 +163,6 @@ void	pipe_restore(t_cmd *cmd_list, int *old_fds)
 
 int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 {
-	pid_t	pid;
 	int		rd_fds[2];
 	int		status;
 	int		old_fds[2];
@@ -183,20 +182,20 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
-		pid = fork();
-		if (pid == 0)
+		g_global.pid = fork();
+		if (g_global.pid == 0)
 		{
 			pipe_process(cmd_list);
 			if (!redirect_process(cmd_list->token, rd_fds))
 				exit(1);
 			exit(0);
 		}
-		else if (pid == -1)
+		else if (g_global.pid == -1)
 			ft_print_err("fork", strerror(errno), NULL, 1);
 		else
 		{
 			wait(&status);
-			g_exit = status >> 8;
+			g_global.exit = status >> 8;
 			redirect_close(rd_fds);
 			pipe_restore(cmd_list, old_fds);
 		}
@@ -204,7 +203,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 	}
 	else
 	{
-		g_exit = 0;
+		g_global.exit = 0;
 		redirect_process(cmd_list->token, rd_fds);
 		redirect_restore(rd_fds, old_fds);
 	}
@@ -213,7 +212,6 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 
 void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 {
-	pid_t	pid;
 	int		status;
 	int		rd_fds[2];
 	int		old_fds[2];
@@ -236,8 +234,8 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
-		pid = fork();
-		if (pid == 0)
+		g_global.pid = fork();
+		if (g_global.pid == 0)
 		{
 			pipe_process(cmd_list);
 			if (!redirect_process(cmd_list->token, rd_fds))
@@ -245,13 +243,13 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 			(*builtin_func(i))(cmd_list->token, envp);
 			exit(0);
 		}
-		else if (pid == -1)
+		else if (g_global.pid == -1)
 			ft_print_err("fork", strerror(errno), NULL, 1);
 		else
 		{
 			wait(&status);
 			if (status >> 8 != 0)
-				g_exit = status >> 8;
+				g_global.exit = status >> 8;
 			redirect_close(rd_fds);
 			pipe_restore(cmd_list, old_fds);
 		}
@@ -271,7 +269,6 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 int	run_process(t_cmd *cmd_list, char ***envp)
 {
 	char	**args;
-	pid_t	pid;
 	int		status;
 	int		rd_fds[2];
 	int		old_fds[2];
@@ -279,7 +276,7 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
-	// g_exit = 0;
+	// g_global.exit = 0;
 	while (cmd_list->token)
 	{
 		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
@@ -292,9 +289,9 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 		cmd_list->token = cmd_list->token->prev;
 	args = make_args(cmd_list->token);
 	pipe(cmd_list->fds);
-	pid = fork();
+	g_global.pid = fork();
 	rt = 0;
-	if (pid == 0)
+	if (g_global.pid == 0)
 	{
 		pipe_process(cmd_list);
 		if (!redirect_process(cmd_list->token, rd_fds))
@@ -307,17 +304,17 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 		}
 		exit(EXIT_SUCCESS);
 	}
-	else if (pid == -1)
+	else if (g_global.pid == -1)
 		ft_print_err("fork", strerror(errno), NULL, 1);
 	else
 	{
 		wait(&status);
 		if (status >> 8 == 255)
-			g_exit = 255;
+			g_global.exit = 255;
 		else if (status >> 8 != 0)
-			g_exit = 1;
+			g_global.exit = 1;
 		else
-			g_exit = 0;
+			g_global.exit = 0;
 		redirect_close(rd_fds);
 		pipe_restore(cmd_list, old_fds);
 	}

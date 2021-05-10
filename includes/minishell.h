@@ -23,11 +23,13 @@ typedef struct s_global	t_global;
 
 struct	s_global
 {
-	int		g_exit;
-	pid_t	g_pid;
+	int		exit;
+	pid_t	pid;
 };
 
 t_global	g_global;
+
+void	minishell(char **envp);
 
 # define B_RED "\033[1;5;31m"
 # define B_GREEN "\033[1;5;92m"
