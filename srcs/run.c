@@ -48,6 +48,7 @@ void	redirect_process(t_token *token, int *rd_fds)
 			if (rd_fds[0] > 0)
 				close (rd_fds[0]);
 			rd_fds[0] = open(token->arg, O_RDONLY);
+			// No such file or directory $? = 1
 			dup2(rd_fds[0], STDIN_FILENO);
 		}
 		else if (token->type == RD_OUT)

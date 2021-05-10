@@ -250,7 +250,7 @@ int		blt_export(t_token *token, char ***envp)
 			if (token->type == ARGUMENT)
 			{
 				if (token->arg[0] == '=')
-					; // error (not a valid identifier)
+					return (ft_print_err("export", "not a valid identifier", NULL, 1));
 				else
 				{
 					i = 0;
@@ -260,10 +260,7 @@ int		blt_export(t_token *token, char ***envp)
 						export_name = ft_str_char_join(export_name, token->arg[i++]);
 					is_err = set_env_name(&export_name, *envp);	// if a" "=abc -> 0		or		a=abc -> 1
 					if (is_err == 0)
-					{
-						export_value = set_env_value(set_export_value(token->arg, i, *envp), 0);
-						new_var = ft_strjoin(export_name, export_value, 0);
-					}
+						return (ft_print_err("export", "not a valid identifier", NULL, 1));
 					else
 					{
 						export_value = set_export_value(token->arg, i, *envp);
@@ -286,5 +283,6 @@ int		blt_export(t_token *token, char ***envp)
 				break ;
 		}
 	}
+	g_exit = 0;
 	return (1);
 }

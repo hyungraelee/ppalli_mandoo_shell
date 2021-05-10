@@ -77,10 +77,9 @@ int		blt_cd(t_token *token, char ***envp)
 		if (!env_value)
 		{
 			if (!arg)
-				ft_print_err("cd", "HOME not set", NULL, 1);
 			// else if (!ft_strcmp("~", arg) || !ft_strcmp("~/", arg))
 				// change dir to home
-			return (0);
+				return (ft_print_err("cd", "HOME not set", NULL, 1));
 		}
 		else
 			ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
@@ -98,10 +97,7 @@ int		blt_cd(t_token *token, char ***envp)
 	{
 		env_value = find_env_value("OLDPWD", *envp);
 		if (!env_value)
-		{
-			ft_print_err("cd", "OLDPWD not set", NULL, 1);
-			return (0);
-		}
+			return (ft_print_err("cd", "OLDPWD not set", NULL, 1));
 		else
 		{
 			ft_putstr_fd(ft_strjoin(env_value, "\n", 0), STDOUT_FILENO);

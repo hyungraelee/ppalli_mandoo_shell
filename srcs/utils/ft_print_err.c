@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_print_err(char *s1, char *s2, char *s3, int code)
+int	ft_print_err(char *s1, char *s2, char *s3, int code)
 {
 	char	*print;
 
@@ -17,9 +17,5 @@ void	ft_print_err(char *s1, char *s2, char *s3, int code)
 	print = ft_strjoin(print, "\n", 1);
 	ft_putstr_fd(print, STDERR_FILENO);
 	free(print);
+	return (0);
 }
-
-// void	ft_print_err_exit(void)
-// {
-
-// }
