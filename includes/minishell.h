@@ -16,10 +16,18 @@
 # include "parser.h"
 # include "run.h"
 # include "utils.h"
+# include "init.h"
+# include "error.h"
 
+typedef struct s_global	t_global;
 
-typedef int	t_exit_code;
-t_exit_code	g_exit;
+struct	s_global
+{
+	int		g_exit;
+	pid_t	g_pid;
+};
+
+t_global	g_global;
 
 # define B_RED "\033[1;5;31m"
 # define B_GREEN "\033[1;5;92m"
