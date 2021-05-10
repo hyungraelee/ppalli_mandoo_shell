@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+void	free_minishell(char	*input_string, char **cmd_set)
+{
+	int	i;
+
+	i = 0;
+	free(input_string);
+	while (cmd_set && cmd_set[i])
+		free(cmd_set[i++]);
+	if (cmd_set)
+		free(cmd_set);
+	cmd_set = NULL;
+}
+
 void	minishell(char **envp)
 {
 	int 		status;
@@ -15,22 +28,16 @@ void	minishell(char **envp)
 	{
 		prompt();
 		input_string = read_cmd(&last);
-		if (!input_string || !check_syntax_err(input_string))
+		if (!ft_strcmp(input_string, "") || !check_syntax_err(input_string))
 			continue ;
 		cmd_set = separate(input_string, ';');
 		i = 0;
 		while (cmd_set && cmd_set[i])
 		{
 			cmd_list = get_parsed_list(cmd_set[i++]);
-			// if (!list)
 			status = run(cmd_list, &envp);
 		}
-		free(input_string);
-		i = 0;
-		while (cmd_set && cmd_set[i])
-			free(cmd_set[i++]);
-		if (cmd_set != NULL)
-			free(cmd_set);
+		free_minishell(input_string, cmd_set);
 	}
 }
 

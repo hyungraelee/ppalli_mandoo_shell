@@ -1,11 +1,11 @@
 NAME = minishell
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
-# CFLAGS = -g3 -fsanitize=address
+CFLAGS = -g3 -fsanitize=address
 
-ifeq ($(DEBUG),true)
-	CFLAGS += -g
-endif
+# ifeq ($(DEBUG),true)
+# 	CFLAGS += -g
+# endif
 
 SRCS_DIR =	./srcs	\
 			./srcs/pre_setting	\
