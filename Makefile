@@ -8,8 +8,11 @@ ifeq ($(DEBUG),true)
 endif
 
 SRCS_DIR =	./srcs	\
-			./srcs/blt_func	\
-			./srcs/cursor	\
+			./srcs/pre_setting	\
+			./srcs/pre_setting/cursor	\
+			./srcs/pre_setting/tokenize	\
+			./srcs/run	\
+			./srcs/run/blt_func	\
 			./srcs/utils
 
 OBJS_DIR = ./objs
@@ -17,25 +20,25 @@ INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
 		./srcs/minishell.c	\
-		./srcs/builtin.c	\
-		./srcs/check_syntax_err.c		\
-		./srcs/error.c		\
-		./srcs/find.c		\
-		./srcs/handle_file_or_dir.c		\
-		./srcs/init.c		\
-		./srcs/parse.c		\
-		./srcs/read_cmd.c	\
-		./srcs/run.c		\
-		./srcs/separate.c	\
-		./srcs/token.c	\
-		./srcs/blt_func/blt_cd.c	\
-		./srcs/blt_func/blt_echo.c	\
-		./srcs/blt_func/blt_env.c	\
-		./srcs/blt_func/blt_exit.c	\
-		./srcs/blt_func/blt_export.c	\
-		./srcs/blt_func/blt_pwd.c	\
-		./srcs/blt_func/blt_unset.c	\
-		./srcs/cursor/cursor.c	\
+		./srcs/pre_setting/check_syntax_err.c	\
+		./srcs/pre_setting/init.c	\
+		./srcs/pre_setting/read_cmd.c	\
+		./srcs/pre_setting/cursor/cursor.c	\
+		./srcs/pre_setting/tokenize/parse.c	\
+		./srcs/pre_setting/tokenize/separate.c	\
+		./srcs/pre_setting/tokenize/token.c	\
+		./srcs/run/builtin.c	\
+		./srcs/run/error.c	\
+		./srcs/run/find.c	\
+		./srcs/run/handle_file_or_dir.c	\
+		./srcs/run/run.c	\
+		./srcs/run/blt_func/blt_cd.c	\
+		./srcs/run/blt_func/blt_echo.c	\
+		./srcs/run/blt_func/blt_env.c	\
+		./srcs/run/blt_func/blt_exit.c	\
+		./srcs/run/blt_func/blt_export.c	\
+		./srcs/run/blt_func/blt_pwd.c	\
+		./srcs/run/blt_func/blt_unset.c	\
 		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\
