@@ -16,10 +16,13 @@ OBJS_DIR = ./objs
 INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
+SRCS =	./srcs/minishell.c	\
 		./srcs/builtin.c	\
 		./srcs/check_syntax_err.c		\
+		./srcs/error.c		\
 		./srcs/find.c		\
 		./srcs/handle_file_or_dir.c		\
+		./srcs/init.c		\
 		./srcs/parse.c		\
 		./srcs/read_cmd.c	\
 		./srcs/run.c		\
@@ -43,8 +46,6 @@ SRCS =	./srcs/main.c	\
 		./srcs/utils/ft_memcpy.c	\
 		./srcs/utils/ft_memmove.c	\
 		./srcs/utils/ft_memset.c	\
-		./srcs/utils/ft_print_err.c	\
-		./srcs/utils/ft_print_synerr.c	\
 		./srcs/utils/ft_putstr_fd.c	\
 		./srcs/utils/ft_split.c	\
 		./srcs/utils/ft_str_char_del.c	\
