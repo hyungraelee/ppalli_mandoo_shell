@@ -217,8 +217,8 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
 	// g_exit = 0;
-	// if (ft_strcmp(cmd_list->cmd_name, "export") && ft_strcmp(cmd_list->cmd_name, "env"))
-	// {
+	if (ft_strcmp(cmd_list->cmd_name, "export") && ft_strcmp(cmd_list->cmd_name, "env"))
+	{
 		while (cmd_list->token)
 		{
 			cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
@@ -229,7 +229,7 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 		}
 		while (cmd_list->token->prev)
 			cmd_list->token = cmd_list->token->prev;
-	// }
+	}
 	if (cmd_list->prev || cmd_list->next)
 	{
 		pipe(cmd_list->fds);
