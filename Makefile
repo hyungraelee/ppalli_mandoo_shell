@@ -31,6 +31,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/blt_func/blt_exit.c	\
 		./srcs/blt_func/blt_export.c	\
 		./srcs/blt_func/blt_pwd.c	\
+		./srcs/blt_func/blt_unset.c	\
 		./srcs/cursor/cursor.c	\
 		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\

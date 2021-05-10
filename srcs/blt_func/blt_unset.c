@@ -1,8 +1,31 @@
 #include "minishell.h"
 
-int	blt_unset(t_token *token, char ***envp)
+char	**delete_env(char **envp, char *str, int idx)
+{
+	char	**result;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	result = (char **)malloc(sizeof(char *) * i);
+	if (!result)
+		return (NULL);
+	i = -1;
+	while (envp[++i])
+	{
+		if (i != idx)
+			result[i] = envp[i];
+	}
+	result[i] = NULL;
+	free(str);
+	return (result);
+}
+
+int		blt_unset(t_token *token, char ***envp)
 {
 	int		i;
+	int		idx;
 	int		is_err;
 	char	*env_name;
 	char	*env_value;
@@ -30,13 +53,14 @@ int	blt_unset(t_token *token, char ***envp)
 				is_err = set_env_name(&env_name, *envp);
 				if (is_err == 0)
 				{
-
+					;	//error (not a valid identifier)
 				}
 				else
 				{
-					if (find_env_name(env_name, *envp) >= 0)
+					idx = find_env_name(env_name, *envp);
+					if (idx >= 0)
 					{
-						 
+						*envp = delete_env(*envp, env_name, idx);
 					}
 				}
 			}
