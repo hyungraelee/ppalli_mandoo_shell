@@ -1,6 +1,59 @@
 #include "minishell.h"
 
-int	check_syntax_err(char *input_string)
+static int	handle_last_open(char sflag, int rd)
+{
+	if ((sflag & REDIRECT) && rd == 1)
+		return (ft_print_synerr('<', rd));
+	else if (sflag & REDIRECT)
+		return (ft_print_synerr('>', rd));
+	else if (sflag & PIPE)
+		return (ft_print_synerr('|', 0));
+	else if (sflag & S_QUOTE)
+		return (ft_print_synerr('\'', 0));
+	else if (sflag & D_QUOTE)
+		return (ft_print_synerr('\"', 0));
+	else
+		return (0);
+}
+
+static void	check_normal_letter(int *i, char *sflag)
+{
+	if (*sflag & REDIRECT)
+		*sflag = (*sflag ^ REDIRECT) | POSSIBLE;
+	else if (*sflag & PIPE)
+	{
+		*sflag ^= PIPE;
+		*sflag |= CMD + POSSIBLE;
+	}
+	else if (!(*sflag & REDIRECT) && !(*sflag & PIPE))
+		*sflag |= CMD;
+	(*i)++;
+}
+
+static void	quote_flag_onoff(char *input_string, int *i, char *sflag)
+{
+	if (*input_string == '\'')
+	{
+		if (*sflag & S_QUOTE)						// if s_quote on
+			*sflag ^= S_QUOTE;						// s_quote off
+		else if (!(*sflag & D_QUOTE))				// if d_quote off
+			*sflag |= S_QUOTE;						// s_quote on
+		(*i)++;
+	}												// if d_quote on -> Do not on s_quote
+	else if (*input_string == '\"')
+	{
+		if (*sflag & D_QUOTE)						// if d_quote on
+		{
+			if (*(input_string - 1) != '\\')
+				*sflag ^= D_QUOTE;					// d_quote off
+		}
+		else if (!(*sflag & S_QUOTE))				// if s_quote off
+			*sflag |= D_QUOTE;						// d_quote on
+		(*i)++;
+	}
+}
+
+int			check_syntax_err(char *input_string)
 {
 	char	sflag;
 	int		i;
@@ -12,106 +65,17 @@ int	check_syntax_err(char *input_string)
 	{
 		if (ft_strchr(IFS, input_string[i]))
 			i++;
-		else if (input_string[i] == '\'')
+		else if (input_string[i] == '\'' || input_string[i] == '\"')
+			quote_flag_onoff(&(input_string[i]), &i, &sflag);
+		else if (ft_strchr("><|;", input_string[i]) && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
 		{
-			if (sflag & S_QUOTE)						// if s_quote on
-				sflag ^= S_QUOTE;						// s_quote off
-			else if (!(sflag & D_QUOTE))				// if d_quote off
-				sflag |= S_QUOTE;						// s_quote on
-			i++;
-		}												// if d_quote on -> Do not on s_quote
-		else if (input_string[i] == '\"')
-		{
-			if (sflag & D_QUOTE)						// if d_quote on
-			{
-				if (input_string[i - 1] != '\\')
-					sflag ^= D_QUOTE;					// d_quote off
-			}
-			else if (!(sflag & S_QUOTE))				// if s_quote off
-				sflag |= D_QUOTE;						// d_quote on
-			i++;
-		}												// if s_quote on -> Do not on d_quote
-		else if ((input_string[i] == '>' || input_string[i] == '<') && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
-		{	// when outside quote
-			if (sflag & REDIRECT)	// if redirect already on (echo 123 > > file)
-			{
-				if (input_string[i] == '>' && input_string[i + 1] == '>')
-					return (ft_print_synerr(input_string[i], 3));
-				else 								// syntax err
-					return (ft_print_synerr(input_string[i], 0));
-			}
-			sflag |= REDIRECT;							// redirect on
-			// sflag ^= POSSIBLE;
-			if (input_string[i] == '>' && input_string[i + 1] == '>')	// if append case
-			{
-				i += 2;
-				rd = 3;
-			}
-			else if (input_string[i] == '>' && input_string[i + 1] != '>')		// if not append case
-			{
-				i++;
-				rd = 2;
-			}
-			else
-			{
-				i++;
-				rd = 1;
-			}
-		}
-		else if (input_string[i] == '|' && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
-		{	// when outside quote
-			if (sflag & REDIRECT)						// if redirect on	(>  | )
-				return (ft_print_synerr(input_string[i], 0));								// syntax err
-			if (!(sflag & POSSIBLE) && !(sflag & CMD))	// if impossible and cmd off (    | | )
-				return (ft_print_synerr(input_string[i], 0));								// syntax err
-			sflag |= PIPE;								// pipe on
-			sflag ^= CMD + POSSIBLE;					// cmd and possible off
-			i++;
-		}
-		else if (input_string[i] == ';' && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
-		{	// when outside quote
-			if ((sflag & REDIRECT) || (sflag & PIPE))	// if redirect or pipe on (echo 123 > ;)
-				return (ft_print_synerr(input_string[i], 0));								// syntax err
-			if (!(sflag & CMD) && !(sflag & POSSIBLE))	// if cmd and possible off (  ;) (echo 123;;)
-				return (ft_print_synerr(input_string[i], 0));								// syntax err
-			sflag = 0;									// flag zero set
-			i++;
+			if (!handle_special_letter(&(input_string[i]), &i, &sflag, &rd))
+				return (0);
 		}
 		else
-		{
-			if (sflag & REDIRECT)
-				sflag = (sflag ^ REDIRECT) | POSSIBLE;
-			else if (sflag & PIPE)
-			{
-				sflag ^= PIPE;
-				sflag |= CMD + POSSIBLE;
-			}
-			else if (!(sflag & REDIRECT) && !(sflag & PIPE))
-				sflag |= CMD;
-			i++;
-		}
+			check_normal_letter(&i, &sflag);
 	}
 	if ((sflag & REDIRECT) || (sflag & PIPE) || (sflag & S_QUOTE) || (sflag & D_QUOTE))		// if redirect or pipe on at the end (echo 123 > )
-	{
-		if ((sflag & REDIRECT) && rd == 1)
-			return (ft_print_synerr('<', rd));
-		else if (sflag & REDIRECT)
-			return (ft_print_synerr('>', rd));
-		else if (sflag & PIPE)
-			return (ft_print_synerr('|', 0));
-		else if (sflag & S_QUOTE)
-			return (ft_print_synerr('\'', 0));
-		else if (sflag & D_QUOTE)
-			return (ft_print_synerr('\"', 0));
-	}
+		return (handle_last_open(sflag, rd));
 	return (1);
 }
-
-// int main()
-// {
-// 	// char a = 1;
-// 	// printf("%d\n", a & 1);
-// 	if(!check_syntax_err("echo > ; fed < ede >> edsd"))
-// 		printf("\nsyntax error\n\n");
-// 	return (0);
-// }

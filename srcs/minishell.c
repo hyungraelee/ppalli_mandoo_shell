@@ -1,5 +1,59 @@
 #include "minishell.h"
 
+void	free_minishell(char	*input_string, char **cmd_set)
+{
+	int	i;
+
+	i = 0;
+	free(input_string);
+	while (cmd_set && cmd_set[i])
+		free(cmd_set[i++]);
+	if (cmd_set)
+		free(cmd_set);
+	cmd_set = NULL;
+}
+
+void	free_token(t_token *token)
+{
+	while (token->prev)
+		token = token->prev;
+	while (token)
+	{
+		free(token->arg);
+		if (token->next)
+		{
+			token = token->next;
+			free(token->prev);
+		}
+		else
+		{
+			free(token);
+			break ;
+		}
+	}
+}
+
+void	free_cmdlist(t_cmd *cmd_list)
+{
+	while (cmd_list->prev)
+		cmd_list = cmd_list->prev;
+	while (cmd_list)
+	{
+		free(cmd_list->cmd_name);
+		free_token(cmd_list->token);
+		if (cmd_list->next)
+		{
+			cmd_list = cmd_list->next;
+			free(cmd_list->prev);
+		}
+		else
+		{
+			free(cmd_list);
+			break ;
+		}
+	}
+}
+
 void	minishell(char **envp)
 {
 	int 		status;
@@ -15,22 +69,21 @@ void	minishell(char **envp)
 	{
 		prompt();
 		input_string = read_cmd(&last);
-		if (!input_string || !check_syntax_err(input_string))
+		if (!ft_strcmp(input_string, "") || !check_syntax_err(input_string))
+		{
+			free(input_string);
+			input_string = NULL;
 			continue ;
+		}
 		cmd_set = separate(input_string, ';');
 		i = 0;
 		while (cmd_set && cmd_set[i])
 		{
 			cmd_list = get_parsed_list(cmd_set[i++]);
-			// if (!list)
 			status = run(cmd_list, &envp);
+			free_cmdlist(cmd_list);
 		}
-		free(input_string);
-		i = 0;
-		while (cmd_set && cmd_set[i])
-			free(cmd_set[i++]);
-		if (cmd_set != NULL)
-			free(cmd_set);
+		free_minishell(input_string, cmd_set);
 	}
 }
 

@@ -1,11 +1,11 @@
 NAME = minishell
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
-# CFLAGS = -g3 -fsanitize=address
+CFLAGS = -g3 -fsanitize=address
 
-ifeq ($(DEBUG),true)
-	CFLAGS += -g
-endif
+# ifeq ($(DEBUG),true)
+# 	CFLAGS += -g
+# endif
 
 SRCS_DIR =	./srcs	\
 			./srcs/pre_setting	\
@@ -21,6 +21,7 @@ INC_DIR = ./includes
 SRCS =	./srcs/main.c	\
 		./srcs/minishell.c	\
 		./srcs/pre_setting/check_syntax_err.c	\
+		./srcs/pre_setting/check_syntax_err2.c	\
 		./srcs/pre_setting/init.c	\
 		./srcs/pre_setting/read_cmd.c	\
 		./srcs/pre_setting/cursor/cursor.c	\
