@@ -31,7 +31,6 @@ void	minishell(char **envp)
 			free(cmd_set[i++]);
 		if (cmd_set != NULL)
 			free(cmd_set);
-
 	}
 }
 

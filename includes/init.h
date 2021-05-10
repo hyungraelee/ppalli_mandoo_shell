@@ -3,8 +3,6 @@
 
 # include "minishell.h"
 
-char	**init_envp(char **env);
-void	init_termios(void);
-void	init_termcap(void);
+char	**init(char **env);
 
 #endif
