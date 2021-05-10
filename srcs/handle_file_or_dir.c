@@ -48,7 +48,8 @@ int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
 		if (pid == 0)
 		{
 			pipe_process(cmd_list);
-			redirect_process(cmd_list->token, rd_fds);
+			if(!redirect_process(cmd_list->token, rd_fds))
+				exit(1);
 			check_stat(cmd_list->cmd_name, envp);
 			exit(g_exit);
 		}
@@ -64,7 +65,11 @@ int	handle_file_or_dir(t_cmd *cmd_list, char ***envp)
 	}
 	else
 	{
-		redirect_process(cmd_list->token, rd_fds);
+		if (!redirect_process(cmd_list->token, rd_fds))
+		{
+			redirect_restore(rd_fds, old_fds);
+			return (0);
+		}
 		check_stat(cmd_list->cmd_name, envp);
 		redirect_restore(rd_fds, old_fds);
 	}

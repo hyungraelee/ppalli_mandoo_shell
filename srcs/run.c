@@ -37,7 +37,7 @@ char	**make_args(t_token *token)
 	return (result);
 }
 
-void	redirect_process(t_token *token, int *rd_fds)
+int	redirect_process(t_token *token, int *rd_fds)
 {
 	rd_fds[0] = 0;
 	rd_fds[1] = 0;
@@ -48,7 +48,8 @@ void	redirect_process(t_token *token, int *rd_fds)
 			if (rd_fds[0] > 0)
 				close (rd_fds[0]);
 			rd_fds[0] = open(token->arg, O_RDONLY);
-			// No such file or directory $? = 1
+			if (rd_fds[0] == -1)
+				return (ft_print_err(token->arg, strerror(errno), NULL, 1));
 			dup2(rd_fds[0], STDIN_FILENO);
 		}
 		else if (token->type == RD_OUT)
@@ -72,6 +73,7 @@ void	redirect_process(t_token *token, int *rd_fds)
 	}
 	while (token->prev)
 		token = token->prev;
+	return (1);
 }
 
 void	redirect_close(int *rd_fds)
@@ -185,7 +187,8 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 		if (pid == 0)
 		{
 			pipe_process(cmd_list);
-			redirect_process(cmd_list->token, rd_fds);
+			if (!redirect_process(cmd_list->token, rd_fds))
+				exit(1);
 			exit(0);
 		}
 		else if (pid == -1)
@@ -217,7 +220,6 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
-	// g_exit = 0;
 	if (ft_strcmp(cmd_list->cmd_name, "export") && ft_strcmp(cmd_list->cmd_name, "env"))
 	{
 		while (cmd_list->token)
@@ -238,7 +240,8 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 		if (pid == 0)
 		{
 			pipe_process(cmd_list);
-			redirect_process(cmd_list->token, rd_fds);
+			if (!redirect_process(cmd_list->token, rd_fds))
+				exit(1);
 			(*builtin_func(i))(cmd_list->token, envp);
 			exit(0);
 		}
@@ -255,7 +258,11 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 	}
 	else
 	{
-		redirect_process(cmd_list->token, rd_fds);
+		if (!redirect_process(cmd_list->token, rd_fds))
+		{
+			redirect_restore(rd_fds, old_fds);
+			return ;
+		}
 		(*builtin_func(i))(cmd_list->token, envp);
 		redirect_restore(rd_fds, old_fds);
 	}
@@ -290,7 +297,8 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	if (pid == 0)
 	{
 		pipe_process(cmd_list);
-		redirect_process(cmd_list->token, rd_fds);	// need error handle -> open error
+		if (!redirect_process(cmd_list->token, rd_fds))
+			exit(1);
 		rt = execve(cmd_list->cmd_name, args, *envp);
 		if (rt == -1)
 		{
