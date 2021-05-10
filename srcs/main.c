@@ -14,83 +14,12 @@ void	prompt(void)
 	write(1, C_RESET, ft_strlen(C_RESET));
 }
 
-void	minishell(char **envp)
-{
-	int 		status;
-	char		*input_string;
-	char		**cmd_set;
-	t_cmd		*cmd_list;
-	pid_t		pid;
-	int			i;
-	t_history	*last;
-
-	status = 1;
-	last = NULL;
-	while (status)
-	{
-		prompt();
-		input_string = read_cmd(&last);
-		if (!input_string || !check_syntax_err(input_string))
-			continue ;
-		cmd_set = separate(input_string, ';');
-		i = 0;
-		while (cmd_set && cmd_set[i])
-		{
-			cmd_list = get_parsed_list(cmd_set[i++]);
-			// if (!list)
-			status = run(cmd_list, &envp);
-		}
-		free(input_string);
-		i = 0;
-		while (cmd_set && cmd_set[i])
-			free(cmd_set[i++]);
-		if (cmd_set != NULL)
-			free(cmd_set);
-
-	}
-}
-
-char	**init_envp(char **env)
-{
-	int		i;
-	int		j;
-	char	**envp;
-
-	i = -1;
-	while (env[++i])
-		;
-	envp = (char **)ft_calloc(i + 1, sizeof(char *));
-	i = -1;
-	while (env[++i])
-	{
-		envp[i] = (char *)ft_calloc(PATH_MAX + 1, sizeof(char));
-		j = -1;
-		while (env[i][++j])
-			envp[i][j] = env[i][j];
-		envp[i][j] = 0;
-	}
-	envp[i] = NULL;
-	return (envp);
-}
-
-void	init_termios(void)
-{
-	struct termios	term;
-
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ICANON;    // non-canonical input 설정
-	term.c_lflag &= ~ECHO;		// 입력시 터미널에 보이지 않도록
-	term.c_cc[VMIN] = 1;        // 최소 입력 버퍼 크기
-	term.c_cc[VTIME] = 0;       //버퍼 비우는 시간 (timeout)
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	tgetent(NULL, "xterm");
-}
-
 int		main(int argc, char **argv, char **env)
 {
 	char	**envp;
 
 	init_termios();
+	init_termcap();
 	envp = init_envp(env);
 	minishell(envp);
 }
