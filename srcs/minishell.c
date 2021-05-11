@@ -65,6 +65,9 @@ void	minishell(char **envp)
 
 	status = 1;
 	last = NULL;
+	g_global.pid = 1;
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (status)
 	{
 		prompt();
