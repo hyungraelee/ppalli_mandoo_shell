@@ -4,6 +4,7 @@ char	**delete_env(char **envp, char *str, int idx)
 {
 	char	**result;
 	int		i;
+	int		j;
 
 	i = 0;
 	while (envp[i])
@@ -11,14 +12,17 @@ char	**delete_env(char **envp, char *str, int idx)
 	result = (char **)malloc(sizeof(char *) * i);
 	if (!result)
 		return (NULL);
-	i = -1;
-	while (envp[++i])
+	i = 0;
+	j = 0;
+	while (envp[i])
 	{
 		if (i != idx)
-			result[i] = envp[i];
+			result[j++] = envp[i++];
+		else
+			i++;
 	}
-	result[i] = NULL;
-	free(str);
+	result[j] = NULL;
+	// free(str);
 	return (result);
 }
 

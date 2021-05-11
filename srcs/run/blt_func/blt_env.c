@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+int		turn_on_flag(int *flag, int quote, int i)
+{
+	if (*flag & quote)
+		*flag ^= quote;
+	else
+		*flag |= quote;
+	i++;
+	return (i);
+}
+
+// int		check_backslash_env(int *flag, char *arg, int idx, int i)
+// {
+	
+// }
+
 char	*set_env_value(char *arg, int idx)
 {
 	int		i;
@@ -14,21 +29,23 @@ char	*set_env_value(char *arg, int idx)
 	while (arg[idx + i])
 	{
 		if (arg[idx + i] == '\"' && !(flag & S_QUOTE))
-		{
-			if (flag & D_QUOTE)
-				flag ^= D_QUOTE;
-			else
-				flag |= D_QUOTE;
-			i++;
-		}
+			i = turn_on_flag(&flag, D_QUOTE, i);
+		// {
+		// 	if (flag & D_QUOTE)
+		// 		flag ^= D_QUOTE;
+		// 	else
+		// 		flag |= D_QUOTE;
+		// 	i++;
+		// }
 		else if (arg[idx + i] == '\'' && !(flag & D_QUOTE))
-		{
-			if (flag & S_QUOTE)
-				flag ^= S_QUOTE;
-			else
-				flag |= S_QUOTE;
-			i++;
-		}
+			i = turn_on_flag(&flag, S_QUOTE, i);
+		// {
+		// 	if (flag & S_QUOTE)
+		// 		flag ^= S_QUOTE;
+		// 	else
+		// 		flag |= S_QUOTE;
+		// 	i++;
+		// }
 		else if (arg[idx + i] == '\\')
 		{
 			if (flag == 0)

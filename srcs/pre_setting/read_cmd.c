@@ -180,13 +180,18 @@ char	*read_cmd(t_history **last)
 			;
 		else
 		{
-			write(1, &c, 1);
 			*on_terminal = ft_str_char_embed(*on_terminal, c, cursor);
-			delete_current_line();
-			prompt();
+			cursor++;
+			c = cursor;
+			while (c != ft_strlen(*on_terminal))
+			{
+				move_cursor_right();
+				c++;
+			}
+			while (--c > 0)
+				delete_letter();
 			ft_putstr_fd(*on_terminal, 1);
 			c = ft_strlen(*on_terminal);
-			cursor++;
 			while (c-- > cursor)
 				move_cursor_left();
 		}
