@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+void		free_history(t_history *history)
+{
+	while (history)
+	{
+		free(history->record);
+		free(history->edit_record);
+		if (history->prev)
+			history = history->prev;
+		else
+			break;
+	}
+}
+
 t_history	*history_init(void)
 {
 	t_history	*result;
@@ -17,67 +30,76 @@ t_history	*history_init(void)
 char	*read_cmd(t_history **last)
 {
 	char		*result;
-	char		**current;
+	char		**on_terminal;
 	int			c;
 	int			cursor;
 	char		*new;
 	t_history	*temp;
-	t_history	*now;
+	t_history	*selected_history;
 
 	result = NULL;
 	new = ft_strdup("");
-	current = &new;
+	on_terminal = &new;
 	cursor = 0;
-	now = *last;
+	selected_history = *last;
 	c = 0;
 	while (read(0, &c, sizeof(c)) > 0)
 	{
+		if (g_global.signal_on)
+		{
+			if (*on_terminal != new)
+			{
+				free(selected_history->edit_record);
+				selected_history->edit_record = ft_strdup(selected_history->record);
+			}
+			free(new);
+			new = ft_strdup("");
+			on_terminal = &new;
+			g_global.signal_on = 0;
+		}
 		if (c == KEY_BACKSPACE)
 		{
 			if (cursor > 0)
 			{
 				delete_letter();
-				*current = ft_str_char_del(*current, cursor - 1);
+				*on_terminal = ft_str_char_del(*on_terminal, cursor - 1);
 				cursor--;
 			}
 		}
 		else if (c == UP_ARROW)
 		{
-			if (*current == new)
+			if (*on_terminal == new)
 			{
 				if (*last)
-				{
-					now = *last;
-					current = &now->edit_record;
-				}
+					selected_history = *last;
 			}
 			else
 			{
-				if (now->prev)
-					now = now->prev;
-				current = &now->edit_record;
+				if (selected_history->prev)
+					selected_history = selected_history->prev;
 			}
-			cursor = ft_strlen(*current);
+			on_terminal = &selected_history->edit_record;
+			cursor = ft_strlen(*on_terminal);
 			delete_current_line();
 			prompt();
-			ft_putstr_fd(*current, 1);
+			ft_putstr_fd(*on_terminal, 1);
 		}
 		else if (c == DOWN_ARROW)
 		{
-			if (*current != new)
+			if (*on_terminal != new)
 			{
-				if (now->next)
+				if (selected_history->next)
 				{
-					now = now->next;
-					current = &now->edit_record;
+					selected_history = selected_history->next;
+					on_terminal = &selected_history->edit_record;
 				}
 				else
-					current = &new;
+					on_terminal = &new;
 			}
-			cursor = ft_strlen(*current);
+			cursor = ft_strlen(*on_terminal);
 			delete_current_line();
 			prompt();
-			ft_putstr_fd(*current, 1);
+			ft_putstr_fd(*on_terminal, 1);
 		}
 		else if (c == LEFT_ARROW)
 		{
@@ -89,7 +111,7 @@ char	*read_cmd(t_history **last)
 		}
 		else if (c == RIGHT_ARROW)
 		{
-			if (cursor < ft_strlen(*current))
+			if (cursor < ft_strlen(*on_terminal))
 			{
 				move_cursor_right();
 				cursor++;
@@ -105,7 +127,7 @@ char	*read_cmd(t_history **last)
 		}
 		else if (c == KEY_END)
 		{
-			while (cursor < ft_strlen(*current))
+			while (cursor < ft_strlen(*on_terminal))
 			{
 				move_cursor_right();
 				cursor++;
@@ -113,9 +135,9 @@ char	*read_cmd(t_history **last)
 		}
 		else if (c == KEY_CTRL_D)
 		{
-			if (!ft_strcmp(*current, ""))
+			if (!ft_strcmp(*on_terminal, ""))
 			{
-				// history free
+				free_history(*last);
 				ft_putstr_fd("exit\n", STDOUT_FILENO);
 				exit (0);
 			}
@@ -123,15 +145,15 @@ char	*read_cmd(t_history **last)
 		else if (c == KEY_ENTER)
 		{
 			write(1, &c, 1);
-			if (ft_strcmp(*current, ""))
+			if (ft_strcmp(*on_terminal, ""))
 			{
 				temp = history_init();
-				temp->record = ft_strdup(*current);
+				temp->record = ft_strdup(*on_terminal);
 				temp->edit_record = ft_strdup(temp->record);
 				if (!(*last))
 				{
 					*last = temp;
-					now = (*last);
+					selected_history = (*last);
 				}
 				else
 				{
@@ -140,11 +162,11 @@ char	*read_cmd(t_history **last)
 					(*last) = (*last)->next;
 				}
 			}
-			result = ft_strdup(*current);
-			if (*current != new)
+			result = ft_strdup(*on_terminal);
+			if (*on_terminal != new)
 			{
-				free(now->edit_record);
-				now->edit_record = ft_strdup(now->record);
+				free(selected_history->edit_record);
+				selected_history->edit_record = ft_strdup(selected_history->record);
 			}
 			break;
 		}
@@ -153,11 +175,11 @@ char	*read_cmd(t_history **last)
 		else
 		{
 			write(1, &c, 1);
-			*current = ft_str_char_embed(*current, c, cursor);
+			*on_terminal = ft_str_char_embed(*on_terminal, c, cursor);
 			delete_current_line();
 			prompt();
-			ft_putstr_fd(*current, 1);
-			c = ft_strlen(*current);
+			ft_putstr_fd(*on_terminal, 1);
+			c = ft_strlen(*on_terminal);
 			cursor++;
 			while (c-- > cursor)
 				move_cursor_left();
