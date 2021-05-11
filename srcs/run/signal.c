@@ -9,12 +9,12 @@ void	sig_handler(int signo)
 			if (signo == SIGINT)
 			{
 				ft_putstr_fd("^C\n", STDOUT_FILENO);
-				// prompt();
+				g_global.exit = 130;
 			}
 			else if (signo == SIGQUIT)
 			{
 				ft_putstr_fd("^\\Quit: 3\n", STDOUT_FILENO);
-				// prompt();
+				g_global.exit = 131;
 			}
 		}
 		else
@@ -23,6 +23,7 @@ void	sig_handler(int signo)
 			{
 				ft_putstr_fd("\n", STDOUT_FILENO);
 				g_global.signal_on = 1;
+				g_global.exit = 1;
 				prompt();
 			}
 		}
@@ -41,19 +42,3 @@ void	sig_handler(int signo)
 	// 	}
 	// }
 }
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	int	i = 0;
-// 	// char	*arg[2];
-
-// 	// arg[0] = "cat";
-// 	// arg[1] = NULL;
-// 	// execve("/bin/cat", arg, envp);
-// 	signal(SIGTERM, sig_handler);
-// 	while (1)
-// 	{
-// 		printf("%d\n", i++);
-// 		sleep(1);
-// 	}
-// }
