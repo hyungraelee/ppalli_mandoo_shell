@@ -83,6 +83,7 @@ void	minishell(char **envp)
 			status = run(cmd_list, &envp);
 			free_cmdlist(cmd_list);
 		}
+		free_cmdlist(cmd_list);
 		free_minishell(input_string, cmd_set);
 	}
 }
