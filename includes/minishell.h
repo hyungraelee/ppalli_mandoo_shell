@@ -3,7 +3,6 @@
 
 # include <stdio.h>
 # include <unistd.h>
-# include <termios.h>
 # include <stdlib.h>
 # include <signal.h>
 # include <sys/types.h>

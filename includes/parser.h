@@ -23,7 +23,7 @@ int		handle_special_letter(char *input_string, int *i, char *sflag, int *rd);
 char	**separate(char *line, char c);
 
 t_cmd	*get_parsed_list(char *line);
-t_token	*make_tokenlist(char *cmdline, char **cmd_name);
+t_token	*get_token_list(char *cmdline, char **cmd_name);
 void	delete_letter(void);
 void	move_cursor_left(void);
 void	move_cursor_right(void);
