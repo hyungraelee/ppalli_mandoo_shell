@@ -56,12 +56,13 @@ void	free_cmdlist(t_cmd *cmd_list)
 
 void	minishell(char **envp)
 {
-	int 		status;
-	char		*input_string;
-	char		**cmd_set;
-	t_cmd		*cmd_list;
-	int			i;
-	t_history	*last;
+	int 			status;
+	char			*input_string;
+	char			**cmd_set;
+	t_cmd			*cmd_list;
+	int				i;
+	t_history		*last;
+	struct termios	backup;
 
 	status = 1;
 	last = NULL;
@@ -71,7 +72,9 @@ void	minishell(char **envp)
 	while (status)
 	{
 		prompt();
+		init_termios(&backup);
 		input_string = read_cmd(&last);
+		tcsetattr(STDIN_FILENO, TCSANOW, &backup);
 		if (!ft_strcmp(input_string, "") || !check_syntax_err(input_string))
 		{
 			free(input_string);

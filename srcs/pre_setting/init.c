@@ -23,10 +23,11 @@ static char	**init_envp(char **env)
 	return (envp);
 }
 
-static void	init_termios(void)
+void	init_termios(struct termios *backup)
 {
 	struct termios	term;
 
+	tcgetattr(STDIN_FILENO, backup);
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ICANON;    // non-canonical input 설정
 	term.c_lflag &= ~ECHO;		// 입력시 터미널에 보이지 않도록
@@ -66,7 +67,7 @@ char		**init(char **env)
 {
 	char	**envp;
 
-	init_termios();
+	// init_termios(backup);
 	init_termcap();
 	envp = init_envp(env);
 	return (envp);

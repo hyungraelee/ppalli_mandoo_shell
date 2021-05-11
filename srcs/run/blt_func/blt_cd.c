@@ -67,7 +67,7 @@ int		blt_cd(t_token *token, char ***envp)
 			break ;
 	}
 	if (token->type == ARGUMENT)
-		arg = get_env_value(token->arg, *envp);
+		arg = ft_strdup(token->arg);
 	else
 		arg = NULL;
 	i = -1;
@@ -109,6 +109,9 @@ int		blt_cd(t_token *token, char ***envp)
 		while (arg[++i])
 			path[i] = arg[i];
 	}
+	if (arg)
+		free(arg);
+	arg = NULL;
 	change_dir(path, envp);
 	return (1);
 }
