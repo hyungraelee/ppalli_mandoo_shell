@@ -25,6 +25,7 @@ struct	s_global
 {
 	int		exit;
 	pid_t	pid;
+	int		signal_on;
 };
 
 t_global	g_global;
