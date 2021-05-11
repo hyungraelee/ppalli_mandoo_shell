@@ -55,6 +55,7 @@ char	*read_cmd(t_history **last)
 			free(new);
 			new = ft_strdup("");
 			on_terminal = &new;
+			cursor = 0;
 			g_global.signal_on = 0;
 		}
 		if (c == KEY_BACKSPACE)
@@ -71,14 +72,19 @@ char	*read_cmd(t_history **last)
 			if (*on_terminal == new)
 			{
 				if (*last)
+				{
 					selected_history = *last;
+					on_terminal = &selected_history->edit_record;
+				}
 			}
 			else
 			{
 				if (selected_history->prev)
+				{
 					selected_history = selected_history->prev;
+					on_terminal = &selected_history->edit_record;
+				}
 			}
-			on_terminal = &selected_history->edit_record;
 			cursor = ft_strlen(*on_terminal);
 			delete_current_line();
 			prompt();

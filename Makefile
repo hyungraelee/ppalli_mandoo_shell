@@ -33,6 +33,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/find.c	\
 		./srcs/run/handle_file_or_dir.c	\
 		./srcs/run/run.c	\
+		./srcs/run/signal.c	\
 		./srcs/run/blt_func/blt_cd.c	\
 		./srcs/run/blt_func/blt_echo.c	\
 		./srcs/run/blt_func/blt_env.c	\
