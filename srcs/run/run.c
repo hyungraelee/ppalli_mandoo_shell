@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-char	**make_args(t_token *token)
+char **make_args(t_token *token)
 {
-	char	**result;
-	int		cnt;
-	int		i;
+	char **result;
+	int cnt;
+	int i;
 
 	cnt = 0;
 	while (token)
@@ -14,7 +14,7 @@ char	**make_args(t_token *token)
 		if (token->next)
 			token = token->next;
 		else
-			break ;
+			break;
 	}
 	while (token->prev)
 		token = token->prev;
@@ -29,7 +29,7 @@ char	**make_args(t_token *token)
 		if (token->next)
 			token = token->next;
 		else
-			break ;
+			break;
 	}
 	result[i] = NULL;
 	while (token->prev)
@@ -37,7 +37,7 @@ char	**make_args(t_token *token)
 	return (result);
 }
 
-int	redirect_process(t_token *token, int *rd_fds)
+int redirect_process(t_token *token, int *rd_fds)
 {
 	rd_fds[0] = 0;
 	rd_fds[1] = 0;
@@ -46,7 +46,7 @@ int	redirect_process(t_token *token, int *rd_fds)
 		if (token->type == RD_IN)
 		{
 			if (rd_fds[0] > 0)
-				close (rd_fds[0]);
+				close(rd_fds[0]);
 			rd_fds[0] = open(token->arg, O_RDONLY);
 			if (rd_fds[0] == -1)
 				return (ft_print_err(token->arg, strerror(errno), NULL, 1));
@@ -55,28 +55,28 @@ int	redirect_process(t_token *token, int *rd_fds)
 		else if (token->type == RD_OUT)
 		{
 			if (rd_fds[1] > 0)
-				close (rd_fds[1]);
+				close(rd_fds[1]);
 			rd_fds[1] = open(token->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			dup2(rd_fds[1], STDOUT_FILENO);
 		}
 		else if (token->type == RD_APPEND)
 		{
 			if (rd_fds[1] > 0)
-				close (rd_fds[1]);
+				close(rd_fds[1]);
 			rd_fds[1] = open(token->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			dup2(rd_fds[1], STDOUT_FILENO);
 		}
 		if (token->next)
 			token = token->next;
 		else
-			break ;
+			break;
 	}
 	while (token->prev)
 		token = token->prev;
 	return (1);
 }
 
-void	redirect_close(int *rd_fds)
+void redirect_close(int *rd_fds)
 {
 	if (rd_fds[0] > 0)
 		close(rd_fds[0]);
@@ -84,7 +84,7 @@ void	redirect_close(int *rd_fds)
 		close(rd_fds[1]);
 }
 
-void	redirect_restore(int *rd_fds, int *old_fds)
+void redirect_restore(int *rd_fds, int *old_fds)
 {
 	if (rd_fds[0] > 0)
 	{
@@ -100,7 +100,7 @@ void	redirect_restore(int *rd_fds, int *old_fds)
 	}
 }
 
-void	pipe_process(t_cmd *cmd_list)
+void pipe_process(t_cmd *cmd_list)
 {
 	if (cmd_list->next || cmd_list->prev)
 	{
@@ -116,7 +116,7 @@ void	pipe_process(t_cmd *cmd_list)
 	}
 }
 
-void	pipe_close(t_cmd *cmd_list)
+void pipe_close(t_cmd *cmd_list)
 {
 	if (cmd_list->next || cmd_list->prev)
 	{
@@ -138,7 +138,7 @@ void	pipe_close(t_cmd *cmd_list)
 	}
 }
 
-void	pipe_restore(t_cmd *cmd_list, int *old_fds)
+void pipe_restore(t_cmd *cmd_list, int *old_fds)
 {
 	if (cmd_list->next || cmd_list->prev)
 	{
@@ -161,11 +161,11 @@ void	pipe_restore(t_cmd *cmd_list, int *old_fds)
 	}
 }
 
-int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
+int handle_no_cmd(t_cmd *cmd_list, char ***envp)
 {
-	int		rd_fds[2];
-	int		status;
-	int		old_fds[2];
+	int rd_fds[2];
+	int status;
+	int old_fds[2];
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
@@ -175,7 +175,7 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 		if (cmd_list->token->next)
 			cmd_list->token = cmd_list->token->next;
 		else
-			break ;
+			break;
 	}
 	while (cmd_list->token->prev)
 		cmd_list->token = cmd_list->token->prev;
@@ -210,11 +210,11 @@ int	handle_no_cmd(t_cmd *cmd_list, char ***envp)
 	return (1);
 }
 
-void	blt_run(int i, t_cmd *cmd_list, char ***envp)
+void blt_run(int i, t_cmd *cmd_list, char ***envp)
 {
-	int		status;
-	int		rd_fds[2];
-	int		old_fds[2];
+	int status;
+	int rd_fds[2];
+	int old_fds[2];
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
@@ -226,7 +226,7 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 			if (cmd_list->token->next)
 				cmd_list->token = cmd_list->token->next;
 			else
-				break ;
+				break;
 		}
 		while (cmd_list->token->prev)
 			cmd_list->token = cmd_list->token->prev;
@@ -259,20 +259,20 @@ void	blt_run(int i, t_cmd *cmd_list, char ***envp)
 		if (!redirect_process(cmd_list->token, rd_fds))
 		{
 			redirect_restore(rd_fds, old_fds);
-			return ;
+			return;
 		}
 		(*builtin_func(i))(cmd_list->token, envp);
 		redirect_restore(rd_fds, old_fds);
 	}
 }
 
-int	run_process(t_cmd *cmd_list, char ***envp)
+int run_process(t_cmd *cmd_list, char ***envp)
 {
-	char	**args;
-	int		status;
-	int		rd_fds[2];
-	int		old_fds[2];
-	int		rt;
+	char **args;
+	int status;
+	int rd_fds[2];
+	int old_fds[2];
+	int rt;
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
@@ -283,7 +283,7 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 		if (cmd_list->token->next)
 			cmd_list->token = cmd_list->token->next;
 		else
-			break ;
+			break;
 	}
 	while (cmd_list->token->prev)
 		cmd_list->token = cmd_list->token->prev;
@@ -321,17 +321,18 @@ int	run_process(t_cmd *cmd_list, char ***envp)
 	return (1);
 }
 
-int	run(t_cmd *cmd_list, char ***envp)
+int run(t_cmd *cmd_list, char ***envp)
 {
-	int			i;
-	struct stat	buf;
+	int i;
+	struct stat buf;
 
 	while (cmd_list)
 	{
 		cmd_list->cmd_name = get_env_value(cmd_list->cmd_name, *envp);
 		if (!cmd_list->cmd_name)
 			handle_no_cmd(cmd_list, envp);
-		else if ((cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/') || cmd_list->cmd_name[0] == '/')
+		// else if ((cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/') || cmd_list->cmd_name[0] == '/')
+		else if ((cmd_list->cmd_name[0] == '.' && cmd_list->cmd_name[1] == '/'))
 			handle_file_or_dir(cmd_list, envp);
 		else
 		{
@@ -341,7 +342,7 @@ int	run(t_cmd *cmd_list, char ***envp)
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
 				{
 					blt_run(i, cmd_list, envp);
-					break ;
+					break;
 				}
 			}
 			if (i >= BLTIN_NUM)
@@ -355,7 +356,7 @@ int	run(t_cmd *cmd_list, char ***envp)
 		if (cmd_list->next)
 			cmd_list = cmd_list->next;
 		else
-			break ;
+			break;
 	}
 	return (1);
 }

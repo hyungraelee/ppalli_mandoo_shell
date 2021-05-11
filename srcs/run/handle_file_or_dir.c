@@ -4,7 +4,6 @@ int	check_stat(char	*cmd_name, char ***envp)
 {
 	struct stat	buf;
 
-	cmd_name = get_env_value(cmd_name, *envp);
 	if (stat(cmd_name, &buf) == -1)
 	{
 		ft_print_err(cmd_name, strerror(errno), NULL, 127);
