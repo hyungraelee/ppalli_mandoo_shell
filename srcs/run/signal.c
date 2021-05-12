@@ -6,16 +6,11 @@ void	sig_handler(int signo)
 	{
 		if (!kill(g_global.pid, signo))
 		{
+			g_global.signal_on = 1;
 			if (signo == SIGINT)
-			{
 				ft_putstr_fd("\n", STDOUT_FILENO);
-				g_global.exit = 130;
-			}
 			else if (signo == SIGQUIT)
-			{
 				ft_putstr_fd("Quit: 3\n", STDOUT_FILENO);
-				g_global.exit = 131;
-			}
 		}
 		else
 		{
