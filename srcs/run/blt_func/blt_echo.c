@@ -32,7 +32,7 @@ int		blt_echo(t_token *token, char ***envp)
 		else
 			break ;
 	}
-	if (!ft_strcmp(token->arg, "-n"))
+	if (token->arg && !ft_strcmp(token->arg, "-n"))
 	{
 		new_line = 0;
 		token = token->next;
