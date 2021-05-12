@@ -47,7 +47,7 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	env_value = find_env_value("PATH", envp);
 	path = ft_split(env_value, ':');
 	i = -1;
-	while (path[++i])
+	while (path && path[++i])
 	{
 		path[i] = ft_strjoin(ft_strjoin(path[i], "/", 1), cmd_list->cmd_name, 1);
 		if (!stat(path[i], &buf))
@@ -56,9 +56,14 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 			break ;
 		}
 	}
-	if (!path[i])
+	if (!stat(cmd_list->cmd_name, &buf) && S_ISDIR(buf.st_mode))
 	{
-		if (ft_strchr(cmd_list->cmd_name, '/'))
+		ft_print_err(cmd_list->cmd_name, "is a directory", NULL, 126);
+		return (0);
+	}
+	if (!path || !path[i])
+	{
+		if (ft_strchr(cmd_list->cmd_name, '/') || !path)
 			ft_print_err(cmd_list->cmd_name, "No such file or directory", NULL, 127);
 		else
 			ft_print_err(cmd_list->cmd_name, "command not found", NULL, 127);

@@ -22,7 +22,9 @@ int		count_args(char *cmdline)
 					while (flag & D_QUOTE)
 					{
 						i++;
-						if (cmdline[i] == '\"' && cmdline[i - 1] != '\\')
+						if (cmdline[i] == '\\')
+							i += 2;
+						if (cmdline[i] == '\"')
 							flag ^= D_QUOTE;
 					}
 				}
@@ -64,7 +66,9 @@ char	**token_array(char **args, char *cmdline)
 					while (flag & D_QUOTE)
 					{
 						j++;
-						if (cmdline[j] == '\"' && cmdline[j - 1] != '\\')
+						if (cmdline[j] == '\\')
+							j += 2;
+						if (cmdline[j] == '\"')
 							flag ^= D_QUOTE;
 					}
 				}

@@ -44,7 +44,9 @@ static void	quote_flag_onoff(char *input_string, int *i, char *sflag)
 	{
 		if (*sflag & D_QUOTE)						// if d_quote on
 		{
-			if (*(input_string - 1) != '\\')
+			// if (*(input_string - 1) == '\\' && *(input_string - 2) == '\\')
+				// *sflag ^= D_QUOTE;					// d_quote off
+			// else if (*(input_string - 1) != '\\')
 				*sflag ^= D_QUOTE;					// d_quote off
 		}
 		else if (!(*sflag & S_QUOTE))				// if s_quote off
@@ -72,6 +74,8 @@ int			check_syntax_err(char *input_string)
 			if (!handle_special_letter(&(input_string[i]), &i, &sflag, &rd))
 				return (0);
 		}
+		else if (input_string[i] == '\\' && (sflag & D_QUOTE))
+			i += 2;
 		else
 			check_normal_letter(&i, &sflag);
 	}

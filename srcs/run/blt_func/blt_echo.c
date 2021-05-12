@@ -32,7 +32,7 @@ int		blt_echo(t_token *token, char ***envp)
 		else
 			break ;
 	}
-	if (!ft_strcmp(token->arg, "-n"))
+	if (token->arg && !ft_strcmp(token->arg, "-n"))
 	{
 		new_line = 0;
 		token = token->next;
@@ -44,18 +44,3 @@ int		blt_echo(t_token *token, char ***envp)
 	g_global.exit = 0;
 	return (1);
 }
-
-	// while (token)
-	// {
-	// 	if (token->type == ARGUMENT)
-	// 		result = ft_strjoin(result, token->arg, 1);
-	// 	if (token->next && token->next->type == ARGUMENT)
-	// 	{
-	// 		result = ft_strjoin(result, " ", 1);
-	// 		token = token->next;
-	// 	}
-	// 	else if (token->next)
-	// 		token = token->next;
-	// 	else
-	// 		break ;
-	// }
