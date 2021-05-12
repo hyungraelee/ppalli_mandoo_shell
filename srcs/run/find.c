@@ -58,7 +58,10 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	}
 	if (!path[i])
 	{
-		ft_print_err(cmd_list->cmd_name, "command not found", NULL, 127);
+		if (ft_strchr(cmd_list->cmd_name, '/'))
+			ft_print_err(cmd_list->cmd_name, "No such file or directory", NULL, 127);
+		else
+			ft_print_err(cmd_list->cmd_name, "command not found", NULL, 127);
 		return (0);
 	}
 	if (!(buf.st_mode & S_IXUSR))
