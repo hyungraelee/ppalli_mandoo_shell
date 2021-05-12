@@ -29,7 +29,6 @@ int		blt_cd(t_token *token, char ***envp);
 char	**add_env(char **envp, char *str);
 int		blt_pwd(t_token *token, char ***envp);
 int		blt_export(t_token *token, char ***envp);
-int		handle_file_or_dir(t_cmd *cmd_list, char ***envp);
 int		blt_unset(t_token *token, char ***envp);
 void	sig_handler(int signo);
 
