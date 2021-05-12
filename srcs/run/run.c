@@ -313,6 +313,8 @@ int run_process(t_cmd *cmd_list, char ***envp)
 			g_global.exit = 255;
 		else if (status >> 8 != 0)
 			g_global.exit = 1;
+		else if (g_global.signal_on)
+			g_global.exit = status + 128;
 		else
 			g_global.exit = 0;
 		redirect_close(rd_fds);
