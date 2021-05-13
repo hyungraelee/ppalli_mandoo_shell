@@ -1,30 +1,5 @@
 #include "minishell.h"
 
-char	**delete_env(char **envp, char *str, int idx)
-{
-	char	**result;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	result = (char **)malloc(sizeof(char *) * i);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (envp[i])
-	{
-		if (i != idx)
-			result[j++] = envp[i++];
-		else
-			i++;
-	}
-	result[j] = NULL;
-	return (result);
-}
-
 int		unset_arg(char *arg, char *env_name, char ***envp)
 {
 	int		i;
@@ -35,13 +10,21 @@ int		unset_arg(char *arg, char *env_name, char ***envp)
 	{
 		env_name = ft_str_char_join(env_name, arg[i]);
 		if (arg[i] == '=')
+		{
+			if (env_name)
+				free(env_name);
 			return (0);
+		}
 	}
 	if (!arg[i])
 	{
-		chk = set_env_name(&env_name, *envp);
+    chk = set_env_name(&env_name, *envp);
 		if (chk == 0)
+		{
+			if (env_name)
+				free(env_name);
 			return (0);
+		}
 		else
 		{
 			chk = find_env_name(env_name, *envp);

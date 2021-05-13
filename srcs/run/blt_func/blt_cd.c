@@ -1,34 +1,11 @@
 #include "minishell.h"
 
-char	**add_env(char **envp, char *str)
-{
-	char	**result;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	result = (char **)malloc(sizeof(char *) * (i + 2));
-	if (!result)
-		return (NULL);
-	i = -1;
-	while (envp[++i])
-		result[i] = envp[i];
-	result[i] = (char *)ft_calloc((PATH_MAX + 1), sizeof(char));
-	ft_strlcpy(result[i], str, ft_strlen(str) + 1);
-	result[++i] = NULL;
-	free(str);
-	// free(envp);
-	return (result);
-}
-
 void	change_dir(char *dest, char ***envp)
 {
 	int		rt;
 	char	*inner_env;
 	char	*temp;
 	char	buf[PATH_MAX];
-	// char	*pwd;
 
 	rt = chdir(dest);
 	inner_env = NULL;
@@ -57,6 +34,7 @@ int		blt_cd(t_token *token, char ***envp)
 	char	*env_value;
 
 	i = -1;
+	env_value = NULL;
 	while (++i < PATH_MAX + 1)
 		path[i] = 0;
 	while (token->type != ARGUMENT)
@@ -100,7 +78,8 @@ int		blt_cd(t_token *token, char ***envp)
 			return (ft_print_err("cd", "OLDPWD not set", NULL, 1));
 		else
 		{
-			ft_putstr_fd(ft_strjoin(env_value, "\n", 0), STDOUT_FILENO);
+			ft_putstr_fd(env_value, STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
 			ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
 		}
 	}

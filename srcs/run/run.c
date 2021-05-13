@@ -276,7 +276,6 @@ int run_process(t_cmd *cmd_list, char ***envp)
 
 	old_fds[0] = dup(STDIN_FILENO);
 	old_fds[1] = dup(STDOUT_FILENO);
-	// g_global.exit = 0;
 	while (cmd_list->token)
 	{
 		cmd_list->token->arg = get_env_value(cmd_list->token->arg, *envp);
@@ -317,6 +316,7 @@ int run_process(t_cmd *cmd_list, char ***envp)
 			g_global.exit = status + 128;
 		else
 			g_global.exit = 0;
+		free_double_arr(args);
 		redirect_close(rd_fds);
 		pipe_restore(cmd_list, old_fds);
 	}

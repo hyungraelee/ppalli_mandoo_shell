@@ -34,6 +34,7 @@ void	print_export(char **envp)
 	i = -1;
 	while (export[++i])
 		set_print_export(export[i]);
+	free(export);
 }
 
 int		handle_normal_export(char ***envp, char *arg, char *name, char *value)
@@ -47,14 +48,23 @@ int		handle_normal_export(char ***envp, char *arg, char *name, char *value)
 		name = ft_str_char_join(name, arg[i++]);
 	chk = set_env_name(&name, *envp);
 	if (chk == 0)
+  {
+		if (name)
+			free(name);
 		return (0);
+	}
 	else
 	{
+		new_var = NULL;
 		value = set_export_value(arg, i, *envp);
 		new_var = ft_strjoin(name, value, 0);
-		chk = find_env_name(name, *envp);
+    chk = find_env_name(name, *envp);
 		if (chk >= 0)
+    {
 			ft_strlcpy((*envp)[chk], new_var, ft_strlen(new_var) + 1);
+			if (new_var)
+				free(new_var);
+		}
 		else
 			*envp = add_env(*envp, new_var);
 	}

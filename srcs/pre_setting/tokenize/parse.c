@@ -39,6 +39,7 @@ t_cmd	*make_cmd_set(char **cmdlines)
 	}
 	while (list->prev)
 		list = list->prev;
+	free_double_arr(cmdlines);
 	return (list);
 }
 
