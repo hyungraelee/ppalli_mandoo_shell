@@ -3,8 +3,7 @@
 int		unset_arg(char *arg, char *env_name, char ***envp)
 {
 	int		i;
-	int		idx;
-	int		is_err;
+	int		chk;
 
 	i = -1;
 	while (arg[++i])
@@ -19,8 +18,8 @@ int		unset_arg(char *arg, char *env_name, char ***envp)
 	}
 	if (!arg[i])
 	{
-		is_err = set_env_name(&env_name, *envp);
-		if (is_err == 0)
+    chk = set_env_name(&env_name, *envp);
+		if (chk == 0)
 		{
 			if (env_name)
 				free(env_name);
@@ -28,9 +27,9 @@ int		unset_arg(char *arg, char *env_name, char ***envp)
 		}
 		else
 		{
-			idx = find_env_name(env_name, *envp);
-			if (idx >= 0)
-				*envp = delete_env(*envp, env_name, idx);
+			chk = find_env_name(env_name, *envp);
+			if (chk >= 0)
+				*envp = delete_env(*envp, env_name, chk);
 		}
 	}
 	if (env_name)
