@@ -10,7 +10,7 @@ int		turn_on_flag(int *flag, int quote, int idx)
 	return (idx);
 }
 
-int		check_backslash_env(int *flag, char *arg, int idx, char **result)
+int		chk_backslash_env(int *flag, char *arg, int idx, char **result)
 {
 	if (*flag == 0)
 		*result = ft_str_char_join(*result, arg[++idx]);
@@ -44,7 +44,7 @@ char	*set_env_value(char *arg, int idx)
 		else if (arg[idx] == '\'' && !(flag & D_QUOTE))
 			idx = turn_on_flag(&flag, S_QUOTE, idx);
 		else if (arg[idx] == '\\')
-			idx = check_backslash_env(&flag, arg, idx, &result);
+			idx = chk_backslash_env(&flag, arg, idx, &result);
 		else
 			result = ft_str_char_join(result, arg[idx++]);
 	}

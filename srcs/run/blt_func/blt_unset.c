@@ -22,43 +22,50 @@ char	**delete_env(char **envp, char *str, int idx)
 			i++;
 	}
 	result[j] = NULL;
-	// free(str);
 	return (result);
 }
 
-int		blt_unset(t_token *token, char ***envp)
+int		unset_arg(char *arg, char *env_name, char ***envp)
 {
 	int		i;
 	int		idx;
 	int		is_err;
+	
+	i = -1;
+	while (arg[++i])
+	{
+		env_name = ft_str_char_join(env_name, arg[i]);
+		if (arg[i] == '=')
+			return (0);
+	}
+	if (!arg[i])
+	{
+		is_err = set_env_name(&env_name, *envp);
+		if (is_err == 0)
+			return (0);
+		else
+		{
+			idx = find_env_name(env_name, *envp);
+			if (idx >= 0)
+				*envp = delete_env(*envp, env_name, idx);
+		}
+	}
+	if (env_name)
+		free(env_name);
+	return (1);
+}
+
+int		blt_unset(t_token *token, char ***envp)
+{
 	char	*env_name;
 
 	while (token)
 	{
 		if (token->type == ARGUMENT)
 		{
-			i = -1;
 			env_name = NULL;
-			while (token->arg[++i])
-			{
-				env_name = ft_str_char_join(env_name, token->arg[i]);
-				if (token->arg[i] == '=')
-					return (ft_print_err("unset", "not a valid identifier", NULL, 1));
-			}
-			if (!token->arg[i])
-			{
-				is_err = set_env_name(&env_name, *envp);
-				if (is_err == 0)
-					return (ft_print_err("unset", "not a valid identifier", NULL, 1));
-				else
-				{
-					idx = find_env_name(env_name, *envp);
-					if (idx >= 0)
-						*envp = delete_env(*envp, env_name, idx);
-				}
-			}
-			if (env_name)
-				free(env_name);
+			if (!unset_arg(token->arg, env_name, envp))
+				return (ft_print_err("unset", "not a valid identifier", NULL, 1));
 		}
 		if (token->next)
 			token = token->next;
