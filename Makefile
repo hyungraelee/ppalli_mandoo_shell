@@ -42,6 +42,8 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/blt_func/blt_exit.c	\
 		./srcs/run/blt_func/blt_export.c	\
 		./srcs/run/blt_func/blt_export2.c	\
+		./srcs/run/blt_func/blt_export3.c	\
+		./srcs/run/blt_func/blt_export4.c	\
 		./srcs/run/blt_func/blt_pwd.c	\
 		./srcs/run/blt_func/blt_unset.c	\
 		./srcs/utils/ft_atoi.c	\
