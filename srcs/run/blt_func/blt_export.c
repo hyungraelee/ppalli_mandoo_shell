@@ -34,7 +34,7 @@ void	set_print_export(char *export)
 		export_name = ft_str_char_join(export_name, export[j++]);
 	ft_putstr_fd("declare -x ", STDOUT_FILENO);
 	ft_putstr_fd(export_name, STDOUT_FILENO);
-	print_export_value(export, j, STDOUT_FILENO);		// ="abc"
+	print_export_value(export, j, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	if (export_name)
 		free(export_name);
@@ -55,7 +55,7 @@ void	print_export(char **envp)
 	export[i] = NULL;
 	sort_export(&export, i);
 	i = -1;
-	while (export[++i])		// if a=abc
+	while (export[++i])
 		set_print_export(export[i]);
 }
 
@@ -69,14 +69,14 @@ int		handle_normal_export(char ***envp, char *arg, char *name, char *value)
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 		name = ft_str_char_join(name, arg[i++]);
-	is_err = set_env_name(&name, *envp);	// if a" "=abc -> 0		or		a=abc -> 1
+	is_err = set_env_name(&name, *envp);
 	if (is_err == 0)
 		return (0);
 	else
 	{
 		value = set_export_value(arg, i, *envp);
 		new_var = ft_strjoin(name, value, 0);
-		idx = find_env_name(name, *envp);	// check if envp-key already exists
+		idx = find_env_name(name, *envp);
 		if (idx >= 0)
 			ft_strlcpy((*envp)[idx], new_var, ft_strlen(new_var) + 1);
 		else
@@ -91,8 +91,8 @@ int		handle_normal_export(char ***envp, char *arg, char *name, char *value)
 
 int		blt_export(t_token *token, char ***envp)
 {
-	char	*export_name;
-	char	*export_value;
+	char	*name;
+	char	*value;
 
 	if (!token->next)
 		print_export(*envp);
@@ -103,12 +103,12 @@ int		blt_export(t_token *token, char ***envp)
 			if (token->type == ARGUMENT)
 			{
 				if (token->arg[0] == '=')
-					return (ft_print_err("export", "not a valid identifier", NULL, 1));
+					return (ft_print_err("export", ERR_MSG1, NULL, 1));
 				else
 				{
-					export_name = NULL;
-					if (!handle_normal_export(envp, token->arg, export_name, export_value))
-						return (ft_print_err("export", "not a valid identifier", NULL, 1));
+					name = NULL;
+					if (!handle_normal_export(envp, token->arg, name, value))
+						return (ft_print_err("export", ERR_MSG1, NULL, 1));
 				}
 			}
 			if (token->next)
