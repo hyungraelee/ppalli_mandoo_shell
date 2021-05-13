@@ -87,6 +87,8 @@ int		blt_env(t_token *token, char ***envp)
 			env_name = ft_str_char_join(env_name, (*envp)[i][j++]);
 		if (find_env_value(env_name, *envp))
 			print_env(env_name, *envp, i, ++j);
+		if (env_name)
+			free(env_name);
 	}
 	g_global.exit = 0;
 	return (1);

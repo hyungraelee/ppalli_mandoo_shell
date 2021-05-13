@@ -52,6 +52,7 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 		path[i] = ft_strjoin(ft_strjoin(path[i], "/", 1), cmd_list->cmd_name, 1);
 		if (!stat(path[i], &buf))
 		{
+			free(cmd_list->cmd_name);
 			cmd_list->cmd_name = ft_strdup(path[i]);
 			break ;
 		}
@@ -59,6 +60,7 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	if (!stat(cmd_list->cmd_name, &buf) && S_ISDIR(buf.st_mode))
 	{
 		ft_print_err(cmd_list->cmd_name, "is a directory", NULL, 126);
+		free_double_arr(path);
 		return (0);
 	}
 	if (!path || !path[i])
@@ -67,17 +69,16 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 			ft_print_err(cmd_list->cmd_name, "No such file or directory", NULL, 127);
 		else
 			ft_print_err(cmd_list->cmd_name, "command not found", NULL, 127);
+		free_double_arr(path);
 		return (0);
 	}
 	if (!(buf.st_mode & S_IXUSR))
 	{
 		ft_print_err(cmd_list->cmd_name, "Permission denied", NULL, 126);
+		free_double_arr(path);
 		return (0);
 	}
-	i = -1;
-	while (path[++i])
-		free(path[i]);
-	free(path);
+	free_double_arr(path);
 	return (run_process(cmd_list, &envp));
 }
 

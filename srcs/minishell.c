@@ -56,7 +56,6 @@ void	free_cmdlist(t_cmd *cmd_list)
 
 void	minishell(char **envp)
 {
-	int 			status;
 	char			*input_string;
 	char			**cmd_set;
 	t_cmd			*cmd_list;
@@ -64,12 +63,11 @@ void	minishell(char **envp)
 	t_history		*last;
 	struct termios	backup;
 
-	status = 1;
 	last = NULL;
 	g_global.pid = 1;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
-	while (status)
+	while (1)
 	{
 		prompt();
 		init_termios(&backup);
@@ -86,7 +84,7 @@ void	minishell(char **envp)
 		while (cmd_set && cmd_set[i])
 		{
 			cmd_list = get_parsed_list(cmd_set[i++]);
-			status = run(cmd_list, &envp);
+			run(cmd_list, &envp);
 			free_cmdlist(cmd_list);
 		}
 		free_minishell(input_string, cmd_set);

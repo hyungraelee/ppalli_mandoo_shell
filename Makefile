@@ -1,11 +1,11 @@
 NAME = minishell
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g3 -fsanitize=address
+# CFLAGS = -g3 -fsanitize=address
 
-# ifeq ($(DEBUG),true)
-# 	CFLAGS += -g
-# endif
+ifeq ($(DEBUG),true)
+	CFLAGS += -g
+endif
 
 SRCS_DIR =	./srcs	\
 			./srcs/pre_setting	\
@@ -13,6 +13,7 @@ SRCS_DIR =	./srcs	\
 			./srcs/pre_setting/tokenize	\
 			./srcs/run	\
 			./srcs/run/blt_func	\
+			./srcs/run/utils	\
 			./srcs/utils
 
 OBJS_DIR = ./objs
@@ -48,6 +49,8 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/blt_func/blt_export4.c	\
 		./srcs/run/blt_func/blt_pwd.c	\
 		./srcs/run/blt_func/blt_unset.c	\
+		./srcs/run/utils/free.c	\
+		./srcs/run/utils/change_env.c	\
 		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\

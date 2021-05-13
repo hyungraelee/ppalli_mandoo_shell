@@ -32,13 +32,14 @@ int		set_env_name(char **export_name, char **envp)
 		else
 			result = ft_str_char_join(result, (*export_name)[i++]);
 	}
+	free(*export_name);
 	*export_name = result;
-	if (!result || ft_isdigit(result[0]))
+	if (!(*export_name) || ft_isdigit((*export_name)[0]))
 		return (0);
 	i = -1;
-	while (result[++i])
+	while ((*export_name)[++i])
 	{
-		if (result[i] != '_' && ft_isalpha(result[i]) == 0)
+		if ((*export_name)[i] != '_' && ft_isalpha((*export_name)[i]) == 0)
 			return (0);
 	}
 	return (1);

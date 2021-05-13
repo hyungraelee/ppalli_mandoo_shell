@@ -41,6 +41,8 @@ int		blt_echo(t_token *token, char ***envp)
 	if (new_line)
 		result = ft_strjoin(result, "\n", 1);
 	ft_putstr_fd(result, STDOUT_FILENO);
+	if (result)
+		free(result);
 	g_global.exit = 0;
 	return (1);
 }
