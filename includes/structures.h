@@ -22,6 +22,7 @@
 typedef struct	s_cmd		t_cmd;
 typedef struct	s_token		t_token;
 typedef struct	s_history	t_history;
+typedef struct	s_read		t_read;
 
 struct	s_token
 {
@@ -46,6 +47,17 @@ struct s_history
 	char		*edit_record;
 	t_history	*next;
 	t_history	*prev;
+};
+
+struct s_read
+{
+	char		*result;
+	char		**on_terminal;
+	int			c;
+	int			cursor;
+	char		*new;
+	t_history	*temp;
+	t_history	*selected_history;
 };
 
 

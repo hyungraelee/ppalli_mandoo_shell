@@ -13,9 +13,13 @@
 # define KEY_HOME 4741915
 # define KEY_END 4610843
 # define KEY_CTRL_D 4
-# define QUERY_CURSOR_POSITION "\033[6n"
 
 char	*read_cmd(t_history **last);
+void	handle_key_arrow(t_read *read_cmd, t_history **last);
+void	handle_special_key(t_read *read_cmd, t_history **last);
+void	handle_normal_key(t_read *read_cmd);
+void	handle_key_enter(t_read *read_cmd, t_history **last);
+void	free_history(t_history *history);
 
 int		check_syntax_err(char *line);
 int		handle_special_letter(char *input_string, int *i, char *sflag, int *rd);
