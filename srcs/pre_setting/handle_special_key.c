@@ -9,7 +9,7 @@ void		free_history(t_history *history)
 		if (history->prev)
 			history = history->prev;
 		else
-			break;
+			break ;
 	}
 }
 
@@ -18,7 +18,8 @@ static void	handle_key_backspace(t_read *read_cmd)
 	if (read_cmd->cursor > 0)
 	{
 		delete_letter();
-		*(read_cmd->on_terminal) = ft_str_char_del(*(read_cmd->on_terminal), read_cmd->cursor - 1);
+		*(read_cmd->on_terminal) = \
+		ft_str_char_del(*(read_cmd->on_terminal), read_cmd->cursor - 1);
 		(read_cmd->cursor)--;
 	}
 }
@@ -49,11 +50,11 @@ static void	handle_key_ctrl_d(t_read *read_cmd, t_history **last)
 	{
 		free_history(*last);
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		exit (0);
+		exit(0);
 	}
 }
 
-void	handle_special_key(t_read *read_cmd, t_history **last)
+void		handle_special_key(t_read *read_cmd, t_history **last)
 {
 	if (read_cmd->c == KEY_BACKSPACE)
 		handle_key_backspace(read_cmd);
