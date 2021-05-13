@@ -38,13 +38,15 @@ void				handle_key_enter(t_read *read_cmd, t_history **last)
 	if (*(read_cmd->on_terminal) != read_cmd->new)
 	{
 		free(read_cmd->selected_history->edit_record);
-		read_cmd->selected_history->edit_record = ft_strdup(read_cmd->selected_history->record);
+		read_cmd->selected_history->edit_record = \
+		ft_strdup(read_cmd->selected_history->record);
 	}
 }
 
 void				handle_normal_key(t_read *read_cmd)
 {
-	*(read_cmd->on_terminal) = ft_str_char_embed(*(read_cmd->on_terminal), read_cmd->c, read_cmd->cursor);
+	*(read_cmd->on_terminal) = \
+	ft_str_char_embed(*(read_cmd->on_terminal), read_cmd->c, read_cmd->cursor);
 	read_cmd->cursor++;
 	read_cmd->c = read_cmd->cursor;
 	while (read_cmd->c != ft_strlen(*(read_cmd->on_terminal)))

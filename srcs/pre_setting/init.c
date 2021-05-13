@@ -23,16 +23,16 @@ static char	**init_envp(char **env)
 	return (envp);
 }
 
-void	init_termios(struct termios *backup)
+void		init_termios(struct termios *backup)
 {
 	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, backup);
 	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ICANON;    // non-canonical input 설정
-	term.c_lflag &= ~ECHO;		// 입력시 터미널에 보이지 않도록
-	term.c_cc[VMIN] = 1;        // 최소 입력 버퍼 크기
-	term.c_cc[VTIME] = 0;       //버퍼 비우는 시간 (timeout)
+	term.c_lflag &= ~ICANON;
+	term.c_lflag &= ~ECHO;
+	term.c_cc[VMIN] = 1;
+	term.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
@@ -67,7 +67,6 @@ char		**init(char **env)
 {
 	char	**envp;
 
-	// init_termios(backup);
 	init_termcap();
 	envp = init_envp(env);
 	return (envp);

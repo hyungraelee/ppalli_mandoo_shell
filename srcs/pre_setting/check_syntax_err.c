@@ -34,52 +34,47 @@ static void	quote_flag_onoff(char *input_string, int *i, char *sflag)
 {
 	if (*input_string == '\'')
 	{
-		if (*sflag & S_QUOTE)						// if s_quote on
-			*sflag ^= S_QUOTE;						// s_quote off
-		else if (!(*sflag & D_QUOTE))				// if d_quote off
-			*sflag |= S_QUOTE;						// s_quote on
+		if (*sflag & S_QUOTE)
+			*sflag ^= S_QUOTE;
+		else if (!(*sflag & D_QUOTE))
+			*sflag |= S_QUOTE;
 		(*i)++;
-	}												// if d_quote on -> Do not on s_quote
+	}
 	else if (*input_string == '\"')
 	{
-		if (*sflag & D_QUOTE)						// if d_quote on
-		{
-			// if (*(input_string - 1) == '\\' && *(input_string - 2) == '\\')
-				// *sflag ^= D_QUOTE;					// d_quote off
-			// else if (*(input_string - 1) != '\\')
-				*sflag ^= D_QUOTE;					// d_quote off
-		}
-		else if (!(*sflag & S_QUOTE))				// if s_quote off
-			*sflag |= D_QUOTE;						// d_quote on
+		if (*sflag & D_QUOTE)
+			*sflag ^= D_QUOTE;
+		else if (!(*sflag & S_QUOTE))
+			*sflag |= D_QUOTE;
 		(*i)++;
 	}
 }
 
-int			check_syntax_err(char *input_string)
+int			check_syntax_err(char *s)
 {
-	char	sflag;
+	char	f;
 	int		i;
 	int		rd;
 
-	sflag = 0;
+	f = 0;
 	i = 0;
-	while (input_string[i])
+	while (s[i])
 	{
-		if (ft_strchr(IFS, input_string[i]))
+		if (ft_strchr(IFS, s[i]))
 			i++;
-		else if (input_string[i] == '\'' || input_string[i] == '\"')
-			quote_flag_onoff(&(input_string[i]), &i, &sflag);
-		else if (ft_strchr("><|;", input_string[i]) && !(sflag & S_QUOTE) && !(sflag & D_QUOTE))
+		else if (s[i] == '\'' || s[i] == '\"')
+			quote_flag_onoff(&(s[i]), &i, &f);
+		else if (ft_strchr("><|;", s[i]) && !(f & S_QUOTE) && !(f & D_QUOTE))
 		{
-			if (!handle_special_letter(&(input_string[i]), &i, &sflag, &rd))
+			if (!handle_special_letter(&(s[i]), &i, &f, &rd))
 				return (0);
 		}
-		else if (input_string[i] == '\\' && (sflag & D_QUOTE))
+		else if (s[i] == '\\' && (f & D_QUOTE))
 			i += 2;
 		else
-			check_normal_letter(&i, &sflag);
+			check_normal_letter(&i, &f);
 	}
-	if ((sflag & REDIRECT) || (sflag & PIPE) || (sflag & S_QUOTE) || (sflag & D_QUOTE))		// if redirect or pipe on at the end (echo 123 > )
-		return (handle_last_open(sflag, rd));
+	if ((f & REDIRECT) || (f & PIPE) || (f & S_QUOTE) || (f & D_QUOTE))
+		return (handle_last_open(f, rd));
 	return (1);
 }

@@ -15,7 +15,8 @@ static void	handle_signal_in_read(t_read *read_cmd)
 	if (*(read_cmd->on_terminal) != read_cmd->new)
 	{
 		free(read_cmd->selected_history->edit_record);
-		read_cmd->selected_history->edit_record = ft_strdup(read_cmd->selected_history->record);
+		read_cmd->selected_history->edit_record = \
+		ft_strdup(read_cmd->selected_history->record);
 	}
 	free(read_cmd->new);
 	read_cmd->new = ft_strdup("");
@@ -26,15 +27,17 @@ static void	handle_signal_in_read(t_read *read_cmd)
 
 static int	is_key_arrow(int c)
 {
-	return (c == UP_ARROW || c == DOWN_ARROW || c == RIGHT_ARROW || c == LEFT_ARROW);
+	return (c == UP_ARROW || c == DOWN_ARROW \
+	|| c == RIGHT_ARROW || c == LEFT_ARROW);
 }
 
 static int	is_special_key(int c)
 {
-	return (c == KEY_BACKSPACE || c == KEY_HOME || c == KEY_END || c == KEY_CTRL_D || c == KEY_TAB);
+	return (c == KEY_BACKSPACE || c == KEY_HOME \
+	|| c == KEY_END || c == KEY_CTRL_D || c == KEY_TAB);
 }
 
-char	*read_cmd(t_history **last)
+char		*read_cmd(t_history **last)
 {
 	t_read	read_cmd;
 
@@ -50,7 +53,7 @@ char	*read_cmd(t_history **last)
 		else if (read_cmd.c == KEY_ENTER)
 		{
 			handle_key_enter(&read_cmd, last);
-			break;
+			break ;
 		}
 		else
 			handle_normal_key(&read_cmd);

@@ -30,6 +30,8 @@ SRCS =	./srcs/main.c	\
 		./srcs/pre_setting/cursor/cursor.c	\
 		./srcs/pre_setting/tokenize/parse.c	\
 		./srcs/pre_setting/tokenize/separate.c	\
+		./srcs/pre_setting/tokenize/make_token_list.c	\
+		./srcs/pre_setting/tokenize/token_array.c	\
 		./srcs/pre_setting/tokenize/token.c	\
 		./srcs/run/builtin.c	\
 		./srcs/run/error.c	\
