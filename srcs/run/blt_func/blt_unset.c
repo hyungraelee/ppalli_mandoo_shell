@@ -65,7 +65,7 @@ int		blt_unset(t_token *token, char ***envp)
 		{
 			env_name = NULL;
 			if (!unset_arg(token->arg, env_name, envp))
-				return (ft_print_err("unset", "not a valid identifier", NULL, 1));
+				return (ft_print_err("unset", ERR_MSG1, NULL, 1));
 		}
 		if (token->next)
 			token = token->next;
