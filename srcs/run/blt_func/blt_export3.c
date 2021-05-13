@@ -1,5 +1,28 @@
 #include "minishell.h"
 
+void	sort_export(char ***export, int i)
+{
+	int		j;
+	char	*tmp;
+
+	i--;
+	while (i > 0)
+	{
+		j = 0;
+		while (j < i)
+		{
+			if (ft_strcmp((*export)[j], (*export)[j + 1]) > 0)
+			{
+				tmp = (*export)[j + 1];
+				(*export)[j + 1] = (*export)[j];
+				(*export)[j] = tmp;
+			}
+			j++;
+		}
+		i--;
+	}
+}
+
 int		chk_export_var(char *name, char **result, char **envp, int i)
 {
 	char	*key;

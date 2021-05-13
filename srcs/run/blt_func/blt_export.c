@@ -1,28 +1,5 @@
 #include "minishell.h"
 
-void	sort_export(char ***export, int i)
-{
-	int		j;
-	char	*tmp;
-
-	i--;
-	while (i > 0)
-	{
-		j = 0;
-		while (j < i)
-		{
-			if (ft_strcmp((*export)[j], (*export)[j + 1]) > 0)
-			{
-				tmp = (*export)[j + 1];
-				(*export)[j + 1] = (*export)[j];
-				(*export)[j] = tmp;
-			}
-			j++;
-		}
-		i--;
-	}
-}
-
 void	set_print_export(char *export)
 {
 	int		j;
@@ -62,23 +39,22 @@ void	print_export(char **envp)
 int		handle_normal_export(char ***envp, char *arg, char *name, char *value)
 {
 	int		i;
-	int		idx;
-	int		is_err;
+	int		chk;
 	char	*new_var;
-	
+
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 		name = ft_str_char_join(name, arg[i++]);
-	is_err = set_env_name(&name, *envp);
-	if (is_err == 0)
+	chk = set_env_name(&name, *envp);
+	if (chk == 0)
 		return (0);
 	else
 	{
 		value = set_export_value(arg, i, *envp);
 		new_var = ft_strjoin(name, value, 0);
-		idx = find_env_name(name, *envp);
-		if (idx >= 0)
-			ft_strlcpy((*envp)[idx], new_var, ft_strlen(new_var) + 1);
+		chk = find_env_name(name, *envp);
+		if (chk >= 0)
+			ft_strlcpy((*envp)[chk], new_var, ft_strlen(new_var) + 1);
 		else
 			*envp = add_env(*envp, new_var);
 	}
@@ -89,11 +65,25 @@ int		handle_normal_export(char ***envp, char *arg, char *name, char *value)
 	return (1);
 }
 
-int		blt_export(t_token *token, char ***envp)
+int		export_type_arg(char *arg, char ***envp)
 {
 	char	*name;
 	char	*value;
 
+	name = NULL;
+	value = NULL;
+	if (arg[0] == '=')
+		return (0);
+	else
+	{
+		if (!handle_normal_export(envp, arg, name, value))
+			return (0);
+	}
+	return (1);
+}
+
+int		blt_export(t_token *token, char ***envp)
+{
 	if (!token->next)
 		print_export(*envp);
 	else
@@ -102,14 +92,8 @@ int		blt_export(t_token *token, char ***envp)
 		{
 			if (token->type == ARGUMENT)
 			{
-				if (token->arg[0] == '=')
+				if (!export_type_arg(token->arg, envp))
 					return (ft_print_err("export", ERR_MSG1, NULL, 1));
-				else
-				{
-					name = NULL;
-					if (!handle_normal_export(envp, token->arg, name, value))
-						return (ft_print_err("export", ERR_MSG1, NULL, 1));
-				}
 			}
 			if (token->next)
 				token = token->next;
