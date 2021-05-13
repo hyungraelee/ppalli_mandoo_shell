@@ -12,7 +12,7 @@
 # include <string.h>
 # include <termcap.h>
 # include "structures.h"
-# include "parser.h"
+# include "pre_setting.h"
 # include "run.h"
 # include "utils.h"
 # include "init.h"

@@ -22,6 +22,9 @@ SRCS =	./srcs/main.c	\
 		./srcs/minishell.c	\
 		./srcs/pre_setting/check_syntax_err.c	\
 		./srcs/pre_setting/check_syntax_err2.c	\
+		./srcs/pre_setting/handle_enter_normal.c	\
+		./srcs/pre_setting/handle_key_arrow.c	\
+		./srcs/pre_setting/handle_special_key.c	\
 		./srcs/pre_setting/init.c	\
 		./srcs/pre_setting/read_cmd.c	\
 		./srcs/pre_setting/cursor/cursor.c	\
@@ -38,6 +41,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/blt_func/blt_env.c	\
 		./srcs/run/blt_func/blt_exit.c	\
 		./srcs/run/blt_func/blt_export.c	\
+		./srcs/run/blt_func/blt_export2.c	\
 		./srcs/run/blt_func/blt_pwd.c	\
 		./srcs/run/blt_func/blt_unset.c	\
 		./srcs/utils/ft_atoi.c	\
