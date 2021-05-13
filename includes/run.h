@@ -29,6 +29,8 @@ int		blt_cd(t_token *token, char ***envp);
 char	**add_env(char **envp, char *str);
 int		blt_pwd(t_token *token, char ***envp);
 int		blt_export(t_token *token, char ***envp);
+char	*set_export_value(char *arg, int idx, char **envp);
+void	print_export_value(char *envp, int idx, int fd);
 int		blt_unset(t_token *token, char ***envp);
 int		turn_on_flag(int *flag, int quote, int idx);
 void	sig_handler(int signo);
