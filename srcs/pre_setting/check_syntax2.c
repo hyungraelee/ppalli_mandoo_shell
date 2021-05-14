@@ -18,7 +18,7 @@ static int	pipe_flag_onoff(char input_string, int *i, char *sflag)
 	if (!(*sflag & POSSIBLE) && !(*sflag & CMD))
 		return (ft_print_synerr(input_string, 0));
 	*sflag |= PIPE;
-	*sflag ^= CMD + POSSIBLE;
+	*sflag &= ~(CMD + POSSIBLE);
 	(*i)++;
 	return (1);
 }

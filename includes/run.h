@@ -43,4 +43,8 @@ void	free_double_arr(char **arr);
 char	**add_env(char **envp, char *str);
 char	**delete_env(char **envp, char *str, int idx);
 
+void	free_minishell(t_minishell *shell);
+void	free_token(t_token *token);
+void	free_cmdlist(t_cmd *cmd_list);
+
 #endif

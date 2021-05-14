@@ -21,7 +21,7 @@ void	handle_normal_key(t_read *read_cmd);
 void	handle_key_enter(t_read *read_cmd, t_history **last);
 void	free_history(t_history *history);
 
-int		check_syntax_err(char *line);
+int		check_syntax(char *line);
 int		handle_special_letter(char *input_string, int *i, char *sflag, int *rd);
 
 char	**separate(char *line, char c);

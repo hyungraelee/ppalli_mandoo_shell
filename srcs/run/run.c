@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-int run(t_cmd *cmd_list, char ***envp)
+int		run(t_cmd *cmd_list, char ***envp)
 {
-	int i;
-	struct stat buf;
+	int			i;
+	struct stat	buf;
 
 	while (cmd_list)
 	{
@@ -18,7 +18,7 @@ int run(t_cmd *cmd_list, char ***envp)
 				if (!ft_strcmp(cmd_list->cmd_name, builtin_str(i)))
 				{
 					blt_run(i, cmd_list, envp);
-					break;
+					break ;
 				}
 			}
 			if (i >= BLTIN_NUM)
@@ -36,7 +36,7 @@ int run(t_cmd *cmd_list, char ***envp)
 		if (cmd_list->next)
 			cmd_list = cmd_list->next;
 		else
-			break;
+			break ;
 	}
 	return (1);
 }

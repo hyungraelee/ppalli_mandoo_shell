@@ -21,8 +21,8 @@ INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
 		./srcs/minishell.c	\
-		./srcs/pre_setting/check_syntax_err.c	\
-		./srcs/pre_setting/check_syntax_err2.c	\
+		./srcs/pre_setting/check_syntax.c	\
+		./srcs/pre_setting/check_syntax2.c	\
 		./srcs/pre_setting/handle_enter_normal.c	\
 		./srcs/pre_setting/handle_key_arrow.c	\
 		./srcs/pre_setting/handle_special_key.c	\
