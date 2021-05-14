@@ -27,6 +27,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/pre_setting/handle_key_arrow.c	\
 		./srcs/pre_setting/handle_special_key.c	\
 		./srcs/pre_setting/init.c	\
+		./srcs/pre_setting/prompt.c	\
 		./srcs/pre_setting/read_cmd.c	\
 		./srcs/pre_setting/cursor/cursor.c	\
 		./srcs/pre_setting/tokenize/parse.c	\
@@ -37,6 +38,10 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/builtin.c	\
 		./srcs/run/error.c	\
 		./srcs/run/find.c	\
+		./srcs/run/handle_no_cmd.c	\
+		./srcs/run/inner_func.c	\
+		./srcs/run/pipe.c	\
+		./srcs/run/redirect.c	\
 		./srcs/run/run.c	\
 		./srcs/run/signal.c	\
 		./srcs/run/blt_func/blt_cd.c	\

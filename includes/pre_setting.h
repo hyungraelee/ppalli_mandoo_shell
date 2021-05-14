@@ -36,6 +36,7 @@ void	delete_letter(void);
 void	move_cursor_left(void);
 void	move_cursor_right(void);
 void	delete_current_line(void);
+
 void	prompt(void);
 
 #endif
