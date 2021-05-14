@@ -21,12 +21,13 @@ INC_DIR = ./includes
 
 SRCS =	./srcs/main.c	\
 		./srcs/minishell.c	\
-		./srcs/pre_setting/check_syntax_err.c	\
-		./srcs/pre_setting/check_syntax_err2.c	\
+		./srcs/pre_setting/check_syntax.c	\
+		./srcs/pre_setting/check_syntax2.c	\
 		./srcs/pre_setting/handle_enter_normal.c	\
 		./srcs/pre_setting/handle_key_arrow.c	\
 		./srcs/pre_setting/handle_special_key.c	\
 		./srcs/pre_setting/init.c	\
+		./srcs/pre_setting/prompt.c	\
 		./srcs/pre_setting/read_cmd.c	\
 		./srcs/pre_setting/cursor/cursor.c	\
 		./srcs/pre_setting/tokenize/parse.c	\
@@ -37,6 +38,10 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/builtin.c	\
 		./srcs/run/error.c	\
 		./srcs/run/find.c	\
+		./srcs/run/handle_no_cmd.c	\
+		./srcs/run/inner_func.c	\
+		./srcs/run/pipe.c	\
+		./srcs/run/redirect.c	\
 		./srcs/run/run.c	\
 		./srcs/run/signal.c	\
 		./srcs/run/blt_func/blt_cd.c	\
@@ -51,6 +56,9 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/blt_func/blt_unset.c	\
 		./srcs/run/utils/free.c	\
 		./srcs/run/utils/change_env.c	\
+		./srcs/run/utils/is_pipe_exist.c	\
+		./srcs/run/utils/replace_env_in_arg.c	\
+		./srcs/run/utils/save_old_fds.c	\
 		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\

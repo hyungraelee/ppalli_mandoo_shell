@@ -6,5 +6,5 @@ int		main(int argc, char **argv, char **env)
 
 	envp = init(env);
 	minishell(envp);
-	system("leaks minishell");
+	return (0);
 }

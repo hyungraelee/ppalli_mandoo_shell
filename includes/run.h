@@ -7,18 +7,23 @@
 
 char	*builtin_str(int i);
 int		(*builtin_func(int i))(t_token *token, char ***envp);
+void	blt_run(int i, t_cmd *cmd_list, char ***envp);
 int		run(t_cmd *cmd_list, char ***envp);
 int		run_process(t_cmd *cmd_list, char ***envp);
 char	*get_env_value(char *arg, char **envp);
 int		find_cmd_path(t_cmd *cmd_list, char **envp);
 char	*find_env_value(char *env_name, char **envp);
 int		find_env_name(char *env_name, char **envp);
+
 void	pipe_process(t_cmd *cmd_list);
 void	pipe_close(t_cmd *cmd_list);
 void	pipe_restore(t_cmd *cmd_list, int *old_fds);
 int		redirect_process(t_token *token, int *rd_fds);
 void	redirect_close(int *rd_fds);
 void	redirect_restore(int *rd_fds, int *old_fds);
+
+int		handle_no_cmd(t_cmd *cmd_list, char ***envp);
+
 int		blt_echo(t_token *token, char ***envp);
 int		blt_env(t_token *token, char ***envp);
 int		set_env_name(char **export_name, char **envp);
@@ -35,7 +40,18 @@ int		blt_unset(t_token *token, char ***envp);
 int		turn_on_flag(int *flag, int quote, int idx);
 void	sig_handler(int signo);
 void	free_double_arr(char **arr);
+
 char	**add_env(char **envp, char *str);
 char	**delete_env(char **envp, char *str, int idx);
+
+int		is_pipe_exist(t_cmd *cmd_list);
+
+void	replace_env_in_arg(t_cmd *cmd_list, char ***envp);
+
+void	save_old_fds(int *old_fds);
+
+void	free_minishell(t_minishell *shell);
+void	free_token(t_token *token);
+void	free_cmdlist(t_cmd *cmd_list);
 
 #endif

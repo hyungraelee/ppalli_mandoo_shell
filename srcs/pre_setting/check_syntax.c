@@ -50,7 +50,7 @@ static void	quote_flag_onoff(char *input_string, int *i, char *sflag)
 	}
 }
 
-int			check_syntax_err(char *s)
+int			check_syntax(char *s)
 {
 	char	f;
 	int		i;

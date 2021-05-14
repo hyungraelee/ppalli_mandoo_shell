@@ -1,6 +1,8 @@
 #ifndef STRUCTURES_H
 # define STRUCTURES_H
 
+# include <termios.h>
+
 /*	flag	*/
 # define NONE 0
 # define CMD 1
@@ -23,6 +25,7 @@ typedef struct	s_cmd		t_cmd;
 typedef struct	s_token		t_token;
 typedef struct	s_history	t_history;
 typedef struct	s_read		t_read;
+typedef struct	s_minishell	t_minishell;
 
 struct	s_token
 {
@@ -60,5 +63,14 @@ struct s_read
 	t_history	*selected_history;
 };
 
+struct s_minishell
+{
+	char			*input_str;
+	char			**cmd_set;
+	t_cmd			*cmd_list;
+	// int				i;
+	t_history		*last;
+	struct termios	backup;
+};
 
 #endif
