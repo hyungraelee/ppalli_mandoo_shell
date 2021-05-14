@@ -1,9 +1,26 @@
 #include "minishell.h"
 
-int		blt_exit(t_token *token, char ***envp)
+static void	handle_exit_arg(t_token *token, int *exit_code)
+{
+	int	i;
+
+	i = 0;
+	if (token->arg[i] == '-')
+		i++;
+	while (token->arg[i])
+	{
+		if (!ft_isdigit(token->arg[i++]))
+		{
+			ft_print_err("exit", token->arg, ERR_MSG6, 255);
+			exit(255);
+		}
+	}
+	*exit_code = ft_atoi(token->arg);
+}
+
+int			blt_exit(t_token *token, char ***envp)
 {
 	int	cnt;
-	int	i;
 	int	exit_code;
 
 	write(STDERR_FILENO, "exit\n", 5);
@@ -15,24 +32,8 @@ int		blt_exit(t_token *token, char ***envp)
 		{
 			cnt++;
 			if (cnt == 2)
-			{
-				ft_print_err("exit", "too many arguments", NULL, 1);
-				g_global.exit = 1;
-				return (0);
-			}
-			i = 0;
-			if (token->arg[i] == '-')
-				i++;
-			while (token->arg[i])
-			{
-				if (!ft_isdigit(token->arg[i++]))
-				{
-					ft_print_err("exit", token->arg, "numeric argument required", 255);
-					g_global.exit = 255;
-					exit(255);
-				}
-			}
-			exit_code = ft_atoi(token->arg);
+				return (ft_print_err("exit", ERR_MSG7, NULL, 1));
+			handle_exit_arg(token, &exit_code);
 		}
 		if (token->next)
 			token = token->next;

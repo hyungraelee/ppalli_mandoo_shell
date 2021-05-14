@@ -8,7 +8,7 @@ static int	dir_home_default(char *path, char *arg, char ***envp)
 	if (!env_value)
 	{
 		if (!arg)
-			return (ft_print_err("cd", "HOME not set", NULL, 1));
+			return (ft_print_err("cd", ERR_MSG4, NULL, 1));
 	}
 	else
 		ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
@@ -21,7 +21,7 @@ static int	dir_oldpwd(char *path, char ***envp)
 
 	env_value = find_env_value("OLDPWD", *envp);
 	if (!env_value)
-		return (ft_print_err("cd", "OLDPWD not set", NULL, 1));
+		return (ft_print_err("cd", ERR_MSG5, NULL, 1));
 	else
 	{
 		ft_putstr_fd(env_value, STDOUT_FILENO);
