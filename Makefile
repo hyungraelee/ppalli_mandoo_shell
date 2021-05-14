@@ -59,6 +59,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/utils/is_pipe_exist.c	\
 		./srcs/run/utils/replace_env_in_arg.c	\
 		./srcs/run/utils/save_old_fds.c	\
+		./srcs/run/utils/turn_on_flag.c	\
 		./srcs/utils/ft_atoi.c	\
 		./srcs/utils/ft_calloc.c	\
 		./srcs/utils/ft_isalnum.c	\
