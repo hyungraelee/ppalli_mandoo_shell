@@ -33,6 +33,8 @@ char	*set_env_value(char *arg, int idx);
 char	*set_export_value(char *arg, int idx, char **envp);
 int		blt_exit(t_token *token, char ***envp);
 int		blt_cd(t_token *token, char ***envp);
+int		handle_special_arg(char *path, char *arg, char ***envp);
+void	dir_start_at_home(char *path, char *arg, char ***envp);
 int		blt_pwd(t_token *token, char ***envp);
 int		blt_export(t_token *token, char ***envp);
 char	*set_export_value(char *arg, int idx, char **envp);
