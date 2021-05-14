@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void	free_str(char *str)
+{
+	if (str)
+		free(str);
+}
+
 void	free_double_arr(char **arr)
 {
 	int	i;

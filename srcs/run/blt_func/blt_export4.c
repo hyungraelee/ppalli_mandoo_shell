@@ -79,8 +79,6 @@ void	print_export_value(char *envp, int idx, int fd)
 		result = ft_str_char_join(result, '\"');
 	}
 	ft_putstr_fd(result, fd);
-	if (result)
-		free(result);
-	if (envp)
-		free(envp);
+	free_str(result);
+	free_str(envp);
 }

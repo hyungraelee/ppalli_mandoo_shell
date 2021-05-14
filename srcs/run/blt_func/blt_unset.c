@@ -1,28 +1,36 @@
 #include "minishell.h"
 
+int		chk_valid_name_unset(char *arg, char **env_name)
+{
+	int	i;
+
+	i = -1;
+	while (arg[++i])
+	{
+		*env_name = ft_str_char_join(*env_name, arg[i]);
+		if (arg[i] == '=')
+		{
+			free_str(*env_name);
+			return (-1);
+		}
+	}
+	return (i);
+}
+
 int		unset_arg(char *arg, char *env_name, char ***envp)
 {
 	int		i;
 	int		chk;
 
-	i = -1;
-	while (arg[++i])
-	{
-		env_name = ft_str_char_join(env_name, arg[i]);
-		if (arg[i] == '=')
-		{
-			if (env_name)
-				free(env_name);
-			return (0);
-		}
-	}
+	i = chk_valid_name_unset(arg, &env_name);
+	if (i < 0)
+		return (0);
 	if (!arg[i])
 	{
-    chk = set_env_name(&env_name, *envp);
+		chk = set_env_name(&env_name, *envp);
 		if (chk == 0)
 		{
-			if (env_name)
-				free(env_name);
+			free_str(env_name);
 			return (0);
 		}
 		else
@@ -32,8 +40,7 @@ int		unset_arg(char *arg, char *env_name, char ***envp)
 				*envp = delete_env(*envp, env_name, chk);
 		}
 	}
-	if (env_name)
-		free(env_name);
+	free_str(env_name);
 	return (1);
 }
 

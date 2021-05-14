@@ -1,69 +1,75 @@
 #include "minishell.h"
 
-void	sort_export(char ***export, int i)
+int		chk_squote_export_var(char *arg, int idx, char **envp, char **result)
 {
-	int		j;
-	char	*tmp;
+	char	*env_name;
 
-	i--;
-	while (i > 0)
+	env_name = NULL;
+	while (!ft_strchr(" \t\n$\"\'\\", arg[++idx]))
+		env_name = ft_str_char_join(env_name, arg[idx]);
+	*result = ft_strjoin(*result, find_env_value(env_name, envp), 1);
+	free_str(env_name);
+	return (idx);
+}
+
+int		chk_backslash_export(int *flag, char *arg, int idx, char **result)
+{
+	if (*flag == 0 && arg[idx + 1] == '\'')
 	{
-		j = 0;
-		while (j < i)
-		{
-			if (ft_strcmp((*export)[j], (*export)[j + 1]) > 0)
-			{
-				tmp = (*export)[j + 1];
-				(*export)[j + 1] = (*export)[j];
-				(*export)[j] = tmp;
-			}
-			j++;
-		}
-		i--;
+		idx++;
+		*result = ft_str_char_join(*result, arg[idx++]);
 	}
+	else
+	{
+		*result = ft_str_char_join(*result, arg[idx++]);
+		if (*flag == 0 || *flag & D_QUOTE)
+		{
+			if (arg[idx] == '\"' || arg[idx] == '$' ||
+			arg[idx] == '`' || arg[idx] == '\\')
+				*result = ft_str_char_join(*result, arg[idx++]);
+		}
+	}
+	return (idx);
 }
 
-int		chk_export_var(char *name, char **result, char **envp, int i)
+int		chk_other_cases_set(int *flag, char *arg, int idx, char **result)
 {
-	char	*key;
-
-	key = NULL;
-	while (!ft_strchr(" \t\n$\"\'\\=", name[++i]))
-		key = ft_str_char_join(key, name[i]);
-	if (find_env_name(key, envp) >= 0)
-		*result = ft_strjoin(*result,
-		set_export_value(find_env_value(key, envp), 0, envp), 1);
-	if (key)
-		free(key);
-	return (i);
+	if (arg[idx] == '\\')
+		idx = chk_backslash_export(flag, arg, idx, result);
+	else if ((*flag & S_QUOTE) && arg[idx] == '\"')
+		*result = ft_str_char_join(*result, arg[idx++]);
+	else if ((*flag & D_QUOTE) && arg[idx] == '\'')
+		*result = ft_str_char_join(*result, arg[idx++]);
+	else
+		*result = ft_str_char_join(*result, arg[idx++]);
+	return (idx);
 }
 
-int		set_env_name(char **export_name, char **envp)
+char	*set_export_value(char *arg, int idx, char **envp)
 {
-	int		i;
+	int		flag;
 	char	*result;
 
-	i = 0;
+	if (!arg)
+		return (NULL);
+	flag = 0;
 	result = NULL;
-	if ((*export_name)[0] != '$' && (*export_name)[0] != '_' &&
-	ft_isalpha((*export_name)[0]) == 0)
-		return (0);
-	while ((*export_name)[i])
+	while (arg[idx])
 	{
-		if ((*export_name)[i] == '$')
-			i = chk_export_var(*export_name, &result, envp, i);
+		if (arg[idx] == '\"' && !(flag & S_QUOTE))
+		{
+			result = ft_str_char_join(result, arg[idx]);
+			idx = turn_on_flag(&flag, D_QUOTE, idx);
+		}
+		else if (arg[idx] == '\'' && !(flag & D_QUOTE))
+		{
+			result = ft_str_char_join(result, arg[idx]);
+			idx = turn_on_flag(&flag, S_QUOTE, idx);
+		}
+		else if (!(flag & S_QUOTE) && arg[idx] == '$')
+			idx = chk_squote_export_var(arg, idx, envp, &result);
 		else
-			result = ft_str_char_join(result, (*export_name)[i++]);
+			idx = chk_other_cases_set(&flag, arg, idx, &result);
 	}
-	free(*export_name);
-	*export_name = result;
-	if (!(*export_name) || ft_isdigit((*export_name)[0]))
-		return (0);
-	i = -1;
-	while ((*export_name)[++i])
-	{
-		if ((*export_name)[i] != '_' && ft_isalpha((*export_name)[i]) == 0)
-			return (0);
-	}
-	return (1);
+	return (result);
 }
