@@ -40,8 +40,15 @@ int		blt_unset(t_token *token, char ***envp);
 int		turn_on_flag(int *flag, int quote, int idx);
 void	sig_handler(int signo);
 void	free_double_arr(char **arr);
+
 char	**add_env(char **envp, char *str);
 char	**delete_env(char **envp, char *str, int idx);
+
+int		is_pipe_exist(t_cmd *cmd_list);
+
+void	replace_env_in_arg(t_cmd *cmd_list, char ***envp);
+
+void	save_old_fds(int *old_fds);
 
 void	free_minishell(t_minishell *shell);
 void	free_token(t_token *token);
