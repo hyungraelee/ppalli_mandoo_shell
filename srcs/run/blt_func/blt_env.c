@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-int		turn_on_flag(int *flag, int quote, int idx)
-{
-	if (*flag & quote)
-		*flag ^= quote;
-	else
-		*flag |= quote;
-	idx++;
-	return (idx);
-}
-
 int		chk_backslash_env(int *flag, char *arg, int idx, char **result)
 {
 	if (*flag == 0)
@@ -63,21 +53,29 @@ void	print_env(char *env_name, char **envp, int i, int j)
 	free(env_value);
 }
 
+int		chk_valid_cmd_env(t_token **token)
+{
+	while (token)
+	{
+		if ((*token)->type == ARGUMENT)
+			return (0);
+		if ((*token)->next)
+			(*token) = (*token)->next;
+		else
+			break ;
+	}
+	return (1);
+}
+
 int		blt_env(t_token *token, char ***envp)
 {
 	int		i;
 	int		j;
 	char	*env_name;
 
-	while (token)
-	{
-		if (token->type == ARGUMENT)
-			return (1);
-		if (token->next)
-			token = token->next;
-		else
-			break ;
-	}
+	g_global.exit = 0;
+	if (!chk_valid_cmd_env(&token))
+		return (1);
 	i = -1;
 	while ((*envp)[++i])
 	{
@@ -87,9 +85,7 @@ int		blt_env(t_token *token, char ***envp)
 			env_name = ft_str_char_join(env_name, (*envp)[i][j++]);
 		if (find_env_value(env_name, *envp))
 			print_env(env_name, *envp, i, ++j);
-		if (env_name)
-			free(env_name);
+		free_str(env_name);
 	}
-	g_global.exit = 0;
 	return (1);
 }
