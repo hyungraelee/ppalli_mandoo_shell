@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	change_dir(char *dest, char ***envp)
+static void	change_dir(char *dest, char ***envp)
 {
 	int		rt;
 	char	*inner_env;
@@ -25,18 +25,8 @@ void	change_dir(char *dest, char ***envp)
 	g_global.exit = 0;
 }
 
-int		blt_cd(t_token *token, char ***envp)
+static char	*get_cd_arg(t_token *token)
 {
-	char	path[PATH_MAX + 1];
-	int		i;
-	int		j;
-	char	*arg;
-	char	*env_value;
-
-	i = -1;
-	env_value = NULL;
-	while (++i < PATH_MAX + 1)
-		path[i] = 0;
 	while (token->type != ARGUMENT)
 	{
 		if (token->next)
@@ -45,51 +35,39 @@ int		blt_cd(t_token *token, char ***envp)
 			break ;
 	}
 	if (token->type == ARGUMENT)
-		arg = ft_strdup(token->arg);
+		return (ft_strdup(token->arg));
 	else
-		arg = NULL;
+		return (NULL);
+}
+
+static int	is_special_arg(char *arg)
+{
+	return (!arg || !ft_strcmp("~", arg) || !ft_strcmp("~/", arg) || !ft_strcmp("-", arg));
+}
+
+
+int			blt_cd(t_token *token, char ***envp)
+{
+	char	path[PATH_MAX + 1];
+	int		i;
+	char	*arg;
+
+	ft_memset(path, 0, sizeof(path));
+	arg = get_cd_arg(token);
 	i = -1;
-	if (!arg || !ft_strcmp("~", arg) || !ft_strcmp("~/", arg))
+	if (is_special_arg(arg))
 	{
-		env_value = find_env_value("HOME", *envp);
-		if (!env_value)
-		{
-			if (!arg)
-			// else if (!ft_strcmp("~", arg) || !ft_strcmp("~/", arg))
-				// change dir to home
-				return (ft_print_err("cd", "HOME not set", NULL, 1));
-		}
-		else
-			ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
+		if (!handle_special_arg(path, arg, envp))
+			return (0);
 	}
 	else if (arg[0] == '~' && arg[1] == '/' && ft_strlen(arg) > 2)
-	{
-		env_value = find_env_value("HOME", *envp);
-		while (env_value[++i])
-			path[i] = env_value[i];
-		j = 2;
-		while (arg[j])
-			path[i++] = arg[j++];
-	}
-	else if (!ft_strcmp("-", arg))
-	{
-		env_value = find_env_value("OLDPWD", *envp);
-		if (!env_value)
-			return (ft_print_err("cd", "OLDPWD not set", NULL, 1));
-		else
-		{
-			ft_putstr_fd(env_value, STDOUT_FILENO);
-			ft_putstr_fd("\n", STDOUT_FILENO);
-			ft_strlcpy(path, env_value, ft_strlen(env_value) + 1);
-		}
-	}
+		dir_start_at_home(path, arg, envp);
 	else
 	{
 		while (arg[++i])
 			path[i] = arg[i];
 	}
-	if (arg)
-		free(arg);
+	free_str(arg);
 	arg = NULL;
 	change_dir(path, envp);
 	return (1);
