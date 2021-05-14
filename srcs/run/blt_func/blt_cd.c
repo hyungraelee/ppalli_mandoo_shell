@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	change_dir(char *dest, char ***envp)
+static void	change_dir(char *dest, char ***envp)
 {
 	int		rt;
 	char	*inner_env;
@@ -25,7 +25,7 @@ void	change_dir(char *dest, char ***envp)
 	g_global.exit = 0;
 }
 
-int		blt_cd(t_token *token, char ***envp)
+int			blt_cd(t_token *token, char ***envp)
 {
 	char	path[PATH_MAX + 1];
 	int		i;
@@ -33,10 +33,9 @@ int		blt_cd(t_token *token, char ***envp)
 	char	*arg;
 	char	*env_value;
 
-	i = -1;
 	env_value = NULL;
-	while (++i < PATH_MAX + 1)
-		path[i] = 0;
+	ft_memset(path, 0, sizeof(path));
+	// arg = 
 	while (token->type != ARGUMENT)
 	{
 		if (token->next)
@@ -55,8 +54,6 @@ int		blt_cd(t_token *token, char ***envp)
 		if (!env_value)
 		{
 			if (!arg)
-			// else if (!ft_strcmp("~", arg) || !ft_strcmp("~/", arg))
-				// change dir to home
 				return (ft_print_err("cd", "HOME not set", NULL, 1));
 		}
 		else
