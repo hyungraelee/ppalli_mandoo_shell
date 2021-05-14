@@ -1,10 +1,8 @@
 #include "minishell.h"
 
-char **make_args(t_token *token)
+static int	get_cnt_args(t_token *token)
 {
-	char **result;
-	int cnt;
-	int i;
+	int	cnt;
 
 	cnt = 0;
 	while (token)
@@ -16,6 +14,16 @@ char **make_args(t_token *token)
 		else
 			break;
 	}
+	return (cnt);
+}
+
+static char	**make_args(t_token *token)
+{
+	char **result;
+	int cnt;
+	int i;
+
+	cnt = get_cnt_args(token);
 	while (token->prev)
 		token = token->prev;
 	result = (char **)malloc(sizeof(char *) * (cnt + 1));
@@ -37,7 +45,7 @@ char **make_args(t_token *token)
 	return (result);
 }
 
-static void	run_process_in_child(t_cmd *cmd_list, char ***envp, int *rd_fds, char **args)
+static void	run_process_in_child(t_cmd *cmd_list, char ***envp, char **args, int *rd_fds)
 {
 	int	rt;
 
@@ -84,7 +92,7 @@ int			run_process(t_cmd *cmd_list, char ***envp)
 	pipe(cmd_list->fds);
 	g_global.pid = fork();
 	if (g_global.pid == 0)
-		run_process_in_child(cmd_list, envp, rd_fds, args);
+		run_process_in_child(cmd_list, envp, args, rd_fds);
 	else if (g_global.pid == -1)
 		ft_print_err("fork", strerror(errno), NULL, 1);
 	else

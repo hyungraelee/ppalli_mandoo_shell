@@ -5,11 +5,15 @@
 
 # define BLTIN_NUM 7
 
-char	*builtin_str(int i);
-int		(*builtin_func(int i))(t_token *token, char ***envp);
-void	blt_run(int i, t_cmd *cmd_list, char ***envp);
 int		run(t_cmd *cmd_list, char ***envp);
+
+int		handle_no_cmd(t_cmd *cmd_list, char ***envp);
+
+char	*builtin_str(int i);
+void	blt_run(int i, t_cmd *cmd_list, char ***envp);
+
 int		run_process(t_cmd *cmd_list, char ***envp);
+
 char	*get_env_value(char *arg, char **envp);
 int		find_cmd_path(t_cmd *cmd_list, char **envp);
 char	*find_env_value(char *env_name, char **envp);
@@ -22,8 +26,6 @@ int		redirect_process(t_token *token, int *rd_fds);
 void	redirect_close(int *rd_fds);
 void	redirect_restore(int *rd_fds, int *old_fds);
 
-int		handle_no_cmd(t_cmd *cmd_list, char ***envp);
-
 int		blt_echo(t_token *token, char ***envp);
 int		blt_env(t_token *token, char ***envp);
 int		set_env_name(char **export_name, char **envp);
@@ -31,6 +33,8 @@ char	*set_env_value(char *arg, int idx);
 char	*set_export_value(char *arg, int idx, char **envp);
 int		blt_exit(t_token *token, char ***envp);
 int		blt_cd(t_token *token, char ***envp);
+int		handle_special_arg(char *path, char *arg, char ***envp);
+void	dir_start_at_home(char *path, char *arg, char ***envp);
 int		blt_pwd(t_token *token, char ***envp);
 int		blt_export(t_token *token, char ***envp);
 char	*set_export_value(char *arg, int idx, char **envp);

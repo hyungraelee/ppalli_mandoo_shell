@@ -38,6 +38,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/builtin.c	\
 		./srcs/run/error.c	\
 		./srcs/run/find.c	\
+		./srcs/run/get_env_value.c	\
 		./srcs/run/handle_no_cmd.c	\
 		./srcs/run/inner_func.c	\
 		./srcs/run/pipe.c	\
@@ -45,6 +46,7 @@ SRCS =	./srcs/main.c	\
 		./srcs/run/run.c	\
 		./srcs/run/signal.c	\
 		./srcs/run/blt_func/blt_cd.c	\
+		./srcs/run/blt_func/blt_cd2.c	\
 		./srcs/run/blt_func/blt_echo.c	\
 		./srcs/run/blt_func/blt_env.c	\
 		./srcs/run/blt_func/blt_exit.c	\
