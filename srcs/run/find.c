@@ -40,22 +40,22 @@ int		cmd_path_error(char *cmd_name, char **path, struct stat buf, int i)
 {
 	if (!stat(cmd_name, &buf) && S_ISDIR(buf.st_mode))
 	{
-		ft_print_err(cmd_name, "is a directory", NULL, 126);
+		ft_print_err(cmd_name, ERR_MSG2, NULL, 126);
 		free_double_arr(path);
 		return (0);
 	}
 	if (!path || !path[i])
 	{
 		if (ft_strchr(cmd_name, '/') || !path)
-			ft_print_err(cmd_name, "No such file or directory", NULL, 127);
+			ft_print_err(cmd_name, ERR_MSG8, NULL, 127);
 		else
-			ft_print_err(cmd_name, "command not found", NULL, 127);
+			ft_print_err(cmd_name, ERR_MSG9, NULL, 127);
 		free_double_arr(path);
 		return (0);
 	}
 	if (!(buf.st_mode & S_IXUSR))
 	{
-		ft_print_err(cmd_name, "Permission denied", NULL, 126);
+		ft_print_err(cmd_name, ERR_MSG3, NULL, 126);
 		free_double_arr(path);
 		return (0);
 	}

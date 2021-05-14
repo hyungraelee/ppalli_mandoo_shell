@@ -23,17 +23,4 @@ void	sig_handler(int signo)
 			}
 		}
 	}
-	// else if (g_global.pid == 0)
-	// {
-	// 	if (signo == SIGINT)
-	// 	{
-	// 		ft_putstr_fd("^C\n", STDOUT_FILENO);
-	// 		// prompt();
-	// 	}
-	// 	else if (signo == SIGQUIT)
-	// 	{
-	// 		ft_putstr_fd("^\\Quit: 3\n", STDOUT_FILENO);
-	// 		// prompt();
-	// 	}
-	// }
 }

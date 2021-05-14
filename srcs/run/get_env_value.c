@@ -49,6 +49,7 @@ int		get_env_other_cases(char *arg, char **envp, char **result, int i)
 	}
 	else
 		*result = ft_str_char_join(*result, arg[i++]);
+	return (i);
 }
 
 int		get_env_dquote_envp(char *arg, char **envp, char **result, int i)

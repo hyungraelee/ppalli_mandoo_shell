@@ -17,9 +17,9 @@ void	handle_cmd_exist(t_cmd *cmd_list, char ***envp)
 	if (i >= BLTIN_NUM)
 	{
 		if (!stat(cmd_list->cmd_name, &buf) && S_ISDIR(buf.st_mode))
-			ft_print_err(cmd_list->cmd_name, "is a directory", NULL, 126);
+			ft_print_err(cmd_list->cmd_name, ERR_MSG2, NULL, 126);
 		else if (!stat(cmd_list->cmd_name, &buf) && !(buf.st_mode & S_IXUSR))
-			ft_print_err(cmd_list->cmd_name, "Permission denied", NULL, 126);
+			ft_print_err(cmd_list->cmd_name, ERR_MSG3, NULL, 126);
 		else if (!stat(cmd_list->cmd_name, &buf))
 			run_process(cmd_list, envp);
 		else
