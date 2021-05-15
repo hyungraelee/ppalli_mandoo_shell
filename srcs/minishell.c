@@ -18,7 +18,7 @@ void		minishell(char **envp)
 	t_minishell	shell;
 
 	shell.last = NULL;
-	g_global.pid = 1;
+	g_global.pid = PID_MAX;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	while (1)

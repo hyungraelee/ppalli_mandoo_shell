@@ -36,6 +36,7 @@ void	minishell(char **envp);
 # define C_RESET "\e[0m"
 
 # define PATH_MAX 1024
+# define PID_MAX 100000
 # define OFF 0
 # define ON 1
 
