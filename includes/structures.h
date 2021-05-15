@@ -68,7 +68,6 @@ struct s_minishell
 	char			*input_str;
 	char			**cmd_set;
 	t_cmd			*cmd_list;
-	// int				i;
 	t_history		*last;
 	struct termios	backup;
 };
