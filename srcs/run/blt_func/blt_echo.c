@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blt_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:37 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:38 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 20:01:15 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int		blt_echo(t_token *token, char ***envp)
 	if (new_line)
 		result = ft_strjoin(result, "\n", 1);
 	ft_putstr_fd(result, STDOUT_FILENO);
-	if (result)
-		free(result);
+	free_str(result);
 	g_global.exit = 0;
 	return (1);
+	(void)envp;
 }

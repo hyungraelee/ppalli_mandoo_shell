@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blt_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:51 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:52 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 20:03:13 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		unset_arg(char *arg, char *env_name, char ***envp)
 		{
 			chk = find_env_name(env_name, *envp);
 			if (chk >= 0)
-				*envp = delete_env(*envp, env_name, chk);
+				*envp = delete_env(*envp, chk);
 		}
 	}
 	free_str(env_name);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:02 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:03 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 20:03:27 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		turn_on_flag(int *flag, int quote, int idx);
 void	sig_handler(int signo);
 
 char	**add_env(char **envp, char *str);
-char	**delete_env(char **envp, char *str, int idx);
+char	**delete_env(char **envp, int idx);
 
 int		is_pipe_exist(t_cmd *cmd_list);
 
