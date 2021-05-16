@@ -6,7 +6,7 @@
 /*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:00:02 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 18:14:43 by hyunlee          ###   ########.fr       */
+/*   Updated: 2021/05/16 20:03:10 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**add_env(char **envp, char *str)
 	return (result);
 }
 
-char	**delete_env(char **envp, char *str, int idx)
+char	**delete_env(char **envp, int idx)
 {
 	char	**result;
 	int		i;

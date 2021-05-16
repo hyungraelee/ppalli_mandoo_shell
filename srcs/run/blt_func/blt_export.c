@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blt_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:42 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:43 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 20:01:52 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int		handle_normal_export(char ***envp, char *arg, char *name)
 {
 	int		i;
 	int		chk;
-	char	*new_var;
 
 	i = 0;
 	while (arg[i] && arg[i] != '=')

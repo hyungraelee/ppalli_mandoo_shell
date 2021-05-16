@@ -6,7 +6,7 @@
 /*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:04:25 by hyunlee           #+#    #+#             */
-/*   Updated: 2021/05/16 18:04:26 by hyunlee          ###   ########.fr       */
+/*   Updated: 2021/05/16 20:01:36 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,5 @@ int			blt_exit(t_token *token, char ***envp)
 	}
 	g_global.exit = exit_code;
 	exit(exit_code);
+	(void)envp;
 }

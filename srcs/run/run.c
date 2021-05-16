@@ -6,7 +6,7 @@
 /*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:05:00 by hyunlee           #+#    #+#             */
-/*   Updated: 2021/05/16 18:05:01 by hyunlee          ###   ########.fr       */
+/*   Updated: 2021/05/16 19:58:27 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ void	handle_cmd_exist(t_cmd *cmd_list, char ***envp)
 
 int		run(t_cmd *cmd_list, char ***envp)
 {
-	int			i;
-	struct stat	buf;
-
 	while (cmd_list)
 	{
 		cmd_list->cmd_name = get_env_value(cmd_list->cmd_name, *envp);
