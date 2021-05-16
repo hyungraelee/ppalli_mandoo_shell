@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:00:10 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 18:00:11 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 18:12:17 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*builtin_str(int i)
+char		*builtin_str(int i)
 {
 	char	*blt_str[BLTIN_NUM + 1];
 

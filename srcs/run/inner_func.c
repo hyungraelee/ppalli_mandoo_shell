@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inner_func.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/16 18:04:50 by hyunlee           #+#    #+#             */
+/*   Updated: 2021/05/16 18:14:11 by hyunlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	get_cnt_args(t_token *token)
@@ -12,16 +24,16 @@ static int	get_cnt_args(t_token *token)
 		if (token->next)
 			token = token->next;
 		else
-			break;
+			break ;
 	}
 	return (cnt);
 }
 
 static char	**make_args(t_token *token)
 {
-	char **result;
-	int cnt;
-	int i;
+	char	**result;
+	int		cnt;
+	int		i;
 
 	cnt = get_cnt_args(token);
 	while (token->prev)
@@ -37,7 +49,7 @@ static char	**make_args(t_token *token)
 		if (token->next)
 			token = token->next;
 		else
-			break;
+			break ;
 	}
 	result[i] = NULL;
 	while (token->prev)
@@ -45,7 +57,8 @@ static char	**make_args(t_token *token)
 	return (result);
 }
 
-static void	run_process_in_child(t_cmd *cmd_list, char ***envp, char **args, int *rd_fds)
+static void	run_process_in_child(t_cmd *cmd_list, char ***envp, \
+char **args, int *rd_fds)
 {
 	int	rt;
 
@@ -62,7 +75,8 @@ static void	run_process_in_child(t_cmd *cmd_list, char ***envp, char **args, int
 	exit(EXIT_SUCCESS);
 }
 
-static void	run_process_in_parents(t_cmd *cmd_list, char **args, int *rd_fds, int *old_fds)
+static void	run_process_in_parents(t_cmd *cmd_list, char **args, \
+int *rd_fds, int *old_fds)
 {
 	int	status;
 
@@ -82,9 +96,9 @@ static void	run_process_in_parents(t_cmd *cmd_list, char **args, int *rd_fds, in
 
 int			run_process(t_cmd *cmd_list, char ***envp)
 {
-	char **args;
-	int rd_fds[2];
-	int old_fds[2];
+	char	**args;
+	int		rd_fds[2];
+	int		old_fds[2];
 
 	save_old_fds(old_fds);
 	replace_env_in_arg(cmd_list, envp);

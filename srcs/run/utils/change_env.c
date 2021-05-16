@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:00:02 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 18:00:03 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 18:14:43 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,3 @@ char	**delete_env(char **envp, char *str, int idx)
 	free(envp);
 	return (result);
 }
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   blt_cd.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/16 18:04:12 by hyunlee           #+#    #+#             */
+/*   Updated: 2021/05/16 18:11:39 by hyunlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	change_dir(char *dest, char ***envp)
@@ -42,9 +54,9 @@ static char	*get_cd_arg(t_token *token)
 
 static int	is_special_arg(char *arg)
 {
-	return (!arg || !ft_strcmp("~", arg) || !ft_strcmp("~/", arg) || !ft_strcmp("-", arg));
+	return (!arg || !ft_strcmp("~", arg) || \
+	!ft_strcmp("~/", arg) || !ft_strcmp("-", arg));
 }
-
 
 int			blt_cd(t_token *token, char ***envp)
 {

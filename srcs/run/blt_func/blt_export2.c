@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blt_export2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:43 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:44 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 18:12:00 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ int		set_env_name(char **name, char **envp)
 	}
 	return (1);
 }
-
-/*	*/
 
 void	sort_export(char ***export, int i)
 {
