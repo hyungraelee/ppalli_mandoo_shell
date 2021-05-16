@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:00:14 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 18:13:03 by hyunlee          ###   ########.fr       */
+/*   Updated: 2021/05/16 20:24:29 by jkeum            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		get_env_other_cases(char *arg, char **envp, char **result, int i)
 		{
 			env_name = NULL;
 			env_temp = NULL;
-			while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
+			while (!ft_strchr(" \t\n$\"\'\\/", arg[++i]))
 				env_name = ft_str_char_join(env_name, arg[i]);
 			env_temp = set_env_value(find_env_value(env_name, envp), 0);
 			*result = get_env_set_envp(env_temp, *result);
@@ -78,7 +78,7 @@ int		get_env_dquote_envp(char *arg, char **envp, char **result, int i)
 	}
 	else
 	{
-		while (!ft_strchr(" \t\n$\"\'\\", arg[++i]))
+		while (!ft_strchr(" \t\n$\"\'\\/", arg[++i]))
 			env_name = ft_str_char_join(env_name, arg[i]);
 		env_temp = set_env_value(find_env_value(env_name, envp), 0);
 		*result = ft_strjoin(*result, env_temp, 1);

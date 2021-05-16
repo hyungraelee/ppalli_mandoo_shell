@@ -6,7 +6,7 @@
 /*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:45 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:46 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 20:20:37 by jkeum            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		chk_squote_export_var(char *arg, int idx, char **envp, char **result)
 	char	*env_name;
 
 	env_name = NULL;
-	while (!ft_strchr(" \t\n$\"\'\\", arg[++idx]))
+	while (!ft_strchr(" \t\n$\"\'\\/", arg[++idx]))
 		env_name = ft_str_char_join(env_name, arg[idx]);
 	*result = ft_strjoin(*result, find_env_value(env_name, envp), 1);
 	free_str(env_name);
