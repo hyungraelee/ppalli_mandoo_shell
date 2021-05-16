@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 17:59:04 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 17:59:06 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 18:10:29 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 
 # include <termios.h>
 
-/*	flag	*/
 # define NONE 0
 # define CMD 1
 # define REDIRECT 2
 # define PIPE 4
 # define ARG 8
-# define POSSIBLE 16 // file exist after redirect
+# define POSSIBLE 16
 # define S_QUOTE 32
 # define D_QUOTE 64
 
@@ -33,11 +32,11 @@
 
 # define IFS " \t\n"
 
-typedef struct	s_cmd		t_cmd;
-typedef struct	s_token		t_token;
-typedef struct	s_history	t_history;
-typedef struct	s_read		t_read;
-typedef struct	s_minishell	t_minishell;
+typedef struct s_cmd		t_cmd;
+typedef struct s_token		t_token;
+typedef struct s_history	t_history;
+typedef struct s_read		t_read;
+typedef struct s_minishell	t_minishell;
 
 struct	s_token
 {
@@ -56,7 +55,7 @@ struct	s_cmd
 	t_cmd	*prev;
 };
 
-struct s_history
+struct	s_history
 {
 	char		*record;
 	char		*edit_record;
@@ -64,7 +63,7 @@ struct s_history
 	t_history	*prev;
 };
 
-struct s_read
+struct	s_read
 {
 	char		*result;
 	char		**on_terminal;
@@ -75,7 +74,7 @@ struct s_read
 	t_history	*selected_history;
 };
 
-struct s_minishell
+struct	s_minishell
 {
 	char			*input_str;
 	char			**cmd_set;

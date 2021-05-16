@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:00:14 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 18:00:15 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 18:13:03 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ int		get_env_dquote(char *arg, char **envp, char **result, int i)
 	{
 		if (arg[i] == '\\')
 		{
-			if (arg[i + 1] == '\"' || arg[i + 1] == '\\' || arg[i + 1] == '`' || arg[i + 1] == '$')
+			if (arg[i + 1] == '\"' || arg[i + 1] == '\\' || \
+			arg[i + 1] == '`' || arg[i + 1] == '$')
 				*result = ft_str_char_join(*result, arg[++i]);
 			else
 				*result = ft_str_char_join(*result, arg[i]);

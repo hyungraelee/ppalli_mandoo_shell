@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkeum <jkeum@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:00:12 by jkeum             #+#    #+#             */
-/*   Updated: 2021/05/16 18:00:13 by jkeum            ###   ########.fr       */
+/*   Updated: 2021/05/16 18:12:47 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ int		find_cmd_path(t_cmd *cmd_list, char **envp)
 	i = -1;
 	while (path && path[++i])
 	{
-		path[i] = ft_strjoin(ft_strjoin(path[i], "/", 1), cmd_list->cmd_name, 1);
+		path[i] = ft_strjoin(ft_strjoin(path[i], "/", 1), \
+		cmd_list->cmd_name, 1);
 		if (!stat(path[i], &buf))
 		{
 			free(cmd_list->cmd_name);

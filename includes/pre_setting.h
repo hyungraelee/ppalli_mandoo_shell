@@ -1,5 +1,17 @@
-#ifndef PARSER_H
-# define PARSER_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pre_setting.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/16 18:03:14 by hyunlee           #+#    #+#             */
+/*   Updated: 2021/05/16 18:08:39 by hyunlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PRE_SETTING_H
+# define PRE_SETTING_H
 
 # include "structures.h"
 
