@@ -64,7 +64,8 @@ void		blt_run(int i, t_cmd *cmd_list, char ***envp)
 	int old_fds[2];
 
 	save_old_fds(old_fds);
-	if (ft_strcmp(cmd_list->cmd_name, "export") && ft_strcmp(cmd_list->cmd_name, "env"))
+	if (ft_strcmp(cmd_list->cmd_name, "export") && \
+	ft_strcmp(cmd_list->cmd_name, "env"))
 		replace_env_in_arg(cmd_list, envp);
 	if (is_pipe_exist(cmd_list))
 		pipe_blt_run(i, cmd_list, envp);
@@ -73,7 +74,7 @@ void		blt_run(int i, t_cmd *cmd_list, char ***envp)
 		if (!redirect_process(cmd_list->token, rd_fds))
 		{
 			redirect_restore(rd_fds, old_fds);
-			return;
+			return ;
 		}
 		(*builtin_func(i))(cmd_list->token, envp);
 		redirect_restore(rd_fds, old_fds);

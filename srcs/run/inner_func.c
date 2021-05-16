@@ -69,10 +69,10 @@ static void	run_process_in_parents(t_cmd *cmd_list, char **args, int *rd_fds, in
 	wait(&status);
 	if (status >> 8 == 255)
 		g_global.exit = 255;
-	else if (status >> 8 != 0)
-		g_global.exit = 1;
 	else if (g_global.signal_on)
 		g_global.exit = status + 128;
+	else if (status >> 8 != 0)
+		g_global.exit = status >> 8;
 	else
 		g_global.exit = 0;
 	free_double_arr(args);
