@@ -6,7 +6,7 @@
 /*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:03:55 by hyunlee           #+#    #+#             */
-/*   Updated: 2021/05/16 18:03:56 by hyunlee          ###   ########.fr       */
+/*   Updated: 2021/05/17 14:47:20 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static void	handle_up_arrow(t_read *read_cmd, t_history **last)
 			read_cmd->on_terminal = &(read_cmd->selected_history->edit_record);
 		}
 	}
+	while (read_cmd->cursor-- > 0)
+		delete_letter();
 	read_cmd->cursor = ft_strlen(*(read_cmd->on_terminal));
-	delete_current_line();
-	prompt();
 	ft_putstr_fd(*(read_cmd->on_terminal), 1);
 }
 
@@ -48,9 +48,9 @@ static void	handle_down_arrow(t_read *read_cmd)
 		else
 			read_cmd->on_terminal = &(read_cmd->new);
 	}
+	while (read_cmd->cursor-- > 0)
+		delete_letter();
 	read_cmd->cursor = ft_strlen(*(read_cmd->on_terminal));
-	delete_current_line();
-	prompt();
 	ft_putstr_fd(*(read_cmd->on_terminal), 1);
 }
 
