@@ -6,7 +6,7 @@
 /*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 18:04:33 by hyunlee           #+#    #+#             */
-/*   Updated: 2021/05/16 18:04:34 by hyunlee          ###   ########.fr       */
+/*   Updated: 2021/05/17 14:22:35 by hyunlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	free_double_arr(char **arr)
 {
 	int	i;
 
+	if (!arr)
+		return ;
 	i = 0;
 	while (arr[i])
 		free(arr[i++]);
