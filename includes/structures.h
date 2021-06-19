@@ -1,35 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structures.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyunlee <hyunlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/16 17:59:04 by jkeum             #+#    #+#             */
+/*   Updated: 2021/05/16 18:10:29 by hyunlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCTURES_H
 # define STRUCTURES_H
 
-# define TYPE_PIPE 0
-# define TYPE_CMD 1
-# define TYPE_REDIRECT 2
+# include <termios.h>
 
-# define RD_IN 0
-# define RD_OUT 1
-# define RD_APPEND 2
+# define NONE 0
+# define CMD 1
+# define REDIRECT 2
+# define PIPE 4
+# define ARG 8
+# define POSSIBLE 16
+# define S_QUOTE 32
+# define D_QUOTE 64
 
-typedef struct	s_cmd		t_cmd;
-typedef struct	s_pipe		t_pipe;
+# define RD_IN 1
+# define RD_OUT 2
+# define RD_APPEND 4
+# define COMMAND 8
+# define ARGUMENT 16
+
+# define IFS " \t\n"
+
+typedef struct s_cmd		t_cmd;
+typedef struct s_token		t_token;
+typedef struct s_history	t_history;
+typedef struct s_read		t_read;
+typedef struct s_minishell	t_minishell;
+
+struct	s_token
+{
+	int		type;
+	char	*arg;
+	t_token	*next;
+	t_token	*prev;
+};
 
 struct	s_cmd
 {
-	char	**line;
-	char	*cmd;
-	char	*arg;
-	char	*rd_in;
-	char	*rd_out;
-	char	*rd_append;
-	t_pipe	*next;
-	t_pipe	*prev;
-	t_cmd	*next_tree;
-};
-
-struct s_pipe
-{
-	int		fd[2];
+	char	*cmd_name;
+	int		fds[2];
+	t_token	*token;
 	t_cmd	*next;
 	t_cmd	*prev;
+};
+
+struct	s_history
+{
+	char		*record;
+	char		*edit_record;
+	t_history	*next;
+	t_history	*prev;
+};
+
+struct	s_read
+{
+	char		*result;
+	char		**on_terminal;
+	int			c;
+	int			cursor;
+	char		*new;
+	t_history	*temp;
+	t_history	*selected_history;
+};
+
+struct	s_minishell
+{
+	char			*input_str;
+	char			**cmd_set;
+	t_cmd			*cmd_list;
+	t_history		*last;
+	struct termios	backup;
 };
 
 #endif
